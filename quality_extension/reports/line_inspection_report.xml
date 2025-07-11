@@ -1,0 +1,478 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="paper_format_line_inspection_report" model="report.paperformat">
+            <field name="name">Line Inspection Report</field>
+            <field name="default" eval="False"/>
+            <field name="disable_shrinking" eval="True"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">30</field>
+            <field name="margin_bottom">30</field>
+            <field name="margin_left">5</field>
+            <field name="margin_right">5</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">22</field>
+            <field name="dpi">150</field>
+        </record>
+        <record id="report_line_inspection_report" model="ir.actions.report">
+            <field name="name">Line Inspection</field>
+            <field name="model">line.inspection</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">quality_extension.line_inspection_report</field>
+            <field name="report_file">quality_extension.line_inspection_report</field>
+            <field name="print_report_name">'Line Inspection'</field>
+            <field name="binding_model_id" ref="quality_extension.model_line_inspection"/>
+            <field name="paperformat_id" ref="quality_extension.paper_format_line_inspection_report"/>
+            <field name="binding_type">report</field>
+        </record>
+        <template id="line_inspection_report_header">
+            <div class="header" style="border: 1px solid black;">
+                <div class="row">
+                    <div class="col-3" style="border-right:1px solid black;">
+                        <div>
+                            <img src='/web/binary/company_logo' class="img-fluid img-thumbnail"
+                                 style="width:100%;margin-top:1px;"/>
+                        </div>
+                    </div>
+                    <div class="col-6" style="border-right:1px solid black;">
+                        <div style="text-align:center;color:black;margin:25px; padding:25px;">
+                            <h4>
+                                LINE INSPECTION
+                            </h4>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div style="text-align:center;font-size:23px;margin:25px; padding:25px;
+                                                            color:black;">
+                            <strong>QA/DI/R/06</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+        <template id="line_inspection_report_body">
+            <t t-call="web.basic_layout">
+                <section>
+                    <div class="row" style="border:1px solid black;">
+                        <div class="col-4" style="border-right:1px solid black;">
+                            <strong style="margin-left:5px;">Part No</strong>
+                            <strong>:</strong>
+                            <span t-field="o.product_id.default_code"/>
+                        </div>
+                        <div class="col-4" style="border-right:1px solid black;">
+                            <strong style="margin-left:5px;">Operation No</strong>
+                            <strong>:</strong>
+                            <span t-field="o.operation_no.operation_no"/>
+                        </div>
+                        <div class="col-2" style="border-right:1px solid black;">
+                            <strong style="margin-left:5px;">Machine No</strong>
+                            <strong>:</strong>
+                            <span t-field="o.machine_no.codefor"/>
+                        </div>
+                        <div class="col-2">
+                            <strong style="margin-left:5px;">Date</strong>
+                            <strong>:</strong>
+                            <span t-field="o.date"/>
+                        </div>
+                    </div>
+                    <div class="row" style="border-bottom:1px solid black;border-left:1px solid black;
+                                                border-right:1px solid black;">
+                        <div class="col-4" style="border-right:1px solid black;">
+                            <strong style="margin-left:5px;">Part Name</strong>
+                            <strong>:</strong>
+                            <span t-field="o.part_name"/>
+                        </div>
+                        <div class="col-4" style="border-right:1px solid black;">
+                            <strong style="margin-left:5px;">Operation Name</strong>
+                            <strong>:</strong>
+                            <span t-field="o.operation_no.opr_name"/>
+                        </div>
+                        <div class="col-2" style="border-right:1px solid black;">
+                            <strong style="margin-left:5px;">Machine Name</strong>
+                            <strong>:</strong>
+                            <span t-field="o.machine_name"/>
+                        </div>
+                        <div class="col-2">
+                            <strong style="margin-left:5px;">Shift</strong>
+                            <strong>:</strong>
+                            <span t-field="o.shift"/>
+                        </div>
+                    </div>
+                    <div class="row"
+                         style="border-left:1px solid black;border-right:1px solid black;">
+                        <div class="col-4" style="border-right:1px solid black;">
+                            <strong style="margin-left:5px">Rev.No &amp; Date</strong>
+                            <strong>:</strong>
+                            <span t-field="o.rev_no"/>
+                        </div>
+                        <div class="col-4" style="border-right:1px solid black;">
+                            <strong style="margin-left:5px">Inspector Name</strong>
+                            <strong>:</strong>
+                            <span t-field="o.inspector_name"/>
+                        </div>
+                        <div class="col-4">
+                            <strong style="margin-left:5px">Operator Name</strong>
+                            <strong>:</strong>
+                            <span t-field="o.operator_name"/>
+                        </div>
+                    </div>
+                </section>
+                <div class="table_content">
+                    <table class="table table-sm" style="border-bottom:1px solid black;border-left:1px solid black;
+                                                border-right:1px solid black;">
+                        <thead style="border-top:1px solid black;">
+                            <tr>
+                                <th rowspan="2">S.No</th>
+                                <th rowspan="2">Characteristics</th>
+                                <th rowspan="2">Spc</th>
+                                <th rowspan="2">Specification in MM</th>
+                                <th rowspan="2">Min</th>
+                                <th rowspan="2">Max</th>
+                                <th rowspan="2">Method of check</th>
+                                <th rowspan="2">Sample Size</th>
+                                <th rowspan="2">Freq</th>
+                                <th colspan="8">Observations</th>
+                                <th rowspan="2">Remarks</th>
+                                <th rowspan="2">Status</th>
+                            </tr>
+                            <tr style="border-top:1px solid black;">
+                                <th>1</th>
+                                <th>2</th>
+                                <th>3</th>
+                                <th>4</th>
+                                <th>5</th>
+                                <th>6</th>
+                                <th>7</th>
+                                <th>8</th>
+                            </tr>
+                        </thead>
+                        <tbody style="border-top:1px solid black;">
+                            <t t-foreach="o.line_ids" t-as="line">
+                                <tr>
+                                    <td style="color:black;text-align:center;">
+                                        <span t-esc="line_index+1"/>
+                                    </td>
+                                    <t t-if="line.characteristics.name">
+                                        <td align="left"
+                                            style="color:black;">
+                                            <span t-esc="line.characteristics.name"/>
+                                        </td>
+                                    </t>
+                                    <t t-else="">
+                                        <td align="center"
+                                            style="color:black;">
+                                            -
+                                        </td>
+                                    </t>
+                                    <t t-if="line.spc">
+                                        <td align="left"
+                                            style="color:black;">
+                                            <span t-esc="line.spc"/>
+                                        </td>
+                                    </t>
+                                    <t t-else="">
+                                        <td align="center"
+                                            style="color:black;">
+                                            -
+                                        </td>
+                                    </t>
+                                    <t t-if="line.line_specification">
+                                        <td align="left"
+                                            style="color:black;">
+                                            <span t-esc="line.line_specification"/>
+                                        </td>
+                                    </t>
+                                    <t t-else="">
+                                        <td align="center"
+                                            style="color:black;">
+                                            -
+                                        </td>
+                                    </t>
+                                    <t t-if="line.line_min">
+                                        <td align="center"
+                                            style="color:black;">
+                                            <span t-esc="'%.2f'%line.line_min"/>
+                                        </td>
+                                    </t>
+                                    <t t-else="">
+                                        <td align="center"
+                                            style="color:black;">
+                                            -
+                                        </td>
+                                    </t>
+                                    <t t-if="line.line_max">
+                                        <td align="center"
+                                            style="color:black;">
+                                            <span t-esc="'%.2f'%line.line_max"/>
+                                        </td>
+                                    </t>
+                                    <t t-else="">
+                                        <td align="center"
+                                            style="color:black;">
+                                            -
+                                        </td>
+                                    </t>
+                                    <t t-if="line.method_of_check.name">
+                                        <td align="left"
+                                            style="color:black;">
+                                            <span t-esc="line.method_of_check.name"/>
+                                        </td>
+                                    </t>
+                                    <t t-else="">
+                                        <td align="center"
+                                            style="color:black;">
+                                            -
+                                        </td>
+                                    </t>
+                                    <t t-if="line.sample_size">
+                                        <td align="center"
+                                            style="color:black;">
+                                            <span t-esc="line.sample_size"/>
+                                        </td>
+                                    </t>
+                                    <t t-else="">
+                                        <td colspan="1" align="center"
+                                            style="color:black;">
+                                            -
+                                        </td>
+                                    </t>
+                                    <t t-if="line.frequency">
+                                        <td align="left"
+                                            style="color:black;">
+                                            <span t-esc="dict(line._fields['frequency'].selection).get(line.frequency)"/>
+                                        </td>
+                                    </t>
+                                    <t t-else="">
+                                        <td align="center"
+                                            style="color:black;">
+                                            -
+                                        </td>
+                                    </t>
+                                    <t t-if="line.frequency == 'fq_one'">
+                                        <t t-if="line.observation1">
+                                            <td align="center" style="color:black;vertical-align:middle;">
+                                                <span t-esc="line.observation1"/>
+                                            </td>
+                                        </t>
+                                        <t t-else="">
+                                            <td align="center" style="color:black;">
+                                                -
+                                            </td>
+                                        </t>
+                                        <t t-if="line.observation2">
+                                            <td align="center" style="color:black;vertical-align:middle;">
+                                                <span t-esc="line.observation2"/>
+                                            </td>
+                                        </t>
+                                        <t t-else="">
+                                            <td align="center" style="color:black;">
+                                                -
+                                            </td>
+                                        </t>
+                                        <t t-if="line.observation3">
+                                            <td align="center" style="color:black;vertical-align:middle;">
+                                                <span t-esc="line.observation3"/>
+                                            </td>
+                                        </t>
+                                        <t t-else="">
+                                            <td align="center" style="color:black;">
+                                                -
+                                            </td>
+                                        </t>
+                                        <t t-if="line.observation4">
+                                            <td align="center" style="color:black;vertical-align:middle;">
+                                                <span t-esc="line.observation4"/>
+                                            </td>
+                                        </t>
+                                        <t t-else="">
+                                            <td align="center" style="color:black;">
+                                                -
+                                            </td>
+                                        </t>
+                                        <t t-if="line.observation5">
+                                            <td align="center" style="color:black;vertical-align:middle;">
+                                                <span t-esc="line.observation5"/>
+                                            </td>
+                                        </t>
+                                        <t t-else="">
+                                            <td align="center" style="color:black;">
+                                                -
+                                            </td>
+                                        </t>
+                                        <t t-if="line.observation6">
+                                            <td align="center" style="color:black;vertical-align:middle;">
+                                                <span t-esc="line.observation6"/>
+                                            </td>
+                                        </t>
+                                        <t t-else="">
+                                            <td align="center" style="color:black;">
+                                                -
+                                            </td>
+                                        </t>
+                                        <t t-if="line.observation7">
+                                            <td align="center" style="color:black;vertical-align:middle;">
+                                                <span t-esc="line.observation7"/>
+                                            </td>
+                                        </t>
+                                        <t t-else="">
+                                            <td align="center" style="color:black;">
+                                                -
+                                            </td>
+                                        </t>
+                                        <t t-if="line.observation8">
+                                            <td align="center" style="color:black;vertical-align:middle;">
+                                                <span t-esc="line.observation8"/>
+                                            </td>
+                                        </t>
+                                        <t t-else="">
+                                            <td align="center" style="color:black;">
+                                                -
+                                            </td>
+                                        </t>
+                                    </t>
+                                    <t t-if="line.frequency == 'fq_two'">
+                                        <t t-if="line.observation1">
+                                            <td colspan="2" align="center"
+                                                style="color:black;vertical-align:middle;">
+                                                <span t-esc="line.observation1"/>
+                                            </td>
+                                        </t>
+                                        <t t-else="">
+                                            <td align="center" style="color:black;">
+                                                -
+                                            </td>
+                                        </t>
+                                        <t t-if="line.observation3">
+                                            <td colspan="2" align="center"
+                                                style="color:black;vertical-align:middle;">
+                                                <span t-esc="line.observation3"/>
+                                            </td>
+                                        </t>
+                                        <t t-else="">
+                                            <td align="center" style="color:black;">
+                                                -
+                                            </td>
+                                        </t>
+                                        <t t-if="line.observation5">
+                                            <td colspan="2" align="center"
+                                                style="color:black;vertical-align:middle;">
+                                                <span t-esc="line.observation5"/>
+                                            </td>
+                                        </t>
+                                        <t t-else="">
+                                            <td align="center" style="color:black;">
+                                                -
+                                            </td>
+                                        </t>
+                                        <t t-if="line.observation7">
+                                            <td colspan="2" align="center"
+                                                style="color:black;vertical-align:middle;">
+                                                <span t-esc="line.observation7"/>
+                                            </td>
+                                        </t>
+                                        <t t-else="">
+                                            <td align="center" style="color:black;">
+                                                -
+                                            </td>
+                                        </t>
+                                    </t>
+                                    <t t-if="line.frequency == 'fq_three'">
+                                        <t t-if="line.observation1">
+                                            <td colspan="4" align="center"
+                                                style="color:black;vertical-align:middle;">
+                                                <span t-esc="line.observation1"/>
+                                            </td>
+                                        </t>
+                                        <t t-else="">
+                                            <td align="center" style="color:black;">
+                                                -
+                                            </td>
+                                        </t>
+                                        <t t-if="line.observation5">
+                                            <td colspan="4" align="center"
+                                                style="color:black;vertical-align:middle;">
+                                                <span t-esc="line.observation5"/>
+                                            </td>
+                                        </t>
+                                        <t t-else="">
+                                            <td align="center" style="color:black;">
+                                                -
+                                            </td>
+                                        </t>
+                                    </t>
+                                    <t t-if="line.frequency == 'fq_four'">
+                                        <t t-if="line.observation1">
+                                            <td colspan="8" align="center"
+                                                style="color:black;vertical-align:middle;">
+                                                <span t-esc="line.observation1"/>
+                                            </td>
+                                        </t>
+                                        <t t-else="">
+                                            <td align="center" style="color:black;">
+                                                -
+                                            </td>
+                                        </t>
+                                    </t>
+                                    <t t-if="line.remarks">
+                                        <td align="left"
+                                            style="color:black;">
+                                            <span t-esc="line.remarks"/>
+                                        </td>
+                                    </t>
+                                    <t t-else="">
+                                        <td align="center"
+                                            style="color:black;">
+                                            -
+                                        </td>
+                                    </t>
+                                    <t t-if="line.obs_status">
+                                        <td colspan="1" class="left"
+                                            style="color:black;border-left:1px">
+                                            <span t-esc="dict(line._fields['obs_status'].selection).get(line.obs_status)"/>
+                                        </td>
+                                    </t>
+                                    <t t-else="">
+                                        <td colspan="1" align="center"
+                                            style="color:black;border-left:1px">
+                                            -
+                                        </td>
+                                    </t>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row">
+                    <div>
+                        <strong>
+                            Note: If any tool changes (or) any issues, conform and record the values.
+                        </strong>
+                    </div>
+                </div>
+                <div class="row" style="border:1px solid black;margin-top:5px;">
+                    <div class="col-6" style="border-right:1px solid black;">
+                        <strong style="margin-left:5px;">Inspected by</strong>
+                        <strong>:</strong>
+                        <span t-field="res_company.env.user.name"/>
+                    </div>
+                    <div class="col-6">
+                        <strong style="margin-left:5px;">Approved by</strong>
+                        <strong>:</strong>
+                        <span t-field="o.approved_by"/>
+                    </div>
+                </div>
+            </t>
+        </template>
+        <template id="line_inspection_report">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="quality_extension.line_inspection_report_header"/>
+                    <t t-call="quality_extension.line_inspection_report_body"/>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

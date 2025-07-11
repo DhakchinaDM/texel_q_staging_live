@@ -1,0 +1,98 @@
+<odoo>
+    <data>
+
+        <record id="view_location_form" model="ir.ui.view">
+            <field name="name">location.details.form</field>
+            <field name="model">location.details</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group string="Location">
+                            <group>
+                                <field name="name" placeholder="virtual location">
+                                </field>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_location_tree" model="ir.ui.view">
+            <field name="name">location.details.tree</field>
+            <field name="model">location.details</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="location_details_action" model="ir.actions.act_window">
+            <field name="name">Location</field>
+            <field name="res_model">location.details</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+        <!--        Build-->
+
+
+        <!-- explicit list view definition -->
+        <!--
+        <record model="ir.ui.view" id="maintenance_extended.list">
+          <field name="name">maintenance_extended list</field>
+          <field name="model">maintenance_extended.maintenance_extended</field>
+          <field name="arch" type="xml">
+            <tree>
+              <field name="name"/>
+              <field name="value"/>
+              <field name="value2"/>
+            </tree>
+          </field>
+        </record>
+        -->
+
+        <!-- actions opening views on models -->
+        <!--
+        <record model="ir.actions.act_window" id="maintenance_extended.action_window">
+          <field name="name">maintenance_extended window</field>
+          <field name="res_model">maintenance_extended.maintenance_extended</field>
+          <field name="view_mode">tree,form</field>
+        </record>
+        -->
+
+        <!-- server action to the one above -->
+        <!--
+        <record model="ir.actions.server" id="maintenance_extended.action_server">
+          <field name="name">maintenance_extended server</field>
+          <field name="model_id" ref="model_my_module_my_module"/>
+          <field name="state">code</field>
+          <field name="code">
+            action = {
+              "type": "ir.actions.act_window",
+              "view_mode": "tree,form",
+              "res_model": self._name,
+            }
+          </field>
+        </record>
+        -->
+
+        <!-- Top menu item -->
+        <!--
+        <menuitem name="maintenance_extended" id="maintenance_extended.menu_root"/>
+        -->
+        <!-- menu categories -->
+        <!--
+        <menuitem name="Menu 1" id="maintenance_extended.menu_1" parent="maintenance_extended.menu_root"/>
+        <menuitem name="Menu 2" id="maintenance_extended.menu_2" parent="maintenance_extended.menu_root"/>
+        -->
+        <!-- actions -->
+        <!--
+        <menuitem name="List" id="maintenance_extended.menu_1_list" parent="maintenance_extended.menu_1"
+                  action="maintenance_extended.action_window"/>
+        <menuitem name="Server to list" id="maintenance_extended" parent="maintenance_extended.menu_2"
+                  action="maintenance_extended.action_server"/>
+        -->
+    </data>
+</odoo>

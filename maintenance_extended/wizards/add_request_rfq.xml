@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- create a wizard for get supplier and value of order lines-->
+    <record id="view_create_rfq_form" model="ir.ui.view">
+        <field name="name">hr.employee.request.create.form</field>
+        <field name="model">hr.employee.request.create</field>
+        <field name="arch" type="xml">
+            <form string="Create RFQ">
+                <group>
+                    <field name="maintenance_service_order_ref" readonly='1' invisible="1"/>
+                    <field name="purchase_order_type" invisible="1" widget="radio" options="{'horizontal': true}"/>
+                    <field name="service_name" invisible="1" readonly="1" force_save="1"/>
+                    <field name="equipment_service_category" invisible="1" readonly="1" force_save="1"/>
+                    <field name="equipment_service_id"
+                           domain="[('service_support','=', equipment_service_category)]"/>
+                    <field name="service_type" readonly="1" invisible="1"/>
+                    <field name="equipment_id" string="Machine" invisible="1" readonly="1"/>
+                    <field name="machine" invisible="1" readonly="1"/>
+                    <field name="category" invisible="1" readonly="1"/>
+                    <field name="sub_category" invisible="1" readonly="1"/>
+                    <field name="complement_service" invisible="1" readonly="1"/>
+                    <field name="requested_for" invisible="1" readonly="1" force_save="1"/>
+                    <field name="requested_by" readonly="1"/>
+                    <field name="service_limit" readonly="1" force_save="1"
+                           invisible="service_limit == 0"/>
+                </group>
+                <group string="Service Material Requisition"
+                       invisible="equipment_service_category != 'internal_service'">
+                    <group>
+                        <field name="responsible"
+                               required="equipment_service_category == 'internal_service'"/>
+                        <field name="department_id"
+                               required="equipment_service_category == 'internal_service'"/>
+                        <field name="current_job_id"
+                               required="equipment_service_category == 'internal_service'"/>
+                        <field name="current_reporting_manager"/>
+                        <field name="purpose"
+                               required="equipment_service_category == 'internal_service'"/>
+                        <field name="location_id"
+                               domain="[('location_id', '!=',False), ('usage', '!=', 'view')]"
+                               required="equipment_service_category == 'internal_service'"/>
+                    </group>
+                    <group>
+                        <field name="request_raised_for"
+                               required="equipment_service_category == 'internal_service'"/>
+                        <field name="requester_department_id"
+                               readonly="1"
+                               force_save="1"
+                               required="equipment_service_category == 'internal_service'"
+                               invisible="request_raised_for == False"/>
+                        <field name="requester_current_job_id"
+                               readonly="1"
+                               force_save="1"
+                               required="equipment_service_category == 'internal_service'"
+                               invisible="request_raised_for == False"/>
+                        <field name="requester_current_reporting_manager"
+                               readonly="1"
+                               force_save="1"
+                               required="equipment_service_category == 'internal_service'"
+                               invisible="request_raised_for == False"/>
+                        <field name="indent_date"
+                               required="equipment_service_category == 'internal_service'"/>
+                        <field name="no_of_days_after"
+                               required="equipment_service_category == 'internal_service'"/>
+                        <field name="required_date"
+                               required="equipment_service_category == 'internal_service'"/>
+                        <field name="requirement"
+                               required="equipment_service_category == 'internal_service'"
+                               on_change="onchange_requirement(indent_date, requirement)"/>
+                    </group>
+                </group>
+                <group>
+                    <group invisible="equipment_service_category != 'external_service'">
+                        <field name="wiz_service_period" readonly="1" force_save="1"
+                               invisible="complement_service == False"/>
+                        <label for="first_service_wiz" string="Service Period Start"
+                               invisible="complement_service == False"/>
+                        <div class="o_row no-gutters d-flex"
+                             invisible="complement_service == False">
+                            <field name="first_service_wiz" class="oe_inline"
+                                   invisible="complement_service == False"/>
+                            <field name="period_type" class="oe_inline" readonly="1"
+                                   invisible="complement_service == False"/>
+                        </div>
+                        <label for="first_expire_period_wiz" string="Service Period End"
+                               invisible="complement_service == False"/>
+                        <div class="o_row no-gutters d-flex"
+                             invisible="complement_service == False">
+                            <field name="first_expire_period_wiz" class="oe_inline" readonly="1" force_save="1"
+                                   invisible="complement_service == False"/>
+                            <field name="period_type" class="oe_inline" readonly="1" forece_save="1"
+                                   invisible="complement_service == False"/>
+                        </div>
+                        <field name="registered_wiz" readonly="1" force_save="1"
+                               invisible="complement_service == False"/>
+                    </group>
+                    <group invisible="complement_service == False and equipment_service_category != 'external_service'">
+                        <field name="first_service_date_wiz" readonly="1" force_save="1"
+                               invisible="first_service_date_wiz == False"/>
+                        <field name="first_service_expire_wiz" readonly="1" force_save="1"
+                               invisible="first_service_expire_wiz == False"/>
+                        <field name="responsible_wiz" readonly="1" force_save="1"
+                               invisible="responsible_wiz == False"/>
+                        <field name="responsible_wiz_company" readonly="1" force_save="1"
+                               invisible="responsible_wiz_company == False"/>
+                        <field name="service_code_wiz" readonly="1" force_save="1"
+                               invisible="service_code_wiz == False"/>
+                        <field name="comppleted_wiz" readonly="1" force_save="1"
+                               invisible="comppleted_wiz == False"/>
+                    </group>
+                    <group>
+                        <field name="service_limit_wiz" readonly="1" force_save="1"
+                               invisible="equipment_service_category != 'external_service' or service_type == 'paid_service' or service_limit_wiz == 0"/>
+                        <field name="service_utilised_wiz" readonly="1" force_save="1"
+                               invisible="equipment_service_category != 'external_service' or service_type == 'paid_service' or service_limit_wiz == 0"/>
+                        <field name="service_remaining_wiz" readonly="1" force_save="1"
+                               invisible="service_type == 'paid_service' or complement_service == False"/>
+                    </group>
+                </group>
+                <field name="order_lines" invisible="equipment_service_category != 'internal_service'">
+                    <tree string="Service Order Lines" editable="bottom">
+                        <field name="product_id"/>
+                        <field name="product_qty"/>
+                        <field name="product_uom_id" readonly="1" force_save="1"/>
+                        <field name="on_hand_qty" readonly="1" force_save="1"/>
+                    </tree>
+                </field>
+                <field name="cost_estimation_ids" invisible="equipment_service_category != 'external_service'">
+                    <tree string="Cost Estimation Lines" editable="bottom">
+                        <field name="cost_estimation_type"/>
+                        <field name="product_id"
+                               domain="[('detailed_type','=','consu')]"
+                               options="{'no_open': True,'no_quick_create': True, 'no_create_edit' : True}"/>
+                        <field name="description"/>
+                        <field name="product_qty"/>
+                        <field name="product_uom" readonly="1" force_save="1"/>
+                        <field name="unit_price"/>
+                        <field name="sub_total"/>
+                    </tree>
+                </field>
+                <footer>
+<!--                    <button string='Create External Service Request' name='open_equipment_service_form'-->
+<!--                            type='object'-->
+<!--                            invisible="equipment_service_category == 'internal_service'"-->
+<!--                            class='btn-primary'/>-->
+<!--                    <button string='Create Internal Service Request' name='create_new_transfer_contract'-->
+<!--                            type='object'-->
+<!--                            invisible="equipment_service_category != 'internal_service'"-->
+<!--                            class='btn-primary'/>-->
+                    <button string='Cancel' class='btn-default' special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="open_create_service_order_wizard_action" model="ir.actions.act_window">
+        <field name="name">Create Service Order</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">hr.employee.request.create</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="view_create_rfq_form"/>
+    </record>
+
+</odoo>
+
+
+

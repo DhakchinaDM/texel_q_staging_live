@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="layout_configuration_form" model="ir.ui.view">
+            <field name="name">layout.configuration.form</field>
+            <field name="model">layout.configuration</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="part_no"/>
+                                <field name="part_name"/>
+                            </group>
+                        </group>
+                        <separator string="Layout Parameter"/>
+                        <field name="layout_parameter_ids">
+                            <tree editable="bottom">
+                                <field name="sequence" widget="handle"/>
+                                <field name="baloon_no"/>
+                                <field name="description"/>
+                                <field name="spl"/>
+                                <field name="specification"/>
+                                <field name="invalid_min_max" optional="hide"/>
+                                <field name="minimum" decoration-danger="invalid_min_max == True"/>
+                                <field name="maximum" decoration-danger="invalid_min_max == True"/>
+                                <field name="method_of_check"/>
+                            </tree>
+                        </field>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="layout_configuration_tree_view" model="ir.ui.view">
+            <field name="name">layout.configuration.tree</field>
+            <field name="model">layout.configuration</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="part_no" string="Part No"/>
+                    <field name='part_name'/>
+                </tree>
+            </field>
+        </record>
+        <record id="layout_configuration_action" model="ir.actions.act_window">
+            <field name="name">Layout Configuration</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">layout.configuration</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_no content_smiling_face">
+                    Layout Information
+                </p>
+            </field>
+        </record>
+<!--        <menuitem id="layout_configuration_main_menu"-->
+<!--                  name="Layout Configuration"-->
+<!--                  parent="quality_control.menu_quality_configuration"-->
+<!--                  action="layout_configuration_action"-->
+<!--                  sequence="4"/>-->
+    </data>
+</odoo>

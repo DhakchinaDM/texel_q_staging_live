@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="sh_purchase_order_wizard_form_view" model="ir.ui.view">
+            <field name="name">sh.purchase.order.wizard.form.view</field>
+            <field name="model">purchase.order.wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <span>
+                        <strong>Note:</strong>
+                        <br/>
+                        1.If Group By is selected single Supplier based single Purchase Indent will be generated.
+                        <br/>
+                        2.If Group By is not selected As per products in the line items single Purchase Indent will be generated
+                        with the selected Supplier
+                        <br/>
+                        <br/>
+                    </span>
+                    <group>
+                        <field name="sh_group_by_partner"/>
+                    </group>
+                    <footer>
+                        <button string='Generate Purchase Request' name="action_create_po" type="object"
+                                icon="fa-asterisk"
+                                class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_purchase_order_wizard" model="ir.actions.act_window">
+            <field name="name">Generate Purchase Request</field>
+            <field name="res_model">purchase.order.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <record id="sh_generate_purchase_order_action" model="ir.actions.act_window">
+            <field name="name">Generate Purchase Request</field>
+            <field name="res_model">purchase.order.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="binding_view_types">list</field>
+            <field name="binding_model_id" ref="apps_tender_management.model_purchase_order_line"/>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>

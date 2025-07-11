@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record id="operation_form_inherit" model="ir.ui.view">
+            <field name="name">mrp.routing.workcenter.form.inherit</field>
+            <field name="model">mrp.routing.workcenter</field>
+            <field name="inherit_id" ref="mrp.mrp_routing_workcenter_form_view"/>
+            <field name="arch" type="xml">
+                <field name="bom_id" position="attributes">
+                    <attribute name="invisible">0</attribute>
+                </field>
+                <field name="workcenter_id" position="attributes">
+                    <attribute name="invisible">0</attribute>
+                    <attribute name="required">0</attribute>
+                </field>
+                <field name="bom_product_template_attribute_value_ids" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="time_mode" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <page name="worksheet" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </page>
+            </field>
+        </record>
+    </data>
+</odoo>

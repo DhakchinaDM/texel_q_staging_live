@@ -1,0 +1,101 @@
+<odoo>
+    <data>
+        <record id="report_mrp_single_productivity" model="ir.actions.report">
+            <field name="name">Work Order Label</field>
+            <field name="model">productivity.line</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">manufacturing_extended.report_mrp_single_productivity_template</field>
+            <field name="report_file">manufacturing_extended.report_mrp_single_productivity_template</field>
+            <field name="print_report_name">'Work Order Label'</field>
+            <field name="paperformat_id" ref="manufacturing_extended.paperformat_finished_work"/>
+            <field name="binding_type">report</field>
+            <field name="binding_model_id" ref="model_productivity_line"/>
+        </record>
+
+        <!-- Report Template -->
+        <template id="report_mrp_single_productivity_template">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+
+                    <t t-call="web.basic_layout">
+                        <div class="page" style="border:1px solid #000;">
+                            <div class="row" style="border-bottom:1px solid #000;">
+                                <h3 style="text-align: center; font-weight: bold;">TEXELQ ENGINEERING INDIA PVT
+                                    LTD
+                                </h3>
+                            </div>
+                            <div class="row" style="border-bottom:1px solid #000;">
+                                <div class="col-3 text-center" style="border-right: 1px solid #000;">
+                                    <strong>PART NO.</strong>
+                                </div>
+                                <div class="col-3 text-center" style="border-right: 1px solid #000;">
+                                    <t t-esc="doc.product_id.default_code"/>
+                                </div>
+                                <div class="col-3 text-center" style="border-right: 1px solid #000;">
+                                    <strong>SHIFT</strong>
+                                </div>
+                                <div class="col-3 text-center">
+                                    <strong t-field="doc.workcenter_productivity_id.shift"/>
+                                </div>
+                            </div>
+                            <div class="row" style="border-bottom:1px solid #000;">
+                                <div class="col-3 text-center" style="border-right: 1px solid #000;">
+                                    <strong>PART NAME</strong>
+                                </div>
+                                <div class="col-9 text-center">
+                                    <t t-esc="doc.product_id.name"/>
+                                </div>
+                            </div>
+                            <div class="row" style="border-bottom:1px solid #000;">
+                                <div class="col-3 text-center" style="border-right: 1px solid #000;">
+                                    <strong>CUR OP</strong>
+                                </div>
+                                <div class="col-3 text-center" style="border-right: 1px solid #000;">
+                                    <t t-esc="doc.op_code"/>
+                                </div>
+                                <div class="col-3 text-center" style="border-right: 1px solid #000;">
+                                    <strong>NEXT OP</strong>
+                                </div>
+                                <div class="col-3 text-center">
+                                    <t t-esc="doc.next_op_code"/>
+                                </div>
+                            </div>
+                            <div class="row" style="border-bottom:1px solid #000;">
+                                <div class="col-3 text-center" style="border-right: 1px solid #000;">
+                                    <strong>DATE</strong>
+                                </div>
+                                <div class="col-3 text-center" style="border-right: 1px solid #000;">
+                                    <t t-esc="doc.date.strftime('%d-%m-%Y')"/>
+                                </div>
+                                <div class="col-3 text-center" style="border-right: 1px solid #000;">
+                                    <strong>JOB NO</strong>
+                                </div>
+                                <div class="col-3 text-center">
+                                    <t t-esc="doc.job_id.name"/>
+                                </div>
+                            </div>
+                            <div class="row" style="border-bottom:1px solid #000;">
+                                <div class="col-3 text-center" style="border-right: 1px solid #000;">
+                                    <strong t-field="doc.qty_type"/>
+                                </div>
+                                <div class="col-3 text-center">
+                                    <t t-esc="doc.produced_qty" t-options="{'widget': 'float', 'precision': 0}"/>
+                                </div>
+                                <div class="col-3 text-center" style="border-right: 1px solid #000;">
+                                    <strong>LOT/SERIAL NO.</strong>
+                                </div>
+                                <div class="col-3 text-center">
+                                    <t t-esc="doc.lot_id.name"/>
+                                </div>
+                            </div>
+                            <div style="text-align: center; padding:10px;z-index:-99;">
+                                <t t-esc="doc.lot_id.name"
+                                   t-options="{'widget': 'barcode', 'barcode_type': 'Code128'}"/>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

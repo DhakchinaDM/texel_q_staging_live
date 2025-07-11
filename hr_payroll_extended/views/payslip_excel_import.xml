@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="payslip_excel_import_view_form" model="ir.ui.view">
+        <field name="name">payslip.excel.view.form</field>
+        <field name="model">payslip.excel.import</field>
+        <field name="arch" type="xml">
+            <form string="Excel Payslip">
+                <header>
+                    <h4>
+                        <button name="generate_payslip"
+                                string="Generate Payslip"
+                                type="object"
+                                invisible="status != 'draft' or is_executed == False"
+                                class="fa fa-play btn btn-primary" style="font-size: 10px;"/>
+                        <button name="generate_payslip_automatic_att"
+                                string="Generate Payslip Automatic Attendance"
+                                type="object"
+                                invisible="status != 'draft' or is_executed == False"
+                                class="fa fa-play btn btn-primary" style="font-size: 10px;"/>
+                    </h4>
+                    <field name="status" widget="statusbar" statusbar_visible="draft,generate"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button type="object" name="get_payslip_views" class="oe_stat_button" icon="fa-tasks"
+                                invisible="payslip_count == 0">
+                            <field name="payslip_count" widget="statinfo" string="Payslip"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" required="1" readonly="status in ['generate']" string="Reference"
+                                   placeholder="Reference"/>
+                        </h1>
+                    </div>
+                    <group/>
+                    <group>
+                        <group>
+                            <strong style="color:#212529; font-weight:500;font-size:18px;">Period
+                            </strong>
+                            <h4>
+                                <div>
+                                    <div class="o_row" name="select_month">
+                                        <field name="select_month" required="1" class="oe_inline"
+                                               readonly="status in ['generate']"/>
+                                        <field name="select_year" required="1" class="oe_inline"
+                                               options="{'no_open': True,'no_create':True, 'no_edit':True}"
+                                               readonly="status in ['generate']"/>
+                                    </div>
+                                    <div class="o_row" name="date_from">
+                                        <field name="date_from" force_save="1"
+                                               class="oe_inline"/>
+                                        <field name="date_to" force_save="1" class="oe_inline"/>
+                                    </div>
+                                </div>
+                            </h4>
+                            <strong style="color:#212529; font-weight:500;font-size:18px;">Type
+                            </strong>
+                            <h4>
+                                <div>
+                                    <field name="attendance_type" widget="radio" options="{'horizontal': true}"
+                                           required="1"/>
+                                </div>
+                            </h4>
+                            <div style="margin-bottom:20px"></div>
+                            <h4>
+                                <field name="excel_sheet" placeholder="Upload the Excel to execute"
+                                       readonly="status in ['generate']"/>
+                                <field name="user_id" invisible="1"/>
+                                <field name="company_id" invisible="1"/>
+                                <field name="currency_symbol" invisible="1"/>
+                                <field name="logged_user" invisible="1"/>
+                                <field name="is_executed" invisible="1"/>
+                            </h4>
+                            <h4>
+                                <div style="margin-bottom: 46px;">
+                                    <button name="get_excel_data"
+                                            string="Execute/Refresh"
+                                            type="object"
+                                            invisible="status in ['generate']"
+                                            class="fa fa-play btn btn-primary" style="font-size: 10px;"/>
+                                </div>
+                            </h4>
+                        </group>
+                        <group>
+                            <field name="total_days_of_month"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="payslip_ids" invisible="1" placeholder="Payslip Reference"
+                               widget="many2many_tags"/>
+                    </group>
+                    <h4>
+                        <div style="font-size: 15px; font-weight: bold; margin-bottom: 10px;">Result:</div>
+                    </h4>
+                    <div style="overflow: scroll">
+                        <group>
+                            <field name="data_html" type="html" class="oe_memo" default_focus="1" string=""
+                                   options="{'resizable': false, 'collaborative': true}"/>
+                        </group>
+                    </div>
+                    <group/>
+                </sheet>
+                <div class="o_attachment_preview" groups="hr_payroll.group_payslip_display"/>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="psql_query_view_tree" model="ir.ui.view">
+        <field name="name">payslip.excel.import.view.tree</field>
+        <field name="model">payslip.excel.import</field>
+        <field name="arch" type="xml">
+            <tree string="Excel Payslip">
+                <field name="name"/>
+                <field name="select_month"/>
+                <field name="select_year"/>
+                <field name="payslip_count"/>
+                <field name="create_uid"/>
+                <field name="create_date"/>
+                <field name="status"/>
+            </tree>
+        </field>
+    </record>
+    <record id="action_payslip_excel_import" model="ir.actions.act_window">
+        <field name="name">Payslip Batches</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">payslip.excel.import</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Execute Excel sheet
+            </p>
+        </field>
+    </record>
+    <menuitem id="payslip_excel_import_root" name="Payslip Batches"
+              parent="hr_payroll.menu_hr_payroll_payslips"
+              action="action_payslip_excel_import" sequence="99"/>
+    <menuitem
+            id="hr_payroll.menu_hr_payslip_run"
+            parent="hr_payroll.menu_hr_payroll_payslips"
+            action="hr_payroll.action_hr_payslip_run_tree"
+            name="Batches"
+            active="False"
+            sequence="80"/>
+</odoo>

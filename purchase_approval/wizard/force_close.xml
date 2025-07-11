@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="force_close_view_form" model="ir.ui.view">
+            <field name="name">force.close.form</field>
+            <field name="model">force.close</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="remarks"/>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button name="tick_ok" type='object' string="Submit" class="oe_highlight"
+                                icon="fa-check-circle"/>
+<!--                        <button name="button_cancel" type='object' string="Cancel kkkk" class="oe_highlight"-->
+<!--                                icon="fa-times-circle"/>-->
+                        <button string="Cancel" class="btn-secondary" special="cancel" data-hotkey="x"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<template id="template" xml:space="preserve">
+    <t t-name="AttendanceDashboard" owl="1">
+        <div class="o_action_manager" style="height: 100%; overflow-y:scroll"
+             t-ref="attendance-dashboard">
+        <div class="employee_dashboard">
+        <div style="padding:10px;">
+            <p><h1>HR Attendance Dashboard</h1></p>
+        </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+        <label for="start_date" style="white-space: nowrap; color: #333; font-weight: bold;">Start Date</label>
+                        <input type="date" id="start_date" class="form-control" t-on-change="onStartDateChange"
+                               style="padding: 5px 10px; border-radius: 5px; border: 1px solid #ccc;"/>
+
+                        <label for="end_date"
+                               style="white-space: nowrap; color: #333; font-weight: bold;">End Date</label>
+                        <input type="date" id="end_date" class="form-control" t-on-change="onEndDateChange"
+                               style="padding: 5px 10px; border-radius: 5px; border: 1px solid #ccc;"/>
+
+                        <input type="text" class="search-bar"
+                               style="border: 1px solid #ccc; padding: 5px 10px; border-radius: 5px;"
+                               id="search-bar" placeholder="Search Employee"/>
+
+                        <button type="object" t-on-click="_OnClickSearchEmployee"
+                                class="btn btn-primary search_employee"
+                                style="padding: 6px 15px; border-radius: 5px;">
+            Apply
+        </button>
+                        <button type="object"
+                                t-on-click="_OnClickPdfReport"
+                                class="btn btn-primary search_employee"
+                                style="padding: 6px 15px; border-radius: 5px; background-color: #F40F02; color: white; border: none;">
+        PDF
+    </button>
+                        <button type="object"
+                                t-on-click="_OnClickExcelReport"
+                                class="btn btn-success search_employee"
+                                style="padding: 6px 15px; border-radius: 5px; background-color: #28a745; color: white; border: none;">
+    Excel
+</button>
+
+    </div>
+</div>
+
+            <div class="attendance_table">
+            <table id="attendance_table" class="hr_attendance"/>
+        </div>
+            <div class="attendance_cust">
+            <table class="table" id="attendance_table_nm">
+
+                <thead class="attendance_cust">
+    <th><strong>Employee Name</strong></th>
+                    <th><strong>Employee Code</strong></th>
+
+                    <t t-foreach="state.filteredDurationDates" t-as="tDate" t-key="tDate_index">
+    <th t-attf-style="
+        background: {{
+            isPublicHoliday(tDate) ? '#b4dea2' :
+            isSunday(tDate) ? '#c78373' : ''
+        }};
+        color: {{ isPublicHoliday(tDate) ? '#fff' : '' }};
+    "
+        t-att-title="isPublicHoliday(tDate) ? isPublicHoliday(tDate).name : ''">
+
+    <t t-if="isPublicHoliday(tDate)">
+        <span t-out="formatDate(tDate)"/>
+        <br/>
+        <span t-out="isPublicHoliday(tDate).name"/>
+    </t>
+        <t t-if="!isPublicHoliday(tDate)">
+        <span t-out="formatDate(tDate)"/>
+    </t>
+    </th>
+</t>
+
+                    <th style="text-align: center;"><strong>Total</strong></th>
+
+                </thead>
+
+
+                <tbody class="attendance_cust">
+    <tr t-foreach="state.employeeData" t-as="employee" t-key="employee_index" class="attendance_cust">
+        <td t-out="employee.name" t-att-data-name="employee.name"/>
+        <td t-out="employee.emp_code" t-att-data-emp-code="employee.emp_code"/>
+
+       <t t-foreach="employee.leave_data" t-as="leave" t-key="leave_index">
+    <td class="employee-leave-data table-data"
+        t-attf-style="
+            background: {{
+                leave.state === 'W/O-P/H' ? '#9c8cd8' :
+                leave.state === 'P/H' ? '#73c77a' :
+                leave.state === 'W/O' ? '#c78373' :
+                leave.color
+            }};
+            color: {{ (leave.state === 'P/H' || leave.state === 'W/O-P/H') ? '#fff' : '' }};
+        "
+        t-att-title="leave.state === 'P/H' || leave.state === 'W/O-P/H' ? (state.publicHolidays.find(ph => ph.date === leave.leave_date)?.name) : ''">
+        <t t-if="leave.displayState">
+            <span class="leave-data" t-out="leave.displayState"/>
+        </t>
+    </td>
+</t>
+
+
+
+        <td t-out="employee.totalPresentDays" style="text-align: center;"/>
+    </tr>
+</tbody>
+
+            </table>
+        </div>
+        </div>
+        </div>
+    </t>
+</template>

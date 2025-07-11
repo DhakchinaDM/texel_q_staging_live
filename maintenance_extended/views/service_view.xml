@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_support_type_form" model="ir.ui.view">
+            <field name="name">equipment.support.details.form</field>
+            <field name="model">equipment.support.details</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <div class="oe_button_box " name="button_box">
+                            <button name="equipment_service_support_count_view"
+                                    class="oe_stat_info"
+                                    icon="fa-wrench"
+                                    type="object" invisible="service_count == 0">
+                                <field name="service_count" class="oe_stat_value"/>
+                                <span class="oe_stat_text">Machines</span>
+                            </button>
+                            <button name="equipment_service_request_count_view"
+                                    class="oe_stat_info"
+                                    icon="fa-eject"
+                                    type="object" invisible="service_count_new == 0">
+                                <field name="service_count_new" class="oe_stat_value"/>
+                                <span class="oe_stat_text">Support</span>
+                            </button>
+                        </div>
+                        <field name="image"
+                               widget="image"
+                               class="oe_avatar oe_right"/>
+                        <group string="Equipment Service">
+                            <group>
+                                <field name="service_type"/>
+                                <field name="name"/>
+                                <field name="complement_service_utilized"
+                                       invisible="service_type == 'paid_service' or service_support == 'internal_service'"/>
+                                <field name="complement_service"
+                                       invisible="service_type == 'paid_service' or service_support == 'internal_service'"/>
+                                <field name="free_service_limit"
+                                       invisible="service_type == 'paid_service' or service_support == 'internal_service' or name == 'Paid Service'"/>
+                                <field name="free_service_limit_used"
+                                       invisible="service_type == 'paid_service' or service_support == 'internal_service' or name == 'Paid Service'"/>
+                                <field name="free_service_remaining_limit" readonly="1"
+                                       invisible="service_type == 'paid_service' or service_support == 'internal_service' or name == 'Paid Service'"/>
+                            </group>
+                            <group>
+                                <field name="service_support"/>
+                                <field name="equipment_id"/>
+                                <field name="machine_id"/>
+                                <label for="first_warranty"/>
+                                <div class="o_row" name="first_warranty">
+                                    <field name="first_warranty"/>
+                                    <span>/ Years</span>
+                                </div>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_support_type_tree" model="ir.ui.view">
+            <field name="name">equipment.support.details.tree</field>
+            <field name="model">equipment.support.details</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="service_support"/>
+                    <field name="maintenance_service_stages"/>
+                    <field name="equipment_id"/>
+                    <field name="service_type"/>
+                    <field name="first_service_date"/>
+                    <field name="first_expire_date"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="machine_support_type_action" model="ir.actions.act_window">
+            <field name="name">Equipment Support</field>
+            <field name="res_model">equipment.support.details</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+<!--        <menuitem id="menu_support_type_details_root"-->
+<!--                  name="Service Support"-->
+<!--                  sequence="57"-->
+<!--                  parent="maintenance.menu_maintenance_configuration"-->
+<!--                  action="machine_support_type_action"/>-->
+
+        <record id="view_services_form" model="ir.ui.view">
+            <field name="name">services.details.form</field>
+            <field name="model">services.details</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group string="Machine Services">
+                            <group>
+                                <field name="name"/>
+
+                            </group>
+                            <group>
+                                <field name="equipment_service"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_services_tree" model="ir.ui.view">
+            <field name="name">services.details.tree</field>
+            <field name="model">services.details</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="equipment_service"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="machine_service_action" model="ir.actions.act_window">
+            <field name="name">Services</field>
+            <field name="res_model">services.details</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record id="view_services_type_form" model="ir.ui.view">
+            <field name="name">services.type.details.form</field>
+            <field name="model">services.type.details</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group string="Machine Services">
+                            <group>
+                                <field name="name"/>
+                                <field name="code" required="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_services_type_tree" model="ir.ui.view">
+            <field name="name">services.type.details.tree</field>
+            <field name="model">services.type.details</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="code"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="machine_service_type_action" model="ir.actions.act_window">
+            <field name="name">Service Type</field>
+            <field name="res_model">services.type.details</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record id="external_delivery_order_tree" model="ir.ui.view">
+            <field name="name">external.delivery.order.tree</field>
+            <field name="model">external.delivery.order</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <tree string="External Service Delivery Order">
+                    <field name="name"/>
+                    <field name="reference"/>
+                    <field name="reference_code"/>
+                    <field name="supplier_name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="external_delivery_order" model="ir.ui.view">
+            <field name="name">external.delivery.order.form</field>
+            <field name="model">external.delivery.order</field>
+            <field name="arch" type="xml">
+                <form string="External Service Delivery Order">
+                    <header>
+                        <button name="external_delivery_validate" type="object" string="Validate"
+                                class="oe_highlight"
+                                invisible="state != 'delivery_sent'"/>
+                        <button name="delivery_complete" type="object" string="Delivery Complete"
+                                class="oe_highlight"
+                                invisible="state != 'under_service'"/>
+                        <field name="state" widget="statusbar" clickable="1"
+                               statusbar_visible="draft,delivery_sent,under_service,completed"/>
+                    </header>
+                    <sheet>
+                        <h1>
+                            <strong>
+                                <field name="request_code"/>
+                            </strong>
+                        </h1>
+                        <group>
+                            <group>
+                                <field name="name"/>
+<!--                                <field name="out_gate_entry_id" invisible="0"/>-->
+<!--                                <field name="in_gate_entry_id" invisible="0"/>-->
+                                <field name="reference" readonly="1"/>
+                                <field name="machine_id"/>
+                                <field name="equip_name"/>
+                                <field name="category_name"/>
+                                <field name="subcategory_id"/>
+                            </group>
+                            <group>
+                                <field name="supplier_name"/>
+                                <field name="assigned_by"/>
+                                <field name="service_takeover_incharge"/>
+                                <field name="service_type"/>
+                                <field name="request_by"/>
+                                <field name="remarks"/>
+                                <field name="reference_code"/>
+                                <field name="external_delivery_status"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model='ir.actions.act_window' id='action_view_external_service_delivery_order'>
+            <field name="name">External Delivery Order</field>
+            <field name="res_model">external.delivery.order</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="menu_external_service_order_menu"
+                  name="External Delivery"
+                  active="False"
+                  parent="maintenance.menu_maintenance_title"
+                  sequence="50"/>
+        <menuitem
+                name="External Delivery Order"
+                id="menu_view_external_service_order_menu"
+                parent="maintenance_extended.menu_external_service_order_menu"
+                action="action_view_external_service_delivery_order"
+                sequence="19"/>
+    </data>
+</odoo>

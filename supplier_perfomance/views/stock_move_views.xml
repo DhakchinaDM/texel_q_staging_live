@@ -1,0 +1,16 @@
+<odoo>
+    <record id="stock_picking_form_inherited_view" model="ir.ui.view">
+        <field name="name">stock.picking.form</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='move_ids_without_package']/tree//field[@name='product_id']"
+                   position="after">
+                <field name="barcode" optional="hide"/>
+                <field name="mfg_date" optional="hide"/>
+                <field name="supplier_reference" optional="hide"/>
+                <field name="inv_date" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

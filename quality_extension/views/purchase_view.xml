@@ -1,0 +1,19 @@
+<odoo>
+    <menuitem name="Purchase"
+              id="q_purchase_menu"
+              parent="quality_control.menu_quality_root"
+              sequence="0"/>
+
+     <menuitem name="Requests for Quotation"
+              id="rfq_request_q_menu"
+              parent="quality_extension.q_purchase_menu"
+              sequence="1"
+              action="purchase_request.purchase_request_action_view"/>
+
+      <menuitem name="Purchase Request"
+              id="purchase_request_quality_menu"
+              parent="quality_extension.q_purchase_menu"
+              sequence="2"
+              action="purchase.purchase_rfq"/>
+
+</odoo>

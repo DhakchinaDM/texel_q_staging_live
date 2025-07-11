@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="seq_calibration_request" model="ir.sequence">
+            <field name="name">Instruments Request</field>
+            <field name="code">calibration.request</field>
+            <field name="prefix">INST/MMR/</field>
+            <field name="padding">3</field>
+            <field name="number_increment">1</field>
+            <field name="company_id" eval="False"/>
+            <field name="implementation">standard</field>
+        </record>
+
+        <record id="seq_calibration_request_gauge" model="ir.sequence">
+            <field name="name">Gauge Request</field>
+            <field name="code">calibration.request.gauge</field>
+            <field name="prefix">GR/MMR/</field>
+            <field name="padding">3</field>
+            <field name="number_increment">1</field>
+            <field name="company_id" eval="False"/>
+            <field name="implementation">standard</field>
+        </record>
+
+        <record id="calibration_request_form_view" model="ir.ui.view">
+            <field name="name">calibration.request.form</field>
+            <field name="model">calibration.request</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_approve" type="object"
+                                class="oe_highlight" string="Approve"
+                                invisible="calib_state not in 'draft'"/>
+                        <button name="action_obsolete" type="object"
+                                class="oe_highlight" string="Obsolete"
+                                invisible="calib_state not in 'draft'"/>
+                        <field name="calib_state" widget="statusbar"
+                               statusbar_visible="draft,done"/>
+                    </header>
+                    <sheet>
+                        <h1>
+                            <field name='name' readonly="1" force_save="1"/>
+                        </h1>
+                        <group invisible="request_instruments == 'gauges'">
+                            <group string="Instrument Request">
+                                <field name="mmr_id" string="INST Code No"/>
+                                <field name="mmr_name"/>
+                                <field name="mmr_range"/>
+                                <field name="calib_attachment" required="1" filename="file_name"/>
+                                <field name="file_name" invisible="1"/>
+                            </group>
+                            <group string="Instrument Request">
+                                <!--                                <field name="mmr_frequency"/>-->
+                                <field name="mmr_frequency_selection" readonly="1"/>
+                                <field name="request_instruments" invisible="1"/>
+                                <field name="due_date_request" string="Request Date"/>
+                            </group>
+                        </group>
+                        <group invisible="request_instruments == 'calibration'">
+                            <group string="Gauges Request">
+                                <field name="mmr_id" string="Gauge Code No"/>
+                                <field name="mmr_name"/>
+                                <field name="part_no"/>
+                                <field name="part_char_name"/>
+                                <field name="size"/>
+                                <field name="calib_attachment" required="1" filename="file_name"/>
+                                <field name="file_name" invisible="1"/>
+                            </group>
+                            <group string="Gauges Request">
+                                <!--                                <field name="mmr_frequency"/>-->
+                                <field name="mmr_frequency_selection" readonly="1"/>
+                                <field name="request_instruments" invisible="1"/>
+                                <field name="due_date_request" string="Request Date"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="calibration_request_tree_view_gauge" model="ir.ui.view">
+            <field name="name">Calibration Request Tree View</field>
+            <field name="model">calibration.request</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name='name'/>
+                    <field name='mmr_id' string="Gauge Code No"/>
+                    <field name="mmr_name"/>
+                    <field name="size"/>
+                    <field name="part_no" />
+                    <field name="part_char_name" />
+                    <field name="due_date_request" string="Calibration Date"/>
+                    <field name='calib_state' widget="badge"
+                           decoration-muted="calib_state in 'draft'"
+                           decoration-danger="calib_state in 'obsolete'"
+                           decoration-success="calib_state in 'done'"/>
+                </tree>
+            </field>
+        </record>
+        <record id="calibration_request_tree_view_mmr" model="ir.ui.view">
+            <field name="name">Calibration Request Tree View</field>
+            <field name="model">calibration.request</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name='name'/>
+                    <field name='mmr_id' string="INST Code No"/>
+                    <field name="mmr_name"/>
+                    <field name="mmr_range"/>
+                    <field name="due_date_request" string="Calibration Date"/>
+                    <field name='calib_state' widget="badge"
+                           decoration-muted="calib_state in 'draft'"
+                           decoration-danger="calib_state in 'obsolete'"
+                           decoration-success="calib_state in 'done'"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="view_calib_request_search_view_gauge" model="ir.ui.view">
+            <field name="name">calibration.request.search</field>
+            <field name="model">calibration.request</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="mmr_id" string="Gauge Code No"/>
+                    <field name="mmr_name"/>
+                    <field name="calib_state"/>
+                    <separator/>
+                    <searchpanel>
+                        <field name="calib_state" icon="fa-filter"/>
+                        <field name="mmr_id" string="Gauge Code No" icon="fa-filter"/>
+                    </searchpanel>
+                </search>
+            </field>
+        </record>
+        <record id="view_calib_request_search_view_mmr" model="ir.ui.view">
+            <field name="name">calibration.request.search</field>
+            <field name="model">calibration.request</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="mmr_id" string="INST Code No"/>
+                    <field name="mmr_name"/>
+                    <field name="calib_state"/>
+                    <separator/>
+                    <searchpanel>
+                        <field name="calib_state" icon="fa-filter"/>
+                        <field name="mmr_id" string="INST Code No" icon="fa-filter"/>
+                    </searchpanel>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_gauge_request" model="ir.actions.act_window">
+            <field name="name">Gauge Request</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">calibration.request</field>
+            <field name="context">{'default_request_instruments': 'gauges'}</field>
+            <field name="search_view_id" ref="quality_extension.view_calib_request_search_view_gauge"/>
+            <field name="domain">[('request_instruments', '=', 'gauges')]</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="calibration_request_tree_view_gauge"/>
+            <field name="help" type="html">
+                <p class="o_view_no content_smiling_face">
+                    Gauge Request
+                </p>
+            </field>
+        </record>
+        <record id="action_calibration_request" model="ir.actions.act_window">
+            <field name="name">Instrument Request</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">calibration.request</field>
+            <field name="context">{'default_request_instruments': 'calibration'}</field>
+            <field name="search_view_id" ref="quality_extension.view_calib_request_search_view_mmr"/>
+            <field name="domain">[('request_instruments', '=', 'calibration')]</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="calibration_request_tree_view_mmr"/>
+            <field name="help" type="html">
+                <p class="o_view_no content_smiling_face">
+                    Instruments Request
+                </p>
+            </field>
+        </record>
+
+
+        <menuitem id="menu_gauge_request"
+                  name="Gauge Request"
+                  parent="quality_control.menu_quality_control"
+                  action="action_gauge_request"
+                  sequence="6"/>
+        <menuitem id="menu_calibration_request"
+                  name="Instrument Request"
+                  parent="quality_control.menu_quality_control"
+                  action="action_calibration_request"
+                  sequence="6"/>
+    </data>
+</odoo>

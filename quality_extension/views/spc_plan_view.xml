@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="seq_spc_plan" model="ir.sequence">
+            <field name="name">Spc Plan</field>
+            <field name="code">spc.plan</field>
+            <field name="prefix">SPC/PL/</field>
+            <field name="padding">3</field>
+            <field name="number_increment">1</field>
+            <field name="company_id" eval="False"/>
+            <field name="implementation">standard</field>
+        </record>
+        <record id="spc_plan_form_view" model="ir.ui.view">
+            <field name="name">spc.plan.form</field>
+            <field name="model">spc.plan</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="draft_to_submit"
+                                string="Submit For Approval"
+                                type="object"
+                                state="draft"
+                                icon="fa-book"
+                                class="oe_highlight"
+                                invisible="state != 'draft'"/>
+                        <button name="approve_to_confirm"
+                                string="Approved"
+                                type="object"
+                                state="approve"
+                                icon="fa-book"
+                                class="oe_highlight"
+                                invisible="state != 'submit_for_approve'"/>
+                        <button name="allow_reject"
+                                string="Reject"
+                                type="object"
+                                state="approve"
+                                icon="fa-book"
+                                class="oe_highlight"
+                                invisible="state != 'submit_for_approve'"/>
+                        <button name="draft_submit"
+                                string="Set To Draft"
+                                type="object"
+                                state="reject"
+                                icon="fa-book"
+                                class="oe_highlight"
+                                invisible="state not in('reject' , 'cancel')"/>
+                        <button name="print_excel" string="Print Excel" type="object" class="oe_highlight"
+                                groups="base.group_no_one"/>
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="draft,submit_for_approve,approve"/>
+                    </header>
+                    <sheet>
+                        <h1>
+                            <field name='name' readonly="1" force_save="1"/>
+                        </h1>
+                        <group>
+                            <group name="spc_plan" string="SPC Plan Information">
+                                <label for="year" string="Year"/>
+                                <div class="row">
+                                    <field name="year" class="oe_inline"/>
+                                    <field name="end_year" class="oe_inline"/>
+                                </div>
+                                <field name="rev_no"/>
+                            </group>
+                            <group string="Plan Approves">
+                                <field name="prepared_by"/>
+                                <field name="approved_by"/>
+                                <field name="company_id" invisible="1"/>
+                                <field name="currency_symbol" invisible="1"/>
+                                <field name="logged_user" invisible="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="SPC Plan Details">
+                                <field name="spc_plan_ids">
+                                    <tree editable="bottom">
+                                        <field name="product_id"/>
+                                        <field name="part_name"/>
+                                        <field name="parameter_id"/>
+                                        <field name="gauges_id" optional="hide"/>
+                                        <field name="specification"/>
+                                        <field name="customer_name"/>
+                                        <field name="month"/>
+                                        <field name="year"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <record id="spc_plan_tree_view" model="ir.ui.view">
+            <field name="name">spc.plan.tree</field>
+            <field name="model">spc.plan</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name='year' string="From"/>
+                    <field name="end_year" string="To"/>
+                    <field name='name'/>
+                    <field name='create_date'/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_spc_plan_search_view" model="ir.ui.view">
+            <field name="name">spc.plan.search</field>
+            <field name="model">spc.plan</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="year"/>
+                    <field name="name"/>
+                    <separator/>
+                    <searchpanel>
+                        <field name="year" icon="fa-filter"/>
+                    </searchpanel>
+                </search>
+            </field>
+        </record>
+
+        <record id="spc_plan_action" model="ir.actions.act_window">
+            <field name="name">SPC Data</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">spc.plan</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_no content_smiling_face">
+                    SPC Plan
+                </p>
+            </field>
+        </record>
+<!--        <menuitem id="spc_plan_main_menu"-->
+<!--                  name="SPC Data"-->
+<!--                  parent="quality_control.menu_quality_control"-->
+<!--                  action="spc_plan_action"-->
+<!--                  sequence="9"/>-->
+    </data>
+</odoo>

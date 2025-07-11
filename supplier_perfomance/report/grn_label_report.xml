@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="paper_format_grn_label_report" model="report.paperformat">
+        <field name="name">GRN Label</field>
+        <field name="default" eval="True"/>
+        <field name="format">custom</field>
+        <field name="page_height">60</field>
+        <field name="page_width">100</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">2</field>
+        <field name="margin_bottom">2</field>
+        <field name="margin_left">1</field>
+        <field name="margin_right">1</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">0</field>
+        <field name="dpi">100</field>
+    </record>
+
+    <record id="report_grn_label_pdf" model="ir.actions.report">
+        <field name="name">GRN Label PDF Report</field>
+        <field name="model">stock.picking</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">supplier_perfomance.grn_label_template</field>
+        <field name="report_file">supplier_perfomance.grn_label_template</field>
+        <field name="paperformat_id" ref="supplier_perfomance.paper_format_grn_label_report"/>
+    </record>
+
+    <template id="grn_label_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.basic_layout">
+                    <t t-foreach="o.move_ids" t-as="line">
+                        <div class="page">
+                            <div style="page-break-after: always;">
+                                <div>
+                                    <span t-esc="line.product_id.default_code"/>
+                                    <span t-field="line.product_id.part_type"/>
+                                </div>
+                                <div>
+                                    <span>REV :</span>
+                                </div>
+                                <div>
+                                    <span t-esc="line.product_id.name"/>
+                                    <span>-</span>
+                                    <span t-field="line.product_id.part_type"/>
+                                </div>
+                                <h2 style="color: black; width: 80%; border-top: 2px solid black;"/>
+                                <div class="row">
+                                    <div class="col-7" align="left">
+                                        <span>QTY :</span>
+                                        <span t-esc="'%.0f' % line.quantity"/>
+                                        <span>PCS</span>
+                                        <br/>
+                                        <span>MFG DATE :</span>
+                                        <t t-if="line.mfg_date">
+                                            <span t-esc="line.mfg_date.strftime('%d/%m/%Y')"/>
+                                        </t>
+                                        <t t-else="">
+                                            <span>-</span>
+                                        </t>
+                                        <br/>
+                                         <t t-if="line.picking_id">
+                                            <span t-esc="line.picking_id.name"/>
+                                        </t>
+                                        <t t-else="">
+                                            <span>-</span>
+                                        </t>
+                                        <div t-field="line.barcode"
+                                             t-options="{'widget': 'barcode', 'symbology': 'auto', 'width': 400, 'height': 100, 'quiet': 0, 'img_style': 'height:35px;'}">
+                                        </div>
+                                        <div style="margin-left:10px;margin-top:4px" t-field="line.barcode"/>
+                                    </div>
+                                    <div class="col-5" align="left">
+                                        <h7>
+                                            <span>CURRENT OP:</span>
+                                            <br/>
+                                            <span t-esc="'%.0f' % line.quantity"/>
+                                            <span>- RECEIVE PCS</span>
+                                            <br/>
+                                            <span>Next OP:</span>
+                                            <br/>
+                                            <span>NONE</span>
+                                            <br/>
+                                        </h7>
+                                        <h3>
+                                            <span>STATUS:</span>
+                                            <span>OK</span>
+                                        </h3>
+                                    </div>
+                                    <div>
+                                    <t t-if="o.move_line_ids">
+                                        <table class="table table-bordered" style="text-align: center">
+                                            <thead>
+                                                <tr>
+                                                    <th>Lot Name</th>
+                                                    <th>Qty</th>
+                                                    <th>Unit of Measure</th>
+                                                </tr>
+                                            </thead>
+                                            <t t-foreach="o.move_line_ids" t-as="line">
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <t t-if="line.lot_name">
+                                                            <span t-esc="line.lot_name"/>
+                                                        </t>
+                                                        <t t-else="">
+                                                            <span>-</span>
+                                                        </t>
+                                                    </td>
+                                                    <td>
+                                                        <t t-if="line.quantity">
+                                                            <span t-esc="line.quantity"/>
+                                                        </t>
+                                                        <t t-else="">
+                                                            <span>-</span>
+                                                        </t>
+                                                    </td>
+                                                    <td>
+                                                        <t t-if="line.product_uom_id">
+                                                            <span t-esc="line.product_uom_id.name"/>
+                                                        </t>
+                                                        <t t-else="">
+                                                            <span>-</span>
+                                                        </t>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                            </t>
+                                        </table>
+                                    </t>
+                                                                                                                      
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="paper_format_layout_inspection_report" model="report.paperformat">
+            <field name="name">Layout Inspection Report</field>
+            <field name="default" eval="False"/>
+            <field name="disable_shrinking" eval="True"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">30</field>
+            <field name="margin_bottom">30</field>
+            <field name="margin_left">5</field>
+            <field name="margin_right">5</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">22</field>
+            <field name="dpi">150</field>
+        </record>
+        <record id="report_layout_inspection_report" model="ir.actions.report">
+            <field name="name">Layout Inspection</field>
+            <field name="model">layout.inspection</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">quality_extension.layout_inspection_report</field>
+            <field name="report_file">quality_extension.layout_inspection_report</field>
+            <field name="print_report_name">'Layout Inspection'</field>
+            <field name="binding_model_id" ref="quality_extension.model_layout_inspection"/>
+            <field name="paperformat_id" ref="quality_extension.paper_format_layout_inspection_report"/>
+            <field name="binding_type">report</field>
+        </record>
+        <template id="layout_inspection_report_header">
+            <div class="header" style="border: 1px solid black;">
+                <div class="row">
+                    <div class="col-3" style="border-right:1px solid black;">
+                        <div>
+                            <img src='/web/binary/company_logo' class="img-fluid img-thumbnail"
+                                 style="width:100%;margin-top:1px;"/>
+                        </div>
+                    </div>
+                    <div class="col-6" style="border-right:1px solid black;">
+                        <div style="text-align:center;color:black;margin:25px; padding:25px;">
+                            <h4>
+                                LAYOUT INSPECTION
+                            </h4>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div style="text-align:center;font-size:23px;margin:25px; padding:25px;
+                                                            color:black;">
+                            <strong>QA/DI/R/20</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+        <template id="layout_inspection_report_body">
+            <t t-call="web.basic_layout">
+                <section>
+                    <div class="row" style="border:1px solid black;">
+                        <div class="col-6" style="border-right:1px solid black;">
+                            <strong style="margin-left:5px;">Part No</strong>
+                            <strong>:</strong>
+                            <span t-field="o.layout_product.default_code"/>
+                        </div>
+                        <div class="col-6">
+                            <strong style="margin-left:5px;">Drawing Rev No. &amp; Date</strong>
+                            <strong>:</strong>
+                            <span t-field="o.rev_no"/>
+                            <span>/</span>
+                            <span t-field="o.rev_date"
+                                  t-options="{'format': 'dd.MM.yyyy'}"/>
+                        </div>
+                    </div>
+                    <div class="row" style="border-bottom:1px solid black;border-left:1px solid black;
+                                                border-right:1px solid black;">
+                        <div class="col-6" style="border-right:1px solid black;">
+                            <strong style="margin-left:5px;">Part Name</strong>
+                            <strong>:</strong>
+                            <span t-field="o.part_name"/>
+                        </div>
+                        <div class="col-6">
+                            <strong style="margin-left:5px;">Date</strong>
+                            <strong>:</strong>
+                            <span t-field="o.date" t-options="{'format': 'dd.MM.yyyy'}"/>
+                        </div>
+                    </div>
+                    <div class="row"
+                         style="border-bottom:1px solid black;border-left:1px solid black;border-right:1px solid black;">
+                        <div class="col-6" style="border-right:1px solid black;">
+                            <strong style="margin-left:5px;">Customer</strong>
+                            <strong>:</strong>
+                            <span t-field="o.customer"/>
+                        </div>
+                        <div class="col-6">
+                            <strong style="margin-left:5px;">Shift</strong>
+                            <strong>:</strong>
+                            <span t-field="o.shift"/>
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <div class="row" style="margin-top:8px;">
+                        <strong>All Dimensions are finished part after coating process.</strong>
+                    </div>
+                </section>
+                <div class="table_content" style="margin-top:8px;">
+                    <table class="table table-sm" style="border-bottom:1px solid black;border-left:1px solid black;
+                                                border-right:1px solid black;">
+                        <thead style="border-top: 1px solid black;">
+                            <tr>
+                                <th rowspan="2">S.No</th>
+                                <th rowspan="2">Description</th>
+                                <th rowspan="2">SPL</th>
+                                <th rowspan="2">Specification</th>
+                                <th rowspan="2">Minimum</th>
+                                <th rowspan="2">Maximum</th>
+                                <th rowspan="2">Checking Method</th>
+                                <th colspan="5">OBSERVATION</th>
+                                <th rowspan="2">Remarks</th>
+                                <th rowspan="2">Status</th>
+                            </tr>
+                            <tr style="border-top:1px solid black;">
+                                <th>1</th>
+                                <th>2</th>
+                                <th>3</th>
+                                <th>4</th>
+                                <th>5</th>
+                            </tr>
+                        </thead>
+                        <tbody style="border-top:1px solid black;">
+                            <t t-foreach="o.layout_ids" t-as="layout">
+                                <tr>
+                                    <td style="color:black;text-align:center;">
+                                        <span t-esc="layout_index+1"/>
+                                    </td>
+                                    <t t-if="layout.description.name">
+                                        <td align="left"
+                                            style="color:black;">
+                                            <span t-esc="layout.description.name"/>
+                                        </td>
+                                    </t>
+                                    <t t-else="">
+                                        <td align="center"
+                                            style="color:black;">
+                                            -
+                                        </td>
+                                    </t>
+                                    <t t-if="layout.spl">
+                                        <td align="left"
+                                            style="color:black;">
+                                            <span t-esc="layout.spl"/>
+                                        </td>
+                                    </t>
+                                    <t t-else="">
+                                        <td align="center"
+                                            style="color:black;">
+                                            -
+                                        </td>
+                                    </t>
+                                    <t t-if="layout.specification">
+                                        <td align="left"
+                                            style="color:black;">
+                                            <span t-esc="layout.specification"/>
+                                        </td>
+                                    </t>
+                                    <t t-else="">
+                                        <td align="center"
+                                            style="color:black;">
+                                            -
+                                        </td>
+                                    </t>
+                                    <t t-if="layout.layout_min">
+                                        <td align="center"
+                                            style="color:black;">
+                                            <span t-esc="'%.2f'%layout.layout_min"/>
+                                        </td>
+                                    </t>
+                                    <t t-else="">
+                                        <td align="center"
+                                            style="color:black;">
+                                            -
+                                        </td>
+                                    </t>
+                                    <t t-if="layout.layout_max">
+                                        <td align="center"
+                                            style="color:black;">
+                                            <span t-esc="'%.2f'%layout.layout_max"/>
+                                        </td>
+                                    </t>
+                                    <t t-else="">
+                                        <td align="center"
+                                            style="color:black;">
+                                            -
+                                        </td>
+                                    </t>
+                                    <t t-if="layout.check_method.name">
+                                        <td align="left"
+                                            style="color:black;">
+                                            <span t-esc="layout.check_method.name"/>
+                                        </td>
+                                    </t>
+                                    <t t-else="">
+                                        <td align="center"
+                                            style="color:black;">
+                                            -
+                                        </td>
+                                    </t>
+                                    <t t-if="layout.observation1">
+                                        <td align="center"
+                                            style="color:black;">
+                                            <span t-esc="layout.observation1"/>
+                                        </td>
+                                    </t>
+                                    <t t-else="">
+                                        <td align="center"
+                                            style="color:black;">
+                                            -
+                                        </td>
+                                    </t>
+                                    <t t-if="layout.observation2">
+                                        <td align="center"
+                                            style="color:black;">
+                                            <span t-esc="layout.observation2"/>
+                                        </td>
+                                    </t>
+                                    <t t-else="">
+                                        <td align="center"
+                                            style="color:black;">
+                                            -
+                                        </td>
+                                    </t>
+                                    <t t-if="layout.observation3">
+                                        <td align="center"
+                                            style="color:black;">
+                                            <span t-esc="layout.observation3"/>
+                                        </td>
+                                    </t>
+                                    <t t-else="">
+                                        <td align="center"
+                                            style="color:black;">
+                                            -
+                                        </td>
+                                    </t>
+                                    <t t-if="layout.observation4">
+                                        <td align="center"
+                                            style="color:black;">
+                                            <span t-esc="layout.observation4"/>
+                                        </td>
+                                    </t>
+                                    <t t-else="">
+                                        <td align="center"
+                                            style="color:black;">
+                                            -
+                                        </td>
+                                    </t>
+                                    <t t-if="layout.observation5">
+                                        <td align="center"
+                                            style="color:black;">
+                                            <span t-esc="layout.observation5"/>
+                                        </td>
+                                    </t>
+                                    <t t-else="">
+                                        <td align="center"
+                                            style="color:black;">
+                                            -
+                                        </td>
+                                    </t>
+                                    <t t-if="layout.remarks">
+                                        <td align="left"
+                                            style="color:black;">
+                                            <span t-esc="layout.remarks"/>
+                                        </td>
+                                    </t>
+                                    <t t-else="">
+                                        <td align="center"
+                                            style="color:black;">
+                                            -
+                                        </td>
+                                    </t>
+                                    <t t-if="layout.obs_status">
+                                        <td align="left"
+                                            style="color:black;">
+                                            <span t-esc="dict(layout._fields['obs_status'].selection).get(layout.obs_status)"/>
+                                        </td>
+                                    </t>
+                                    <t t-else="">
+                                        <td align="center"
+                                            style="color:black;">
+                                            -
+                                        </td>
+                                    </t>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+                <section>
+                    <div class="row" style="margin-top:50px;border-bottom:1px solid black;border-left:1px solid black;
+                                                border-right:1px solid black;border-top:1px solid black;height:50px;width:100%;">
+                        <div class="col-3">
+                            <div style="padding-left:60px;padding-top:10px;font-size:19px;">
+                                <strong style="padding-left:30px">INSPECTED BY :</strong>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div style="font-size:19px;padding-top:10px;">
+                                <span t-field="o.inspected_by"/>
+                            </div>
+                        </div>
+                        <div class="col-3" style="border-left:1px solid black;">
+                            <div style="padding-left:60px;padding-top:10px;font-size:19px;">
+                                <strong>APPROVED BY :</strong>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div style="font-size:19px;padding-top:10px;">
+                                <span t-field="o.approved_by"/>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </t>
+        </template>
+        <template id="layout_inspection_report">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="quality_extension.layout_inspection_report_header"/>
+                    <t t-call="quality_extension.layout_inspection_report_body"/>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

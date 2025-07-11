@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="approval_remark_form_view" model="ir.ui.view">
+            <field name="name">approval.remark.form</field>
+            <field name="model">approval.remark</field>
+            <field name="arch" type="xml">
+                <form string="ApprovalRemark">
+                    <sheet>
+                        <group>
+                            <field name="reject_remark" invisible="remark_type != 'reject'"/>
+                            <field name="approval_remark" invisible="remark_type != 'approve'"/>
+                            <field name="cancel_remark" invisible="remark_type != 'cancel'"/>
+                            <field name="name" string="Remark"/>
+                            <field name="remark_type" string="Remark Type" invisible="1"/>
+                            <field name="model" string="Model Type" invisible="1"/>
+                            <field name="done_approvals" invisible="1"/>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button name="approve_one" string="Approve" type="object" class="oe_highlight"
+                                data-hotkey="q" invisible="done_approvals != 'first'"/>
+                        <button name="approve_second" string="Approve" type="object" class="oe_highlight"
+                                data-hotkey="q" invisible="done_approvals != 'second'"/>
+                        <button name="approve_third" string="Approve" type="object" class="oe_highlight"
+                                data-hotkey="q" invisible="done_approvals != 'third'"/>
+                        <button string="Cancel" class="btn btn-secondary" name="cancel_approve"
+                                invisible="remark_type != 'cancel' or model != 'pur'"
+                                type="object" data-hotkey="c"/>
+                        <button string="Reject" class="btn btn-secondary"
+                                invisible="remark_type != 'reject' or model != 'pur'"
+                                name="reject" type="object" data-hotkey="r"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

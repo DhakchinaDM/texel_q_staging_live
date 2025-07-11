@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="ir_cron_spc_plan_expiry" model="ir.cron">
+            <field name="name">SPC Plan Expiry</field>
+            <field name="model_id" ref="model_spc_plan"/>
+            <field name="state">code</field>
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="code">model.month_to_notify()</field>
+            <field name="interval_number">30</field>
+            <field name="interval_type">months</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+            <field name="priority">3</field>
+        </record>
+    </data>
+</odoo>

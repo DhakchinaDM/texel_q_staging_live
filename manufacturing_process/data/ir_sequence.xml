@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="production_order_sequence" model="ir.sequence">
+        <field name="name">Production Order</field>
+        <field name="code">production.order</field>
+        <field name="prefix">M/OUT/%(y)s/</field>
+        <field name="padding">4</field>
+        <field name="number_increment">1</field>
+        <field name="company_id" eval="False"/>
+        <field name="implementation">standard</field>
+    </record>
+
+    <record id="group_approve_manager" model="res.groups">
+        <field name="name">FG Approve Manager</field>
+    </record>
+</odoo>

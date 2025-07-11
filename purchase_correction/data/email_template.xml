@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="email_template_purchase_req" model="mail.template">
+            <field name="name">purchase Req</field>
+            <field name="model_id" ref="purchase.model_purchase_order"/>
+            <field name="body_html" type="html">
+                <table border="0" cellpadding="0" cellspacing="0"
+                       style="padding-top: 16px; background-color: #F1F1F1; font-family:Verdana, Arial,sans-serif; color: #454748; width: 100%; border-collapse:separate;">
+                    <tr>
+                        <td align="center">
+                            <table border="0" cellpadding="0" cellspacing="0" width="590"
+                                   style="padding: 16px; background-color: white; color: #454748; border-collapse:separate;">
+                                <tbody>
+                                    <!-- HEADER -->
+                                    <tr>
+                                        <td align="center" style="min-width: 590px;">
+                                            <table border="0" cellpadding="0" cellspacing="0" width="590"
+                                                   style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                                                <tr>
+                                                    <td valign="middle">
+                                                        <span style="font-size: 10px;">Dear
+                                                            <t t-out="ctx.get('creater')"/>
+                                                        </span>
+                                                        <br/>
+                                                    </td>
+                                                    <td valign="middle" align="right">
+                                                        <img t-attf-src="/logo.png?company={{ object.company_id.id }}"
+                                                             style="padding: 0px; margin: 0px; height: auto; width: 80px;"
+                                                             t-att-alt="object.company_id.name"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="middle">
+                                                        <span style="font-size: 10px;">This is an automated alert
+                                                            regarding the delayed
+                                                            delivery of products for<t t-out="ctx.get('name')"/>/24-25.
+                                                            The supplier's promised delivery date is approaching,
+                                                            but it seems likely to be exceeded.
+
+                                                            <!--                                                            <t t-out="ctx.get('company_name')"/>-->
+                                                        </span>
+                                                        <br/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="middle">
+                                                        <span style="font-size: 10px;">
+                                                            <b>
+                                                                Please take immediate action to address this issue.
+                                                            </b>
+
+                                                            <!--                                                            <t t-out="ctx.get('company_name')"/>-->
+                                                        </span>
+                                                        <br/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center">
+                                                        <a t-attf-href="{{ ctx.get('link') }}">
+                                                            <button class="btn btn-primary bg-success"
+                                                                    style="margin-top: 1em;padding: 0.5em 4em;background: linear-gradient(to bottom, #d5d7e5, #eee, #d5d7e5);">
+                                                                <span style="letter-spacing: 9px">LINK</span>
+                                                            </button>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </field>
+        </record>
+    </data>
+</odoo>

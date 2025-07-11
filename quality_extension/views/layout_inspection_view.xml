@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="seq_layout_inspection" model="ir.sequence">
+            <field name="name">Layout Inspection</field>
+            <field name="code">layout.inspection</field>
+            <field name="prefix">LYR/</field>
+            <field name="padding">3</field>
+            <field name="number_increment">1</field>
+            <field name="company_id" eval="False"/>
+            <field name="implementation">standard</field>
+        </record>
+        <record id="layout_inspection_form" model="ir.ui.view">
+            <field name="name">layout.inspection.form</field>
+            <field name="model">layout.inspection</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_submit"
+                                type="object" class="oe_highlight"
+                                string="Submit for Approval"
+                                invisible="state in ('waiting','approve','reject')"/>
+                        <button name="action_approval"
+                                type="object" class="oe_highlight"
+                                string="Approve"
+                                invisible="state not in 'waiting'"/>
+                        <button name="action_rejection"
+                                type="object" class="oe_highlight"
+                                string="Reject"
+                                invisible="state not in 'waiting'"/>
+                        <button name="set_to_draft"
+                                type="object" class="oe_highlight"
+                                string="Set to Draft"
+                                invisible="state not in 'reject'"/>
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="draft,waiting,approve"/>
+                    </header>
+                    <sheet>
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                        <group>
+                            <group string="Layout Inspection Details">
+                                <field name="layout_product"
+                                       required="1"
+                                       readonly="state in ('approve','reject')"
+                                       options="{'no_open': True}"/>
+                                <field name="part_name"
+                                       readonly="1"/>
+                                <field name="customer"
+                                       required="1"
+                                       readonly="state in ('approve','reject')"
+                                       options="{'no_open': True}"/>
+                                <field name="inspected_by"
+                                       readonly="state in ('approve','reject')"
+                                       options="{'no_open': True}"/>
+                                <field name="approved_by"
+                                       readonly="state in ('approve','reject')"
+                                       options="{'no_open': True}"/>
+                            </group>
+                            <group string="Layout Inspection Details">
+                                <field name="rev_no" string="Drawing Rev No."
+                                       invisible="rev_no == False"
+                                       readonly="1"/>
+                                <field name="rev_date" string="Rev Date"
+                                       invisible="rev_date == False"
+                                       readonly="1"/>
+                                <field name="date" required="1"
+                                       readonly="state in ('approve','reject')"/>
+                                <field name="select_year" invisible="1"
+                                       readonly="state in ('approve','reject')"/>
+                                <field name="shift" required="1"
+                                       readonly="state in ('approve','reject')"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="Layout Inspection Details">
+                                <field name="layout_ids" widget="section_and_note_one2many"
+                                       mode="tree" context="{'default_display_type': False}"
+                                       readonly="state in ('approve','reject')">
+                                    <tree editable="bottom">
+                                        <control>
+                                            <create name="add_product_control"
+                                                    string="Add a Line"/>
+                                            <create name="add_section_control"
+                                                    string="Add a section"
+                                                    context="{'default_display_type': 'line_section'}"/>
+                                            <create name="add_note_control"
+                                                    string="Add a note"
+                                                    context="{'default_display_type': 'line_note'}"/>
+                                        </control>
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="name"/>
+                                        <field name="display_type"
+                                               column_invisible="1"/>
+                                        <field name="baloon_no"
+                                               readonly="0" force_save="1"
+                                               options="{'no_open': True}"/>
+                                        <field name="description"
+                                               readonly="0" force_save="1"
+                                               options="{'no_open': True}"/>
+                                        <field name="spl" readonly="0" force_save="1"/>
+                                        <field name="specification" readonly="0" force_save="1"/>
+                                        <field name="layout_min" readonly="0" force_save="1"/>
+                                        <field name="layout_max" readonly="0" force_save="1"/>
+                                        <field name="check_method"
+                                               readonly="0" force_save="1"
+                                               options="{'no_open': True}"/>
+                                        <field name="observation1" decoration-danger="obser_1_check == True"/>
+                                        <field name="observation2" decoration-danger="obser_2_check == True"/>
+                                        <field name="observation3" decoration-danger="obser_3_check == True"/>
+                                        <field name="observation4" decoration-danger="obser_4_check == True"/>
+                                        <field name="observation5" decoration-danger="obser_5_check == True"/>
+                                        <field name="obser_1_check" column_invisible="1"/>
+                                        <field name="obser_2_check" column_invisible="1"/>
+                                        <field name="obser_3_check" column_invisible="1"/>
+                                        <field name="obser_4_check" column_invisible="1"/>
+                                        <field name="obser_5_check" column_invisible="1"/>
+                                        <field name="remarks"/>
+                                        <field name="obs_status"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <record id="layout_inspection_tree_view" model="ir.ui.view">
+            <field name="name">layout.inspection.tree</field>
+            <field name="model">layout.inspection</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name='name'/>
+                    <field name="part_name"/>
+                    <field name="customer"/>
+                    <field name="date"/>
+                    <field name="shift"/>
+                    <field name="state" widget="badge"
+                           decoration-muted="state in 'draft'"
+                           decoration-info="state in 'waiting'"
+                           decoration-success="state in 'approve'"
+                           decoration-danger="state in 'reject'"/>
+                </tree>
+            </field>
+        </record>
+        <record id="layout_inspection_action" model="ir.actions.act_window">
+            <field name="name">Layout Inspection</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">layout.inspection</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_no content_smiling_face">
+                    Layout Inspection Information
+                </p>
+            </field>
+        </record>
+
+        <record id="view_layout_inspection_search_view" model="ir.ui.view">
+            <field name="name">layout.inspection.search</field>
+            <field name="model">layout.inspection</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="part_name"/>
+                    <field name="customer"/>
+                    <field name="date"/>
+                    <field name="shift"/>
+                    <field name="state"/>
+                    <separator/>
+                    <searchpanel>
+                        <field name="state" icon="fa-filter"/>
+                        <field name="shift" icon="fa-filter"/>
+                    </searchpanel>
+                </search>
+            </field>
+        </record>
+
+
+<!--        <menuitem id="layout_inspection_main_menu"-->
+<!--                  name="Layout Inspection"-->
+<!--                  parent="quality_control.menu_quality_control"-->
+<!--                  action="layout_inspection_action"-->
+<!--                  sequence="8"/>-->
+    </data>
+</odoo>

@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="hr_employee_view_employee_kanban_inherit" model="ir.ui.view">
+        <field name="name">hr.employee.kanban.inherit</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.hr_kanban_view_employees"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('oe_kanban_details')]" position="replace">
+                <div class="oe_kanban_details">
+                    <div class="o_kanban_record_top">
+                        <div class="o_kanban_record_headings">
+                            <strong class="o_kanban_record_title">
+                                <field name="name" placeholder="Employee's Name"/>
+                                <div class="float-end">
+                                    <div t-if="record.show_hr_icon_display.raw_value">
+                                        <field name="hr_icon_display" class="o_employee_availability"
+                                               widget="hr_presence_status"/>
+                                    </div>
+                                </div>
+                            </strong>
+                            <span t-if="record.job_title.raw_value" class="o_kanban_record_subtitle">
+                                <field name="job_title"/>
+                            </span>
+                        </div>
+                    </div>
+                    <ul>
+                        <li t-if="record.emp_code.raw_value" class="o_text_overflow">
+                            <i class="fa fa-fw me-2 fa-user text-primary" title="Email"/>
+                            <field name="emp_code" widget="badge" decoration-success="True"/>
+                        </li>
+                        <li t-if="record.work_email.raw_value" class="o_text_overflow">
+                            <i class="fa fa-fw me-2 fa-envelope text-primary" title="Email"/>
+                            <field name="work_email"/>
+                        </li>
+                        <li t-if="record.work_phone.raw_value and record.user_id.raw_value" class="o_force_ltr">
+                            <i class="fa fa-fw me-2 fa-phone text-primary" title="Phone"/>
+                            <field name="work_phone"/>
+                        </li>
+                        <field name="employee_properties" widget="properties"/>
+                        <li class="hr_tags">
+                            <field name="category_ids" widget="many2many_tags" options="{'color_field': 'color'}"
+                                   optional="hide"/>
+                        </li>
+                    </ul>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="payroll_hr_employee_view_form" model="ir.ui.view">
+        <field name="name">payroll.hr.employee.view.form</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='lang']" position="replace">
+            </xpath>
+            <xpath expr="//group[@name='emergency']" position="replace">
+                <group string="Emergency" name="emergency">
+                    <separator name="contact_person_one" string="Contact Person One"/>
+                    <field name="emergency_contact"/>
+                    <field name="emergency_phone" class="o_force_ltr"/>
+                    <separator name="contact_person_two" string="Contact Person Two"/>
+                    <field name="name_emergency"/>
+                    <field name="number_emergency" class="o_force_ltr"/>
+                </group>
+            </xpath>
+            <xpath expr="//page[@name='personal_information']/group/group[1]" position="replace">
+                <group string="Private Contact">
+                    <label for="private_street" string="Private Address"/>
+                    <div class="o_address_format">
+                        <field name="private_street" placeholder="Street..." class="o_address_street"/>
+                        <field name="private_street2" placeholder="Street 2..." class="o_address_street"/>
+                        <field name="private_city" placeholder="City" class="o_address_city"/>
+                        <field name="private_state_id" class="o_address_state" placeholder="State"
+                               options="{'no_open': True, 'no_quick_create': True}"
+                               context="{'default_country_id': private_country_id}"/>
+                        <field name="private_zip" placeholder="ZIP" class="o_address_zip"/>
+                        <field name="private_country_id" placeholder="Country" class="o_address_country"
+                               options='{"no_open": True, "no_create": True}'/>
+                    </div>
+                    <field name="private_email" string="Email"/>
+                    <field name="private_phone" string="Phone"/>
+                    <field name="bank_account_id" context="{'default_partner_id': work_contact_id}"
+                           options="{'no_quick_create': True}" readonly="not id"/>
+                    <field name="lang" string="Language"/>
+                    <label for="km_home_work" invisible="1"/>
+                    <div class="o_row" name="div_km_home_work" invisible="1">
+                        <field name="km_home_work" class="o_hr_narrow_field"/>
+                        <span>Km</span>
+                    </div>
+                    <field name="private_car_plate" invisible="1"/>
+                </group>
+            </xpath>
+
+            <xpath expr="//page[@name='personal_information']/group/group[4]" position="replace">
+                <group name="has_work_permit" string="Work Permit" invisible="1">
+                    <field name="visa_no"/>
+                    <field name="permit_no"/>
+                    <field name="visa_expire"/>
+                    <field name="work_permit_expiration_date"/>
+                    <field name="work_permit_name" invisible="1"/>
+                    <field name="has_work_permit" widget="work_permit_upload" filename="work_permit_name"/>
+                </group>
+            </xpath>
+            <xpath expr="//page[@name='personal_information']/group/group[5]" position="replace">
+                <group string="Other">
+                    <field name="country_id" options='{"no_open": True, "no_create": True}' invisible="1"/>
+                    <field name="identification_id" invisible="1"/>
+                    <field name="ssnid" invisible="1"/>
+                    <field name="passport_id" invisible="1"/>
+                    <field name="gender"/>
+                    <field name="birthday"/>
+                    <field name="aadhar_number"/>
+                    <field name="pan_number"/>
+                    <field name="blood_type"/>
+                    <field name="place_of_birth" invisible="1"/>
+                    <field name="country_of_birth" invisible="1"/>
+                </group>
+            </xpath>
+            <xpath expr="//field[@name='coach_id']" position="after">
+                <field name="allocation_bool" invisible="1"/>
+                <field name="uan_number"/>
+                <field name="provident_fund_number"/>
+                <field name="esi_number"/>
+                <field name="shift_id"/>
+            </xpath>
+            <xpath expr="//field[@name='coach_id']" position="attributes">
+                <attribute name="string">Reporting Head</attribute>
+            </xpath>
+            <xpath expr="//field[@name='work_email']" position="after">
+                <field name="date_of_joining"/>
+                <label for="eligible_leave_period"/>
+                <div class="o_row" name="house_rent_allowance">
+                    <field name="months" force_save="1"/>
+                    <strong>Date is :</strong>
+                    <field name="eligible_leave_period" readonly="1" force_save="1"/>
+                </div>
+            </xpath>
+            <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+                <button name="%(hr_payroll.act_hr_employee_payslip_list)d" class="oe_stat_button"
+                        icon="fa-money" type="action" string="Payslip">
+                    <field name="payslip_count" widget="statinfo"/>
+                </button>
+            </xpath>
+
+            <xpath expr="//field[@name='work_email']" position="before">
+                <field name="emp_code"/>
+            </xpath>
+            <xpath expr="//page[@name='personal_information']" position="before">
+                <page name="salary_revision" string="Salary Revision">
+                    <field name="salary_revision_ids" nolabel="1">
+                        <tree editable="bottom">
+                            <field name="new_salary_from"/>
+                            <field name="new_salary_amount"/>
+                            <field name="old_salary_amount"/>
+                            <field name="salary_hike"/>
+                            <field name="new_salary_id" readonly="1"/>
+                            <field name="job_position_id"/>
+                            <field name="department_id" optional="hide"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+            <xpath expr="//notebook/page[@name='public']"
+                   position="after">
+                <page string="Family Info">
+                    <field name="family_ids">
+                        <tree editable="bottom">
+                            <field name="name"/>
+                            <field name="relation_id"/>
+                            <field name="mobile"/>
+                            <field name="birthday"/>
+                            <field name="certificate"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+            <xpath expr="//field[@name='private_email']" position="after">
+                <field name="age"/>
+                <field name="religion"/>
+                <field name="language"/>
+            </xpath>
+            <xpath expr="//notebook/page[@name='public']"
+                   position="after">
+                <page string="Qualification">
+                    <field name="employee_wrk_hist_ids">
+                        <tree editable="bottom">
+                            <field name="institute_id"/>
+                            <field name="degree_id"/>
+                            <field name="department_id"/>
+                            <field name="detail"/>
+                            <field name="to_date"/>
+                            <field name="attachment" widget='many2many_binary'/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hr_employee_view_search_modified" model="ir.ui.view">
+        <field name="name">hr.employee.search.inherit</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr_payroll.payroll_hr_employee_view_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='registration_number']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hr_employee_view_search_inherited" model="ir.ui.view">
+        <field name="name">hr.employee.search.inherit</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="emp_code" string="Employee Code"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_employee_inherited_tree" model="ir.ui.view">
+        <field name="name">hr.employee.tree.inherited</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_tree"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="emp_code"/>
+            </field>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,20 @@
+<odoo>
+    <menuitem id="quality_control.menu_config_quality_tags"
+              active="False"/>
+    <menuitem id="quality_control.menu_quality_config_alert_stage"
+              active="False"/>
+    <menuitem id="quality_control.menu_quality_config_alert_team"
+              active="False"/>
+    <menuitem id="quality_control.menu_quality_check_report"
+              active="False"/>
+    <menuitem id="quality_control.menu_quality_alert_report"
+              active="False"/>
+    <menuitem id="quality_control.menu_quality_dashboard"
+              active="False"/>
+    <menuitem id="quality_control.menu_quality_control_points"
+              active="False"/>
+    <menuitem id="quality_control.menu_quality_checks"
+              active="False"/>
+    <menuitem id="quality_control.menu_quality_alert"
+              active="False"/>
+</odoo>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="action_odoo_services" model="ir.actions.client">
+            <field name="name">Location Based Products</field>
+            <field name="tag">location_based_inventory.OdooServices</field>
+        </record>
+
+         <menuitem name="Location Based Products"
+                  id="main_location_based_inventory" parent="stock.menu_warehouse_report" sequence="260"
+                  action="action_odoo_services"
+                  />
+
+    </data>
+</odoo>

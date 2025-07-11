@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- create a wizard for get supplier and value of order lines-->
+    <record id="view_create_rfq_form" model="ir.ui.view">
+        <field name="name">hr.employee.create.form</field>
+        <field name="model">hr.employee.create</field>
+        <field name="arch" type="xml">
+            <form string="Create RFQ">
+                <group>
+                    <field name="material_requisition_ref" readonly='1'/>
+                    <field name="name" placeholder="SELECT A SUPPLIER TO CREATE RFQ"/>
+                    <field name="order_lines" create="0">
+                        <tree string="Purchase Order Lines" editable="bottom" create="0">
+                            <field name="product_id" force_save="1" readonly="1"/>
+                            <field name="product_qty" force_save="1" readonly="1"/>
+                            <field name="product_uom_id" force_save="1" readonly="1"/>
+                            <field name="on_hand_qty" force_save="1" readonly="1"/>
+                        </tree>
+                    </field>
+                </group>
+                <footer>
+                    <button string='Create RFQ' name='create_RFQs' type='object' class='btn-primary'/>
+                    <button string='Cancel' class='btn-default' special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="open_create_rfq_wizard_action" model="ir.actions.act_window">
+        <field name="name">Create RFQ</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">hr.employee.create</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="view_create_rfq_form"/>
+    </record>
+
+    <!-- create a wizard for get Direct po remark-->
+    <record id="view_direct_po_remark_wizard_form" model="ir.ui.view">
+        <field name="name">direct.po.remark.wizard.form</field>
+        <field name="model">direct.po.remark.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Create RFQ">
+                <group>
+                    <field name="direct_po_remark"/>
+                </group>
+                <footer>
+                    <button string='Submit' name='get_direct_po_remark' type='object' class='btn-primary'/>
+                    <button string='Cancel' class='btn-default' special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="open_direct_po_remark_wizard_action" model="ir.actions.act_window">
+        <field name="name">Direct PO Remark</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">direct.po.remark.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="view_direct_po_remark_wizard_form"/>
+    </record>
+
+    <!-- create a wizard for get Direct po remark-->
+    <record id="view_store_verified_remark_form" model="ir.ui.view">
+        <field name="name">store.verified.remark.form</field>
+        <field name="model">store.verified.remark</field>
+        <field name="arch" type="xml">
+            <form string="Store Verified Remark">
+                <group>
+                    <field name="store_verified_remark" required="1"/>
+                </group>
+                <footer>
+                    <button string='Submit' name='get_store_verified_remark' type='object' class='btn-primary'/>
+                    <button string='Cancel' class='btn-default' special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="open_tore_verified_remark_action" model="ir.actions.act_window">
+        <field name="name">Store Verified Remark</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">store.verified.remark</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="view_store_verified_remark_form"/>
+    </record>
+
+</odoo>
+
+
+

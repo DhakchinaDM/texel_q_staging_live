@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="in_house_wizard_form" model="ir.ui.view">
+            <field name="name">in.house.wizard.view</field>
+            <field name="model">in.house.wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="start_date"/>
+                            </group>
+                            <group>
+                                <field name="end_date"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button name="print_pdf" string="Print" type="object" class="oe_highlight" icon="fa-print"/>
+                        <button name="tick_cancel" type='object' string="Cancel" class="oe_highlight" special="cancel"
+                                icon="fa-times-circle"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        <record id="in_house_wizard_action" model="ir.actions.act_window">
+            <field name="name">In House Non Conformance</field>
+            <field name="res_model">in.house.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+        <menuitem id="menu_in_house_wizard"
+                  name="In House Non Conformance Report"
+                  action="in_house_wizard_action"
+                  parent="quality_extension.menu_quality_master_reporting"
+                  sequence="1"/>
+    </data>
+</odoo>

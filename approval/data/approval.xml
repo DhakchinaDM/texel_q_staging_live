@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="category_approval_default" model="category.approval">
+            <field name="name">Purchase Default Approval</field>
+            <field name="name">Purchase Approval</field>
+            <field name="purchase_limit_one">1000.00</field>
+            <field name="approver_one" ref="base.user_admin"/>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="part_operation_sequence" model="ir.sequence">
+        <field name="name">Part Operation</field>
+        <field name="code">part.operation</field>
+        <field name="prefix">P/OP/%(y)s/</field>
+        <field name="padding">4</field>
+        <field name="number_increment">1</field>
+        <field name="company_id" eval="False"/>
+        <field name="implementation">standard</field>
+    </record>
+
+    <record id="customer_release_sequence" model="ir.sequence">
+        <field name="name">Customer Release</field>
+        <field name="code">customer.release</field>
+        <field name="prefix">C/R/%(y)s/</field>
+        <field name="padding">4</field>
+        <field name="number_increment">1</field>
+        <field name="company_id" eval="False"/>
+        <field name="implementation">standard</field>
+    </record>
+    <record id="job_planning_sequence" model="ir.sequence">
+        <field name="name">Job Planning</field>
+        <field name="code">job.planning</field>
+        <field name="prefix">JP/%(y)s/</field>
+        <field name="padding">4</field>
+        <field name="number_increment">1</field>
+        <field name="company_id" eval="False"/>
+        <field name="implementation">standard</field>
+    </record>
+    <record id="job_tracking_sequence" model="ir.sequence">
+        <field name="name">Job Tracking</field>
+        <field name="code">job.order.tracking</field>
+        <field name="prefix">JT/%(y)s/</field>
+        <field name="padding">4</field>
+        <field name="number_increment">1</field>
+        <field name="company_id" eval="False"/>
+        <field name="implementation">standard</field>
+    </record>
+
+    <record id="part_operation_line_sequence" model="ir.sequence">
+        <field name="name">Operation Line</field>
+        <field name="code">part.operation.line</field>
+        <field name="prefix">POL/%(y)s/</field>
+        <field name="padding">4</field>
+        <field name="number_increment">1</field>
+        <field name="company_id" eval="False"/>
+        <field name="implementation">standard</field>
+    </record>
+
+    <record id="_sequence" model="ir.sequence">
+        <field name="name">Productivity Line</field>
+        <field name="code">productivity.line</field>
+        <field name="prefix">PL/%(y)s/</field>
+        <field name="padding">4</field>
+        <field name="number_increment">1</field>
+        <field name="company_id" eval="False"/>
+        <field name="implementation">standard</field>
+    </record>
+    <record id="reject_rework_sequence" model="ir.sequence">
+        <field name="name">Reject Rework Lot</field>
+        <field name="code">reject.rework.lot</field>
+        <field name="prefix">R/%(y)s/</field>
+        <field name="padding">4</field>
+        <field name="number_increment">1</field>
+        <field name="company_id" eval="False"/>
+        <field name="implementation">standard</field>
+    </record>
+</odoo>

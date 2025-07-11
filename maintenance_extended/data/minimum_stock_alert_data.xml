@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="stock_replenishment_maintenance_mail" model="mail.template">
+            <field name="name">Stock Replenishment Maintenance Mail</field>
+            <field name="model_id" ref="maintenance_extended.model_spare_details"/>
+            <field name="body_html" type="html">
+                <table border="0" cellpadding="0" cellspacing="0"
+                       style="background-color: #F1F1F1; font-family:Verdana, Arial,sans-serif; color: #454748; width: 100%; border-collapse:separate;">
+                    <tr>
+                        <td align="center">
+                            <table border="0" cellpadding="0" cellspacing="0" width="590"
+                                   style="background-color: white; color: #454748; border-collapse:separate; padding: 16px;">
+                                <tbody>
+                                    <tr>
+                                        <td align="center" style="min-width: 590px;">
+                                            <table border="0" cellpadding="0" cellspacing="0" width="590"
+                                                   style="padding: 0px 8px 0px 8px; border-collapse:separate;">
+                                                <tr>
+                                                    <td valign="middle" align="left">
+                                                        <span style="font-size: 14px;">Dear Maintenance Team,</span>
+                                                        <br/><br/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="middle" align="left">
+                                                        <span style="font-size: 12px;">
+                                                            This is to inform you that the stock level of the following
+                                                            spare product has fallen below the minimum required
+                                                            threshold:
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                                <br/><br/>
+                                                <tr>
+                                                    <td>
+                                                        <br/><br/>
+                                                        <span style="font-size: 12px;">
+                                                            <strong>Products:</strong>
+                                                            <table style="width:100%; border-collapse: collapse; margin-top: 10px; font-size: 12px;">
+                                                                <thead>
+                                                                    <tr style="background-color: #f2f2f2;">
+                                                                        <th style="border: 1px solid #dddddd; text-align: left; padding: 8px;">
+                                                                            Spare
+                                                                        </th>
+                                                                        <th style="border: 1px solid #dddddd; text-align: left; padding: 8px;">
+                                                                            Description
+                                                                        </th>
+                                                                        <th style="border: 1px solid #dddddd; text-align: left; padding: 8px;">
+                                                                            On Hand
+                                                                        </th>
+                                                                        <th style="border: 1px solid #dddddd; text-align: left; padding: 8px;">
+                                                                            Minimum Stock Level
+                                                                        </th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <t t-foreach="object.minimum_stock_alert()" t-as="spare">
+                                                                        <tr>
+                                                                            <td style="border: 1px solid #dddddd; padding: 8px;">
+                                                                                <t t-esc="spare['product_code']"/>
+                                                                            </td>
+                                                                            <td style="border: 1px solid #dddddd; padding: 8px;">
+                                                                                <t t-esc="spare['product_name']"/>
+                                                                            </td>
+                                                                            <td style="border: 1px solid #dddddd; padding: 8px;">
+                                                                                <t t-esc="spare['on_hand']"/> Units
+                                                                            </td>
+                                                                            <td style="border: 1px solid #dddddd; padding: 8px;">
+                                                                                <t t-esc="spare['minimum_stock']"/> Units
+                                                                            </td>
+                                                                        </tr>
+                                                                    </t>
+                                                                </tbody>
+                                                            </table>
+                                                        </span>
+                                                        <br/><br/>
+                                                        <span style="font-size: 12px;">
+                                                            Please review and take immediate action to replenish the
+                                                            stock to avoid any issues to maintenance operations.
+                                                        </span>
+                                                        <br/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="middle" align="left">
+                                                        <span style="font-size: 12px;">
+                                                            Best regards,
+                                                            <br/>
+                                                            <t t-esc="object.company_id.name"/> Maintenance Team
+                                                        </span>
+                                                        <br/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" style="padding-top: 16px;">
+                                                        <a t-attf-href="{{ ctx.get('link') }}">
+                                                            <button style="padding: 0.5em 2em; background-color: #28a745; color: white; border: none; cursor: pointer;">
+                                                                View Product Details
+                                                            </button>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </field>
+        </record>
+    </data>
+</odoo>

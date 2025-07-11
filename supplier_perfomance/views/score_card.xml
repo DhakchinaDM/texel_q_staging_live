@@ -1,0 +1,60 @@
+<odoo>
+    <record id="score_card_report_form" model="ir.ui.view">
+        <field name="name">supplier.monthly.score.card.form</field>
+        <field name="model">supplier.monthly.score.card</field>
+        <field name="arch" type="xml">
+            <form string="Supplier Monthly Score Card">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="partner_id" options='{"no_open": False, "no_create": True,"no_edit": True}'/>
+                            <field name="part_no" widget="many2many_tags"
+                                   options='{"no_open": False, "no_create": True,"no_edit": True}'/>
+                            <!--                             domain="[('supplier_rank', '=', 1)]"-->
+                            <field name="start_date" invisible="1"/>
+                            <field name="end_date" invisible="1"/>
+                        </group>
+                        <group>
+                            <label for="select_month" string="Month/Year"/>
+                            <div class="o_row">
+                                <field name="select_month" class="oe_inline"/>
+                                <field name="year_master" class="oe_inline"
+                                       options='{"no_open": False, "no_create": True,"no_edit": True}'/>
+                            </div>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="report_printed" invisible="1"/>
+                        <group invisible="report_printed != True">
+                            <field name="file_name" invisible="1"/>
+                            <field name="summary_file" readonly="1" filename="file_name"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="print_score_card" type='object'
+                            string="Submit"
+                            class="oe_highlight"/>
+
+                    <button name="tick_cancel" type='object' string="Cancel" class="oe_highlight" special="cancel"
+                            icon="fa-times-circle"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_supplier_monthly_score_card" model="ir.actions.act_window">
+        <field name="name">Supplier Monthly Score Card</field>
+        <field name="res_model">supplier.monthly.score.card</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+
+    <menuitem id="menu_supplier_monthly_score_card"
+              name="Supplier Monthly Score Card Report"
+              action="action_supplier_monthly_score_card"
+              sequence="3"
+              parent="purchase.purchase_report_main"/>
+
+</odoo>

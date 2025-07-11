@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-name="employee_face_tracking.OdooServices" owl="1">
+        <div class="o_content d-flex justify-content-center align-items-center" style="min-height: 100vh; background: #f8f9fa;">
+            <div class="card shadow-lg p-4" style="max-width: 500px; width: 100%;">
+
+                <h3 class="text-center mb-4 text-primary">Employee Attendance</h3>
+
+                <div class="d-flex justify-content-center mb-3">
+                    <video t-ref="video" width="320" height="240" autoplay="autoplay"
+                           style="border: 2px solid #0d6efd; border-radius: 8px;">
+                    </video>
+                </div>
+
+                <div class="d-grid gap-2 mb-3">
+                    <input t-ref="barcode" type="text" placeholder="Scan Barcode"
+                           t-on-keypress="onBarcodeEnter"
+                           style="opacity: 0; position: absolute; left: -9999px;" />
+                </div>
+
+                <div class="alert alert-success text-center fw-bold" role="alert"
+                     t-if="state.message">
+                    <t t-esc="state.message" />
+                </div>
+
+            </div>
+        </div>
+    </t>
+</templates>

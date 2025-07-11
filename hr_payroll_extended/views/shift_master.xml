@@ -1,0 +1,40 @@
+<odoo>
+    <record id="shift_master_view_form" model="ir.ui.view">
+        <field name="name">shift_master_view_form</field>
+        <field name="model">shift.master</field>
+        <field name="arch" type="xml">
+            <form string="shift_master_form">
+                <sheet>
+                    <group>
+                        <field name="name" required="1"/>
+                        <field name="start_time" widget="time" required="1"/>
+                        <field name="end_time" widget="time" required="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="shift_master_view_tree" model="ir.ui.view">
+        <field name="name">shift_master_view_tree</field>
+        <field name="model">shift.master</field>
+        <field name="arch" type="xml">
+            <tree string="shift_master_tree">
+                <field name="name"/>
+                <field name="start_time" widget="time"/>
+                <field name="end_time" widget="time"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <record id="shift_master_action" model="ir.actions.act_window">
+        <field name="name">Shift Types</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">shift.master</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_shift_types" name="Shift Types" parent="hr.menu_human_resources_configuration"
+              action="shift_master_action" sequence="1"/>
+</odoo>

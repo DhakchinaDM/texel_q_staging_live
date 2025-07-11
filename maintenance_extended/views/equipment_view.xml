@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <record id="seq_equipment" model="ir.sequence">
+            <field name="name">Equipment Sequence</field>
+            <field name="code">equipment.code</field>
+            <field name="prefix">M</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="hr_equipment_form_inherited_id_production" model="ir.ui.view">
+            <field name="name">maintenance.equipment.inherited</field>
+            <field name="model">maintenance.equipment</field>
+            <field name="inherit_id" ref="mrp_maintenance.maintenance_equipment_view_form_inherit_mrp"/>
+            <field name="arch" type="xml">
+                <!--                        <xpath expr="//field[@name='workcenter_id']" position="replace">-->
+                <!--                            <field name="workcenter_id" context="{'default_company_id':company_id}"-->
+                <!--                                   groups="mrp.group_mrp_routings" invisible="production_selection = 'non'"/>-->
+                <!--                        </xpath>-->
+
+                <field name="workcenter_id" position="after">
+                                        <field name="production_selection" widget="radio" invisible="1"/>
+
+                </field>
+                <xpath expr="//field[@name='workcenter_id']" position="attributes">
+                    <attribute name="invisible">production_selection == 'non'</attribute>
+                </xpath>
+            </field>
+        </record>
+
+
+        <record id="hr_equipment_form_inherited_id" model="ir.ui.view">
+            <field name="name">maintenance.equipment.inherited</field>
+            <field name="model">maintenance.equipment</field>
+            <field name="inherit_id" ref="maintenance.hr_equipment_view_form"/>
+            <field name="arch" type="xml">
+                <div class="oe_button_box" position="inside">
+                    <!--                    <button name="internal_maintenance_list"-->
+                    <!--                            class="oe_stat_info"-->
+                    <!--                            icon="fa-pencil-square-o"-->
+                    <!--                            type="object"-->
+                    <!--                            invisible="internal_maintenace_count == 0">-->
+                    <!--                        <field name="internal_maintenace_count" widget="statinfo"/>-->
+                    <!--                    </button>-->
+                    <button name="external_maintenance_list"
+                            class="oe_stat_info"
+                            icon="fa-pencil-square-o"
+                            type="object"
+                            invisible="external_maintenace_count == 0">
+                        <field name="external_maintenace_count" widget="statinfo"/>
+                    </button>
+                </div>
+                <xpath expr="//field[@name='scrap_date']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='location']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+
+                <xpath expr="//div[hasclass('oe_title')]" position="before">
+                    <field name="image"
+                           widget="image"
+                           class="oe_avatar oe_right"/>
+                </xpath>
+                <xpath expr="//div[hasclass('oe_title')]" position="before">
+                    <h1>
+                        <strong>
+                            <field name="codefor" placeholder="Machine ID"/>
+                        </strong>
+                    </h1>
+                </xpath>
+                <xpath expr="//field[@name='category_id']" position="after">
+                    <field name="subcategory_id" invisible="0"/>
+                    <field name="production_selection" widget="radio"/>
+
+                </xpath>
+                <xpath expr="//field[@name='category_id']" position="attributes">
+                    <attribute name="string">Category</attribute>
+                </xpath>
+                <xpath expr="//field[@name='name']" position="attributes">
+                    <attribute name="placeholder">eg : Sewing Machine</attribute>
+                </xpath>
+                <xpath expr="//field[@name='assign_date']" position="attributes">
+                    <attribute name="string">Purchase Date</attribute>
+                </xpath>
+                <xpath expr="//field[@name='assign_date']" position="after">
+                    <field name="last_maintenance_date"/>
+                    <field name="machine_type_mc" invisible="1"/>
+                    <field name="machine_type_mc_id" required="1"/>
+                </xpath>
+                <xpath expr="//field[@name='category_id']" position="before">
+                    <field name="machine_category" widget="radio"
+                           options="{'horizontal':True}"/>
+                    <field name="newmachine" widget="radio"
+                           options="{'horizontal':True}"
+                           invisible="machine_category != 'machinary'"/>
+                    <field name="newmequipment" widget="radio"
+                           options="{'horizontal':True}"
+                           invisible="machine_category == 'machinary'"/>
+                </xpath>
+                <page name="product_information" position="attributes">
+                    <attribute name="string">Machine/Equipment Info</attribute>
+                </page>
+                <field name="partner_id" position="attributes">
+                    <attribute name="string">Supplier</attribute>
+                </field>
+                <field name="partner_ref" position="attributes">
+                    <attribute name="string">Supplier Reference</attribute>
+                </field>
+                <field name="warranty_date" position="after">
+                    <field name="amc_start_date"/>
+                    <field name="amc_end_date"/>
+                    <field name="amc_supplier"/>
+                    <field name="amc_attachment"/>
+                </field>
+                <xpath expr="//notebook" position="inside">
+                    <page string="Maintenance History" invisible="1">
+                        <h2 style="color:#714B67">
+                            <lable>Internal Maintenance</lable>
+                        </h2>
+                        <field name="equipment_history_ids" readonly="1">
+                            <tree editable="bottom" create="0" delete="0">
+                                <field name="maintenance_request_name"/>
+                                <field name="maintenance_request_code"/>
+                                <field name="maintenance_team_id"/>
+                                <field name="request_created_by"/>
+                                <field name="request_responsible"/>
+                                <field name="maintenance_request_ref"/>
+                                <field name="maintenance_type"/>
+                                <field name="maintenance_duration"/>
+                                <field name="maintenance_end_date"/>
+                            </tree>
+                        </field>
+                        <field name="external_equipment_history_ids" readonly="0" invisible="1">
+                            <tree editable="bottom" create="0" delete="1">
+                                <field name="maintenance_request_name"/>
+                                <field name="maintenance_request_code"/>
+                                <field name="maintenance_request_ref"/>
+                                <field name="request_by"/>
+                                <field name="request_assigned_by"/>
+                                <field name="request_incharge"/>
+                                <field name="request_manager"/>
+                                <field name="request_supplier" invisible="1"/>
+                                <field name="request_supplier_id"/>
+                                <field name="maintenance_type"/>
+                                <field name="maintenance_end_date"/>
+                            </tree>
+                        </field>
+                    </page>
+                    <page string="Critical Spares">
+                        <h2 style="color:#714B67">
+                            <lable>Spare Details</lable>
+                        </h2>
+                        <field name="spare_ids" readonly="0">
+                            <tree editable="bottom">
+                                <field name="machine_id" readonly="1" force_save="1" optional="hide"/>
+                                <field name="product_id" domain="[('is_spare_bool','=',True)]"
+                                       options='{"no_open": False, "no_create": True,"no_edit": True}'/>
+                                <field name="default_code" string="Part No"/>
+                                <field name="product_name" string="Part Name"/>
+                                <field name="make_name"/>
+                                <field name="specification"/>
+                                <!--                                <field name="minimum_stock"/>-->
+                                <field name="on_hand" column_invisible="1"/>
+                            </tree>
+                        </field>
+                    </page>
+
+                    <page string="Break Down">
+                        <h2 style="color:#714B67">
+                            <lable>Break Down</lable>
+                        </h2>
+                        <field name="cm_ids" readonly="0">
+                            <tree editable="bottom" delete="0" create="0">
+                                <field name="name" readonly="1" force_save="1" string="Reference"/>
+                                <field name="machine_id" readonly="1" force_save="1" optional="hide"/>
+                                <field name="maintenance_type" readonly="1" force_save="1" optional="hide"/>
+                                <field name="root_case" readonly="1" force_save="1"/>
+                                <field name="action_taken" readonly="1" force_save="1"/>
+                                <field name="break_down_time" readonly="1" force_save="1"/>
+                                <field name="restart_time" readonly="1" force_save="1"/>
+                                <field name="duration" readonly="1" force_save="1"/>
+                                <field name="state" readonly="1" force_save="1"/>
+                            </tree>
+                        </field>
+                    </page>
+
+                    <page string="Preventive Maintenance Check">
+                        <h2 style="color:#714B67">
+                            <lable>Preventive Maintenance Check</lable>
+                        </h2>
+                        <field name="pmc_ids" readonly="0">
+                            <tree editable="bottom" create="0" delete="0" default_order="next_date_due ASC">
+                                <field name="request_id" column_invisible="1"/>
+                                <field name="name" string="Reference" optional="hide" readonly="1" force_save="1"/>
+                                <field name="machine_id" optional="hide" readonly="1" force_save="1"/>
+                                <field name="serial_no" optional="hide" readonly="1" force_save="1"/>
+                                <field name="plan_date" readonly="1" force_save="1"/>
+                                <field name="plan_hours" readonly="1" force_save="1"/>
+                                <field name="actual_date" readonly="1" force_save="1"/>
+                                <field name="remarks" readonly="1" force_save="1"/>
+                                <field name="preventive_maintenance_type" readonly="1" force_save="1"/>
+                                <field name="next_date_due" readonly="1" force_save="1"/>
+                                <field name="state" widget="badge" readonly="1" force_save="1"
+                                       decoration-success="state=='done'"
+                                       decoration-info="state=='draft'"
+                                       decoration-danger="state=='cancel'"/>
+                            </tree>
+                        </field>
+                    </page>
+
+                    <page string="Machine History">
+                        <h2 style="color:#714B67">
+                            <lable>Machine History</lable>
+                        </h2>
+                        <field name="machine_history_ids" readonly="0">
+                            <tree editable="bottom" delete="0" create="0">
+                                <field name="machine_id" readonly="1" force_save="1" optional="hide"/>
+                                <field name="type" readonly="1" force_save="1"/>
+                                <field name="preventive_maintenance_type" readonly="1" force_save="1"/>
+                                <field name="reference" readonly="0" force_save="1"/>
+                                <field name="user_id" readonly="1" force_save="1"/>
+                                <field name="plan_date" readonly="1" force_save="1"/>
+                                <field name="actual_date" readonly="1" force_save="1"/>
+                                <field name="plan_hours" readonly="1" force_save="1"/>
+                                <field name="remarks" readonly="1" force_save="1" optional="hide"/>
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+                <page name="maintenance" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </page>
+            </field>
+        </record>
+
+        <!--tree  View -->
+        <record id="hr_equipment_view_tree_inherited_id" model="ir.ui.view">
+            <field name="name">maintenance.equipment.inherited</field>
+            <field name="model">maintenance.equipment</field>
+            <field name="inherit_id" ref="maintenance.hr_equipment_view_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="/tree/field[@name='name']" position="after">
+                    <field name="last_maintenance_date" optional="hide"/>
+                    <field name="codefor"/>
+                    <field name="subcategory_id" optional="hide"/>
+                </xpath>
+            </field>
+        </record>
+
+
+        <record id="hr_equipment_view_kanban_machine" model="ir.ui.view">
+            <field name="name">maintenance.equipment.kanban</field>
+            <field name="model">maintenance.equipment</field>
+            <field name="inherit_id" ref="maintenance.hr_equipment_view_kanban"/>
+            <field name="arch" type="xml">
+                <xpath expr='//kanban/templates/t/div/div[2]' position="after">
+                    <li>ID :
+                        <field name="codefor"/>
+                    </li>
+                    <div t-if="!record.codefor.raw_value"
+                         style="margin: 0px; padding:3px 3px 10px 3px; color:#F77171; background-color: #FFF3F3;">
+                    </div>
+                </xpath>
+                <field name="owner_user_id" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+            </field>
+        </record>
+
+
+        <record id="hr_equipments_action" model="ir.actions.act_window">
+            <field name="name">Equipments</field>
+            <field name="res_model">maintenance.equipment</field>
+            <field name="view_mode">kanban,tree,form,graph</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Add a new equipment
+                </p>
+            </field>
+        </record>
+
+
+        <record id="maintenance_equipment_graph_view" model="ir.ui.view">
+            <field name="name">maintenance.equipment.graph</field>
+            <field name="model">maintenance.equipment</field>
+            <field name="arch" type="xml">
+                <graph string="Equipment">
+                    <field name="name"/>
+                    <field name="category_id"/>
+                    <field name="codefor"/>
+                    <field name="subcategory_id"/>
+                </graph>
+            </field>
+        </record>
+
+        <menuitem
+                id="maintenance.menu_m_request_form"
+                name="Maintenance Requests"
+                active="False"/>
+        <menuitem
+                id="maintenance.maintenance_request_reporting"
+                name="Maintenance Requests"
+                active="False"/>
+
+        <menuitem
+                id="mrp_maintenance.menu_equipment_dashboard"
+                name="List of Machinery"
+                parent="maintenance.menu_equipment_form"
+                action="maintenance.hr_equipment_action"
+                sequence="2"/>
+        <menuitem id="mrp_maintenance.menu_workcenter_tree"
+                  action="mrp_maintenance.maintenance_workcenter_action"
+                  groups="mrp.group_mrp_routings"
+                  parent="maintenance.menu_equipment_form"
+                  sequence="1"/>
+    </data>
+</odoo>

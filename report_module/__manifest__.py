@@ -1,0 +1,26 @@
+{
+    'name': 'Reports',
+    'version': '17.15',
+    'summary': 'Reports',
+    'author': 'Appscomp Widgets Pvt Ltd.,',
+    'website': 'appscomp.com',
+    'license': 'LGPL-3',
+    'depends': ['purchase', 'mail', 'base', 'hr', 'stock', 'contacts', 'account', 'hr_payroll_extended'],
+    'data': [
+        'security/ir.model.access.csv',
+        'views/stock_picking_inhrit.xml',
+        'views/salary_statement_excel.xml',
+        'report/purchase_request_report.xml',
+        'report/delivery_challan_report.xml',
+        'report/delivery_challan_job_work_report.xml',
+        'report/service_purchase_order_report.xml',
+        'report/new_purchase_report.xml',
+        'report/credit_note_report.xml',
+        'report/debit_note_report.xml',
+        # 'report/debit_note_report_.xml',
+    ],
+    'demo': [],
+    'installable': True,
+    'auto_install': False,
+    'application': False
+}

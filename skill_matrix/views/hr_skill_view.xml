@@ -1,0 +1,65 @@
+<odoo>
+    <record id="hr_skill_type_inherit_view_form" model="ir.ui.view">
+        <field name="name">hr.skill.type.view.form</field>
+        <field name="model">hr.skill.type</field>
+        <field name="inherit_id" ref="hr_skills.hr_employee_skill_type_view_form"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <button name="generate_fg" type="object" class="oe_highlight" string="Generate FG"/>
+            </field>
+            <xpath expr="//field[@name='skill_level_ids']" position="replace">
+                <field name="skill_level_ids" nolabel="1" widget="auto_save_skill_type"
+                       context="{'default_skill_type_id': id}">
+                    <tree editable="bottom">
+                        <field name="name"/>
+                        <field name="description"/>
+                        <field name="level_progress" widget="progressbar" nolabel="1"/>
+                        <field name="level_progress" optional="hide"/>
+                        <field name="default_level" widget="boolean_toggle" optional="hide"/>
+                        <field name="color" widget="color" optional="hide"/>
+                        <field name="level_image"/>
+                        <field name="level_id" column_invisible="1" optional="hide"/>
+                    </tree>
+                </field>
+            </xpath>
+            <xpath expr="//field[@name='skill_ids']/tree//field[@name='sequence']" position="after">
+                <field name="code"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!--    <record id="hr_skill_type_inherit_view_tree" model="ir.ui.view">-->
+    <!--        <field name="name">hr.skill.type.view.tree</field>-->
+    <!--        <field name="model">hr.skill.type</field>-->
+    <!--        <field name="inherit_id" ref="hr_skills.hr_skill_type_view_tree"/>-->
+    <!--        <field name="arch" type="xml">-->
+    <!--            <field name="skill_ids" position="after">-->
+    <!--                <field name="skill_type"/>-->
+    <!--            </field>-->
+    <!--        </field>-->
+    <!--    </record>-->
+
+
+    <!--    <record id="hr_skill_type_inherit_view_search" model="ir.ui.view">-->
+    <!--        <field name="name">hr.skill.type.search</field>-->
+    <!--        <field name="model">hr.skill.type</field>-->
+    <!--        <field name="type">search</field>-->
+    <!--        <field name="arch" type="xml">-->
+    <!--            <search>-->
+    <!--                <field name="name"/>-->
+    <!--                <field name="skill_ids"/>-->
+    <!--                <field name="skill_type"/>-->
+    <!--                <separator/>-->
+    <!--                <searchpanel>-->
+    <!--                    <field name="skill_type" icon="fa-filter"/>-->
+    <!--                </searchpanel>-->
+    <!--                <filter string="Machine Skills" name="machine_skills_filter" domain="[('machine_id','=',True)]"-->
+    <!--                        context="{'group_by':'machine_id'}"/>-->
+    <!--                <filter string="Job Role Skills" name="job_role_skills" domain="[('job_id','=',True)]"-->
+    <!--                        context="{'group_by':'job_id'}"/>-->
+    <!--                <filter string="Part Skills" name="part_skills_filter" domain="[('part_id','=',True)]"-->
+    <!--                        context="{'group_by':'part_id'}"/>-->
+    <!--            </search>-->
+    <!--        </field>-->
+    <!--    </record>-->
+</odoo>

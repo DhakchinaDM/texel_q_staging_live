@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_employee_skill_tree" model="ir.ui.view">
+        <field name="name">hr.employee.skill.view.tree</field>
+        <field name="model">hr.employee.skill</field>
+        <field name="arch" type="xml">
+            <tree string="Skills Update" editable="bottom">
+                <field name="employee_id"/>
+                <field name="skill_type_id"/>
+                <field name="skill_id"/>
+                <field name="skill_level_id"/>
+                <field name="level_progress"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_emp_skill_action" model="ir.actions.act_window">
+        <field name="name">Skill Level</field>
+        <field name="res_model">hr.employee.skill</field>
+        <field name="view_mode">tree</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create a New Skill Level.
+            </p>
+        </field>
+    </record>
+
+    <menuitem
+            id="view_skill_emp_menu"
+            name="Add Skills"
+            action="view_emp_skill_action"
+            parent="hr.hr_menu_hr_reports"
+            sequence="2"/>
+
+    <menuitem id="hr_skills.hr_employee_skill_report_menu"
+              active="False"/>
+    <menuitem id="hr_contract_reports.menu_report_contract_employee_all"
+              active="False"/>
+</odoo>

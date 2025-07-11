@@ -1,0 +1,167 @@
+<odoo>
+    <record id="view_corrective_maintenance_form" model="ir.ui.view">
+        <field name="name">corrective.maintenance.form</field>
+        <field name="model">corrective.maintenance</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <!--                    <button name="action_done" type="object" class="oe_highlight" string="Complete"-->
+                    <!--                            invisible="state != 'draft'"/>-->
+                    <button name="action_delivery" type="object" class="oe_highlight" string="Delivery"
+                            invisible="delivery_state != 'delivery'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_delivery_count" string="Delivery" type="object"
+                                class="oe_stat_button" invisible="delivery_count == 0"
+                                icon="fa-truck">
+                            <field name="delivery_count" string="Delivery" widget="statinfo"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="machine_id" required="1" readonly="state == 'done'"/>
+                            <field name="machine_no" required="1" force_save="1" readonly="1"/>
+                            <field name="machine_serial_no" readonly="1" force_save="1"/>
+                            <field name="maintenance_type" readonly="0" force_save="1"/>
+                            <field name="indentification_time" readonly="state == 'done'"/>
+                            <field name="request_raised_for" readonly="state == 'done'"/>
+                            <field name="description" readonly="state == 'done'"/>
+                            <field name="shift_type" readonly="state == 'done'"/>
+                        </group>
+                        <group>
+                            <field name="break_down_time" readonly="state == 'done'"/>
+                            <field name="restart_time" readonly="state == 'done'"/>
+                            <field name="duration" readonly="state == 'done'"/>
+                            <field name="root_case" readonly="state == 'done'"/>
+                            <field name="action_taken" readonly="state == 'done'"/>
+                            <field name="work_done_byy" readonly="state == 'done'"/>
+                            <field name="remarks" readonly="state == 'done'"/>
+                            <field name="spare_replaced" readonly="state == 'done'"/>
+                            <field name="duration_float" readonly="state == 'done'" invisible="1"/>
+                            <field name="work_done_by" invisible="1" readonly="state == 'done'"/>
+                            <field name="partner_id" invisible="1"/>
+                            <field name="warehouse_id" readonly="1" invisible="1"/>
+                            <field name="delivery_id" readonly="1" force_save="1" invisible="delivery_id == False"/>
+                            <field name="delivery_state" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name='critical_spares' string="Spares">
+                            <field name="spare_ids" nolabel="1" readonly="state == 'done'">
+                                <tree editable="bottom">
+                                    <field name="product_id" string="Spares"/>
+                                    <field name="available_qty"/>
+                                    <field name="required_qty"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page name='details' string="Details">
+                            <group>
+                                <field name="doc_num"/>
+                                <field name="rev_num"/>
+                                <field name="rev_date"/>
+                            </group>
+                        </page>
+                    </notebook>
+                    <group col="12">
+                        <group colspan="8">
+                        </group>
+                        <group colspan="4">
+                            <group class="oe_subtotal_footer">
+                                <button name="action_done" type="object" class="oe_highlight" string="Complete"
+                                        invisible="state != 'draft'"/>
+                            </group>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="o_attachment_preview" groups="hr_payroll.group_payslip_display"/>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_cm_search_view" model="ir.ui.view">
+        <field name="name">corrective.maintenance.check.search</field>
+        <field name="model">corrective.maintenance</field>
+        <field name="type">search</field>
+        <field name="arch" type="xml">
+            <search string="Preventive Maintenance Check Search">
+                <field name="name"/>
+                <field name="machine_id"/>
+                <field name="machine_no"/>
+                <field name="root_case"/>
+                <field name="action_taken"/>
+                <field name="state"/>
+                <field name="remarks"/>
+                <separator/>
+                <searchpanel>
+                    <field name="state" icon="fa-filter"/>
+                    <field name="machine_id" icon="fa-filter"/>
+                </searchpanel>
+                <filter string="Break Down" name="break_down_filter" domain="[]"
+                        context="{'group_by':'break_down_time'}"/>
+
+            </search>
+        </field>
+    </record>
+
+    <record id="view_corrective_maintenance_tree" model="ir.ui.view">
+        <field name="name">corrective.maintenance.tree</field>
+        <field name="model">corrective.maintenance</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" string="Reference"/>
+                <field name="machine_id"/>
+                <field name="machine_no"/>
+                <field name="machine_serial_no" optional="hide"/>
+                <field name="break_down_time"/>
+                <field name="restart_time"/>
+                <field name="duration"/>
+                <field name="state" widget="badge" decoration-success="state in 'done'"
+                       decoration-warning="state in 'draft'"/>
+                <field name="doc_num" optional="hide"/>
+                <field name="rev_num" optional="hide"/>
+                <field name="rev_date" optional="hide"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="corrective_maintenance_action" model="ir.actions.act_window">
+        <field name="name">Break Down</field>
+        <field name="res_model">corrective.maintenance</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_break_down_filter': 1, 'default_maintenance_type': 'corrective'}</field>
+        <field name="domain">[('maintenance_type', '=', 'corrective')]</field>
+    </record>
+
+    <menuitem id="menu_corrective_maintenance"
+              name="Break Down"
+              sequence="3"
+              parent="maintenance.menu_m_request"
+              action="corrective_maintenance_action"/>
+
+    <record id="predictive_maintenance_action" model="ir.actions.act_window">
+        <field name="name">Predictive</field>
+        <field name="res_model">corrective.maintenance</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_break_down_filter': 1, 'default_maintenance_type': 'preventive'}</field>
+        <field name="domain">[('maintenance_type', '=', 'preventive')]</field>
+    </record>
+
+    <menuitem id="menu_predictive_maintenance"
+              name="Predictive Maintenance"
+              sequence="3"
+              parent="maintenance.menu_m_request"
+              action="predictive_maintenance_action"/>
+</odoo>

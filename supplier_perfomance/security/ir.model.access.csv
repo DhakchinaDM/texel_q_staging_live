@@ -1,0 +1,12 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_supplier_performance,supplier.performance,model_supplier_performance,base.group_user,1,1,1,1
+access_supplier_perform_category,supplier.perform.category,model_supplier_perform_category,base.group_user,1,1,1,1
+access_supplier_evaluation_line,supplier.evaluation.line,model_supplier_evaluation_line,base.group_user,1,1,1,1
+access_purchase_order_excel,purchase.order.excel,model_purchase_order_excel,base.group_user,1,1,1,1
+access_service_po_excel,service.po.excel,model_service_po_excel,base.group_user,1,1,1,1
+access_pending_service_po_excel,pending.service.po.excel,model_pending_service_po_excel,base.group_user,1,1,1,1
+access_pending_purchase_order_excel,pending.purchase.order.excel,model_pending_purchase_order_excel,base.group_user,1,1,1,1
+access_supplier_monthly_score_card,supplier.monthly.score.card,model_supplier_monthly_score_card,base.group_user,1,1,1,1
+access_rfq_report_excel,rfq.report.excel,model_rfq_report_excel,base.group_user,1,1,1,1
+access_pending_grn_excel,pending.grn.excell,model_pending_grn_excel,base.group_user,1,1,1,1
+access_grn_excel,grn.excell,model_grn_excel,base.group_user,1,1,1,1

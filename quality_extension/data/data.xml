@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record id="appearance_parameter" model="quality.parameter">
+            <field name="name">Appearance</field>
+            <field name="observation_no_need">True</field>
+        </record>
+
+        <record id="material_parameter" model="quality.parameter">
+            <field name="name">Material</field>
+            <field name="observation_no_need">True</field>
+        </record>
+
+        <record id="length_parameter" model="quality.parameter">
+            <field name="name">Length</field>
+        </record>
+
+        <record id="distance_parameter" model="quality.parameter">
+            <field name="name">Distance</field>
+        </record>
+
+        <record id="mis_match_parameter" model="quality.parameter">
+            <field name="name">Mis Match</field>
+        </record>
+
+        <record id="thickness_parameter" model="quality.parameter">
+            <field name="name">Thickness</field>
+        </record>
+
+        <record id="rib_thickness_parameter" model="quality.parameter">
+            <field name="name">RIB Thickness</field>
+        </record>
+
+        <record id="Diameter" model="quality.parameter">
+            <field name="name">Diameter</field>
+        </record>
+
+        <record id="depth" model="quality.parameter">
+            <field name="name">Depth</field>
+        </record>
+
+        <record id="3_pad_height_difference" model="quality.parameter">
+            <field name="name">3 Pad Height Difference</field>
+        </record>
+
+        <record id="visual_check_method" model="quality.check.method">
+            <field name="name">Visual</field>
+        </record>
+
+        <record id="supplier_certificate_check_method" model="quality.check.method">
+            <field name="name">SUPPLIER TEST REPORT / MTC</field>
+        </record>
+
+        <record id="digital_vernier_check_method" model="quality.check.method">
+            <field name="name">Digital Vernier</field>
+        </record>
+
+        <record id="2d_height_gauge_check_method" model="quality.check.method">
+            <field name="name">2D HEIGHT GAUGE</field>
+        </record>
+
+        <record id="2d_height_gauge_check_method" model="quality.check.method">
+            <field name="name">2D HEIGHT GAUGE</field>
+        </record>
+    </data>
+</odoo>

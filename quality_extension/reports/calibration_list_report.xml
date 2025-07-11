@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="paper_format_calibration_list_report" model="report.paperformat">
+            <field name="name">Calibration List Report</field>
+            <field name="default" eval="False"/>
+            <field name="disable_shrinking" eval="True"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">7</field>
+            <field name="margin_bottom">20</field>
+            <field name="margin_left">5</field>
+            <field name="margin_right">5</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">22</field>
+            <field name="dpi">90</field>
+        </record>
+        <record id="report_calibration_list" model="ir.actions.report">
+            <field name="name">Gauges/Instruments List</field>
+            <field name="model">calibration.list.wizard</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">quality_extension.gauges_instruments_template_pdf</field>
+            <field name="report_file">quality_extension.gauges_instruments_template_pdf</field>
+            <field name="print_report_name">'Calibration List'</field>
+            <field name="binding_model_id" ref="quality_extension.model_calibration_list_wizard"/>
+            <field name="paperformat_id" ref="quality_extension.paper_format_calibration_list_report"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <template id="gauges_instruments_template_pdf">
+            <t t-call="web.html_container">
+                <t t-call="web.basic_layout">
+                    <div style="border: 1px solid black;">
+                        <div class="row" style="CCCCC">
+                            <div class="col-3" style="border-right:1px solid black;">
+                                <img src='/web/binary/company_logo' class="img-fluid img-thumbnail"
+                                         style="width:100%;margin-top:1px;"/>
+                            </div>
+                            <div class="col-6" style="border-right:1px solid black;">
+                                <div style="text-align:center;color:black;margin:25px; padding:25px;">
+                                    <t t-if="form['instrument_type'] == 'calibration'">
+                                        <h4>
+                                            LIST OF MONITORING AND MEASURING RESOURCES (MMR)
+                                        </h4>
+                                    </t>
+                                    <t t-if="form['instrument_type'] == 'gauges'">
+                                        <h4>
+                                            MASTER LIST OF GAUGES FOR AUTOMOTIVES PARTS
+                                        </h4>
+                                    </t>
+                                </div>
+                            </div>
+                            <div class="col-3" style="margin:25px;">
+                                <t t-if="form['instrument_type'] == 'calibration'">
+                                    <div>
+                                        <strong>Doc No</strong>
+                                        <strong>:</strong>
+                                        <span>QA/DI/D/14</span>
+                                    </div>
+                                    <div>
+                                        <strong>Rev No</strong>
+                                        <strong>:</strong>
+                                        <span>00</span>
+                                    </div>
+                                </t>
+                                <t t-if="form['instrument_type'] == 'gauges'">
+                                    <div>
+                                        <strong>Doc No</strong>
+                                        <strong>:</strong>
+                                        <span>QA/DI/D/08</span>
+                                    </div>
+                                    <div>
+                                        <strong>Rev No</strong>
+                                        <strong>:</strong>
+                                        <span>00</span>
+                                    </div>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table_content">
+                        <table class="table table-sm" style="border-bottom:1px solid black;border-left:1px solid black;
+                                                border-right:1px solid black;">
+                            <thead style="border-top: 1px solid black;">
+                                <tr>
+                                    <th rowspan="2">S No</th>
+                                    <th rowspan="2">Code No</th>
+                                    <th rowspan="2">Description</th>
+                                    <t t-if="form['instrument_type'] == 'calibration'">
+                                        <th rowspan="2">Range</th>
+                                        <th rowspan="2">Least Count</th>
+                                        <th rowspan="2">Acceptance Criteria</th>
+                                    </t>
+                                    <t t-if="form['instrument_type'] == 'gauges'">
+                                        <th rowspan="2">Size</th>
+                                        <th rowspan="2">Part Name</th>
+                                    </t>
+                                    <th rowspan="2">Make</th>
+                                    <th rowspan="2">Calibration Frequency</th>
+                                    <th rowspan="2">Date of Calibration</th>
+                                    <th rowspan="2">Next Due Date</th>
+                                    <th rowspan="2">Calibration Source</th>
+                                    <th rowspan="2">Remarks</th>
+                                </tr>
+                            </thead>
+                            <tbody style="border-top: 1px solid black;">
+                                <t t-foreach="data" t-as="l">
+                                    <tr>
+                                        <td style="color:black;text-align:center;">
+                                            <span t-esc="l_index+1"/>
+                                        </td>
+                                        <t t-if="l['code_no']">
+                                            <td align="left"
+                                                style="color:black;">
+                                                <span t-esc="l['code_no']"/>
+                                            </td>
+                                        </t>
+                                        <t t-else="">
+                                            <td align="center"
+                                                style="color:black;">
+                                                -
+                                            </td>
+                                        </t>
+                                        <t t-if="l['description']">
+                                            <td align="left"
+                                                style="color:black;">
+                                                <span t-esc="l['description']"/>
+                                            </td>
+                                        </t>
+                                        <t t-else="">
+                                            <td align="center"
+                                                style="color:black;">
+                                                -
+                                            </td>
+                                        </t>
+                                        <t t-if="form['instrument_type'] == 'calibration'">
+                                            <t t-if="l['mmr_range']">
+                                                <td align="left"
+                                                    style="color:black;">
+                                                    <span t-esc="l['mmr_range']"/>
+                                                </td>
+                                            </t>
+                                            <t t-else="">
+                                                <td align="center"
+                                                    style="color:black;">
+                                                    -
+                                                </td>
+                                            </t>
+                                        </t>
+                                        <t t-if="form['instrument_type'] == 'calibration'">
+                                            <t t-if="l['least_count']">
+                                                <td align="left"
+                                                    style="color:black;">
+                                                    <span t-esc="l['least_count']"/>
+                                                </td>
+                                            </t>
+                                            <t t-else="">
+                                                <td align="center"
+                                                    style="color:black;">
+                                                    -
+                                                </td>
+                                            </t>
+                                        </t>
+                                        <t t-if="form['instrument_type'] == 'calibration'">
+                                            <t t-if="l['acceptance_criteria']">
+                                                <td align="left"
+                                                    style="color:black;">
+                                                    <span t-esc="l['acceptance_criteria']"/>
+                                                </td>
+                                            </t>
+                                            <t t-else="">
+                                                <td align="center"
+                                                    style="color:black;">
+                                                    -
+                                                </td>
+                                            </t>
+                                        </t>
+                                        <t t-if="form['instrument_type'] == 'gauges'">
+                                            <t t-if="l['size']">
+                                                <td align="left"
+                                                    style="color:black;">
+                                                    <span t-esc="l['size']"/>
+                                                </td>
+                                            </t>
+                                            <t t-else="">
+                                                <td align="center"
+                                                    style="color:black;">
+                                                    -
+                                                </td>
+                                            </t>
+                                        </t>
+                                        <t t-if="form['instrument_type'] == 'gauges'">
+                                            <t t-if="l['part_name']">
+                                                <td align="left"
+                                                    style="color:black;">
+                                                    <span t-esc="l['part_name']"/>
+                                                </td>
+                                            </t>
+                                            <t t-else="">
+                                                <td align="center"
+                                                    style="color:black;">
+                                                    -
+                                                </td>
+                                            </t>
+                                        </t>
+                                        <t t-if="l['make']">
+                                            <td align="left"
+                                                style="color:black;">
+                                                <span t-esc="l['make']"/>
+                                            </td>
+                                        </t>
+                                        <t t-else="">
+                                            <td align="center"
+                                                style="color:black;">
+                                                -
+                                            </td>
+                                        </t>
+                                        <t t-if="l['calib_frequency']">
+                                            <td align="left"
+                                                style="color:black;">
+                                                <span t-esc="l['calib_frequency']"/>
+                                            </td>
+                                        </t>
+                                        <t t-else="">
+                                            <td align="center"
+                                                style="color:black;">
+                                                -
+                                            </td>
+                                        </t>
+                                        <t t-if="l['calib_date']">
+                                            <td align="left"
+                                                style="color:black;">
+                                                <span t-esc="l['calib_date'].strftime('%d-%m-%Y')"/>
+                                            </td>
+                                        </t>
+                                        <t t-else="">
+                                            <td align="center"
+                                                style="color:black;">
+                                                -
+                                            </td>
+                                        </t>
+                                        <t t-if="l['due_date']">
+                                            <td align="left"
+                                                style="color:black;">
+                                                <span t-esc="l['due_date'].strftime('%d-%m-%Y')"/>
+                                            </td>
+                                        </t>
+                                        <t t-else="">
+                                            <td align="center"
+                                                style="color:black;">
+                                                -
+                                            </td>
+                                        </t>
+                                        <t t-if="l['calib_source']">
+                                            <td align="left"
+                                                style="color:black;">
+                                                <span t-esc="l['calib_source']"/>
+                                            </td>
+                                        </t>
+                                        <t t-else="">
+                                            <td align="center"
+                                                style="color:black;">
+                                                -
+                                            </td>
+                                        </t>
+                                        <t t-if="l['remarks']">
+                                            <td align="left"
+                                                style="color:black;">
+                                                <span t-esc="l['remarks']"/>
+                                            </td>
+                                        </t>
+                                        <t t-else="">
+                                            <td align="center"
+                                                style="color:black;">
+                                                -
+                                            </td>
+                                        </t>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                        <div class="row" style="border:1px solid black;">
+                            <div class="col-6" style="border-right:1px solid black;">
+                                <strong style="margin-left:5px;">Prepared by</strong>
+                                <strong>:</strong>
+                                <t t-if="form['prepared_by']">
+                                    <span t-esc="form['prepared_by']"/>
+                                </t>
+                                <t t-else="">
+                                    -
+                                </t>
+                            </div>
+                            <div class="col-6">
+                                <strong style="margin-left:5px;">Approved by</strong>
+                                <strong>:</strong>
+                                <t t-if="form['approved_by']">
+                                    <span t-esc="form['approved_by']"/>
+                                </t>
+                                <t t-else="">
+                                    -
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

@@ -1,0 +1,99 @@
+<odoo>
+    <record id="skill_matrix_exl_tree" model="ir.ui.view">
+        <field name="name">skill.matrix.tree.view</field>
+        <field name="model">skill.matrix</field>
+        <field name="arch" type="xml">
+            <tree string="Skill Matrix">
+                <field name="name"/>
+                <field name="employee_id" widget="many2many_tags"/>
+                <field name="department_id" widget="many2many_tags"/>
+                <field name="skill_id" widget="many2many_tags"/>
+                <field name="date"/>
+                <field name="create_date" optional="hide"/>
+                <field name="create_uid"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="skill_matrix_exl_form" model="ir.ui.view">
+        <field name="name">skill.matrix.form.view</field>
+        <field name="model">skill.matrix</field>
+        <field name="arch" type="xml">
+            <form string="Skill Matrix">
+                <sheet>
+                    <div class="oe_title" invisible="1">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <div style="overflow: scroll">
+                        <div class="card-header" style="margin-left:300px;margin-right:300px">
+                            <group>
+                                <group>
+                                    <field name="entry_type" widget="radio" class="form-control" options="{'horizontal': true}"/>
+                                    <field name="department_id" class="form-control" widget="many2many_tags"
+                                           options='{"no_open": False, "no_create": True,"no_edit": True}'/>
+                                    <field name="employee_id" class="form-control" widget="many2many_tags" invisible="entry_type == 'assigned'"
+                                           options='{"no_open": False, "no_create": True,"no_edit": True}'/>
+                                    <field name="single_employee_id" class="form-control" invisible="entry_type == 'all'"
+                                           options='{"no_open": False, "no_create": True,"no_edit": True}'/>
+                                    <button name="get_excel_data"
+                                            string="Execute/Refresh"
+                                            type="object"
+                                            class="fa fa-play btn btn-primary" style="font-size: 10px;"/>
+                                </group>
+                                <group>
+                                    <field name="date" class="form-control" invisible="1"/>
+                                    <field name="skill_id" class="form-control" widget="many2many_tags"
+                                           options='{"no_open": False, "no_create": True,"no_edit": True}'/>
+                                    <field name="emp_skill_id" class="form-control" widget="many2many_tags" invisible="entry_type == 'assigned'"
+                                           options='{"no_open": False, "no_create": True,"no_edit": True}'/>
+                                    <field name="summary_file" class="form-control" readonly="1" filename="file_name"
+                                           invisible="1"/>
+                                    <label for="download_excel" string=""/>
+                                    <button name="download_excel" type="object" class="oe_link" icon="fa-download"
+                                            string="Click here to download Excel" invisible="report_printed != True"
+                                            style="white-space: nowrap;"/>
+                                </group>
+                            </group>
+                        </div>
+                        <group>
+                            <field name="report_printed" invisible="1"/>
+                            <field name="user_id" invisible="1"/>
+                            <field name="company_id" invisible="1"/>
+                            <group invisible="report_printed != True">
+                                <field name="file_name" invisible="1"/>
+                            </group>
+                        </group>
+                        <div style="font-size: 15px; font-weight: bold; margin-bottom: 10px;">
+                            <separator string="Result"/>
+                        </div>
+
+                        <group>
+                            <field name="data_html" type="html" class="oe_memo" default_focus="1" string=""
+                                   options="{'resizable': false, 'collaborative': true}"/>
+                        </group>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_skill_matrix_exl" model="ir.actions.act_window">
+        <field name="name">Skill Matrix</field>
+        <field name="res_model">skill.matrix</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create a New Skill Matrix.
+            </p>
+        </field>
+    </record>
+
+
+    <menuitem id="menu_skill_matrix_report_exl"
+              name="Skill Matrix"
+              sequence="9"
+              action="action_skill_matrix_exl"
+              parent="hr.hr_menu_hr_reports"/>
+</odoo>

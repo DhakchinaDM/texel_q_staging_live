@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="sh_update_qty_wizard_form_view" model="ir.ui.view">
+            <field name="name">sh.update.qty.wizard.form.view</field>
+            <field name="model">update.qty</field>
+            <field name="arch" type="xml">
+                <form string="Update Quantity">
+                    <div class="alert alert-info mb-4" role="alert">
+                        This will help you to update the Quantity of the selected product.
+                    </div>
+                    <group>
+                        <field name="sh_qty"/>
+                        <field name="comments"/>
+                    </group>
+                    <footer>
+                        <button string='Update Quantity' name="action_change_qty" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        <record id="action_chnage_qty_wizard" model="ir.actions.act_window">
+            <field name="name">Update Quantity</field>
+            <field name="res_model">update.qty</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>

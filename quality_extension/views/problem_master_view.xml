@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record id="problem_master_form_view" model="ir.ui.view">
+            <field name="name">Problem Master Form</field>
+            <field name="model">problem.master</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name='name'/>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="problem_master_tree_view" model="ir.ui.view">
+            <field name="name">Problem Master Tree</field>
+            <field name="model">problem.master</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name='name'/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="problem_master_action" model="ir.actions.act_window">
+            <field name="name">Problem</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">problem.master</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_no content_smiling_face">
+                    Create a New Problem
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="problem_master_main_menu"
+                  name="Problem"
+                  parent="quality_control.menu_quality_configuration"
+                  action="problem_master_action"
+                  sequence="21"/>
+
+    </data>
+</odoo>

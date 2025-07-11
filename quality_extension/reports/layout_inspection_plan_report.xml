@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="paper_format_layout_inspection_plan_report" model="report.paperformat">
+            <field name="name">Layout Inspection Plan</field>
+            <field name="default" eval="False"/>
+            <field name="disable_shrinking" eval="True"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">30</field>
+            <field name="margin_bottom">25</field>
+            <field name="margin_left">5</field>
+            <field name="margin_right">5</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">22</field>
+            <field name="dpi">150</field>
+        </record>
+        <record id="report_layout_inspection_plan_report" model="ir.actions.report">
+            <field name="name">Layout Inspection Plan</field>
+            <field name="model">layout.inspection.plan</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">quality_extension.layout_inspection_plan_report</field>
+            <field name="report_file">quality_extension.layout_inspection_plan_report</field>
+            <field name="print_report_name">'Layout Inspection Plan'</field>
+            <field name="binding_model_id" ref="quality_extension.model_layout_inspection_plan"/>
+            <field name="paperformat_id" ref="quality_extension.paper_format_layout_inspection_plan_report"/>
+            <field name="binding_type">report</field>
+        </record>
+        <template id="layout_inspection_plan_report_header">
+            <div class="header row" style="border: 1px solid black;vertical-align: middle;">
+                <div class="col-3" style="border-right:1px solid black;">
+                    <img src='/web/binary/company_logo' class="img-fluid img-thumbnail"
+                         style="width:100%;margin-top:1px;"/>
+                </div>
+                <div class="col-6" style="border-right:1px solid black;text-align:center;color:black;">
+                    <h4>
+                        LAYOUT INSPECTION PLAN
+                    </h4>
+                </div>
+                <div class="col-3">
+                    <div style="margin:5px;">
+                        <strong>Doc No</strong>
+                        <strong>:</strong>
+                        <span>QA/DI/D/22</span>
+                    </div>
+                    <div style="margin:5px;">
+                        <strong>Rev No</strong>
+                        <strong>:</strong>
+                        <span t-field="o.rev_no"/>
+                    </div>
+                    <div style="margin:5px;">
+                        <strong>Date</strong>
+                        <strong>:</strong>
+                        <span t-field="o.date"/>
+                    </div>
+                </div>
+            </div>
+        </template>
+        <template id="layout_inspection_plan_report_body">
+            <t t-call="web.basic_layout">
+                <div class="row"
+                     style="border-top:1px solid black;border-right:1px solid black;border-left:1px solid black;">
+                    <h5 class="col-12" align="center">FREQUENCY ONCE IN A YEAR</h5>
+                </div>
+                <table class="table table-sm" style="border:1px solid black;">
+                    <thead style="background-color:#DBDCC8;">
+                        <tr>
+                            <th rowspan="2" style="vertical-align: middle;">S.No</th>
+                            <th rowspan="2" style="vertical-align: middle;">Part No</th>
+                            <th rowspan="2" style="vertical-align: middle;">Part Name</th>
+                            <th rowspan="2" style="vertical-align: middle;">Customer Name</th>
+                            <th colspan="12">Year &amp; Month
+                                <span t-field="o.select_year"/> -
+                                <span t-field="o.end_year"/>
+                            </th>
+                            <th rowspan="2" style="vertical-align: middle;">Status</th>
+                            <th rowspan="2" style="vertical-align: middle;">Remarks</th>
+                        </tr>
+                        <tr>
+                            <th>May</th>
+                            <th>June</th>
+                            <th>July</th>
+                            <th>Aug</th>
+                            <th>Sep</th>
+                            <th>Oct</th>
+                            <th>Nov</th>
+                            <th>Dec</th>
+                            <th>Jan</th>
+                            <th>Feb</th>
+                            <th>Mar</th>
+                            <th>Apr</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="o.line_ids" t-as="line">
+                            <tr>
+                                <td style="color:black;border-left:1px;text-align:center;vertical-align: middle;">
+                                    <span t-esc="line_index+1"/>
+                                </td>
+                                <t t-if="line.part_name">
+                                    <td align="left" style="color:black;border-left:1px;vertical-align: middle;">
+                                        <span t-esc="line.part_name"/>
+                                    </td>
+                                </t>
+                                <t t-else="">
+                                    <td align="center"
+                                        style="color:black;border-left:1px;vertical-align: middle;">
+                                        -
+                                    </td>
+                                </t>
+                                <t t-if="line.part_no.name">
+                                    <td align="left" style="color:black;border-left:1px;vertical-align: middle;">
+                                        <span t-esc="line.part_no.name"/>
+                                    </td>
+                                </t>
+                                <t t-else="">
+                                    <td align="center"
+                                        style="color:black;border-left:1px;vertical-align: middle;">
+                                        -
+                                    </td>
+                                </t>
+                                <t t-if="line.partner_id.name">
+                                    <td align="left" style="color:black;border-left:1px;vertical-align: middle;">
+                                        <span t-esc="line.partner_id.name"/>
+                                    </td>
+                                </t>
+                                <t t-else="">
+                                    <td align="center"
+                                        style="color:black;border-left:1px;vertical-align: middle;">
+                                        -
+                                    </td>
+                                </t>
+                                <t t-if="line.may">
+                                    <td align="center"
+                                        style="color:black;border-left:1px;vertical-align: middle;font-size:25px;">
+
+                                        <i class="fa fa-check-square" style="font-size:25px;"/>
+                                    </td>
+                                </t>
+                                <t t-else="">
+                                    <td align="center"
+                                        style="color:black;border-left:1px;vertical-align: middle;font-size:25px;">
+                                        <i class="fa fa-square-o" style="font-size:25px;"/>
+                                    </td>
+                                </t>
+                                <t t-if="line.june">
+                                    <td align="center"
+                                        style="color:black;border-left:1px;vertical-align: middle;font-size:25px;">
+                                        <i class="fa fa-check-square" style="font-size:25px;"/>
+                                    </td>
+                                </t>
+                                <t t-else="">
+                                    <td align="center"
+                                        style="color:black;border-left:1px;vertical-align: middle;font-size:25px;">
+                                        <i class="fa fa-square-o" style="font-size:25px;"/>
+                                    </td>
+                                </t>
+                                <t t-if="line.july">
+                                    <td align="center"
+                                        style="color:black;border-left:1px;vertical-align: middle;font-size:25px;">
+                                        <i class="fa fa-check-square" style="font-size:25px;"/>
+                                    </td>
+                                </t>
+                                <t t-else="">
+                                    <td align="center"
+                                        style="color:black;border-left:1px;vertical-align: middle;font-size:25px;">
+                                        <i class="fa fa-square-o" style="font-size:25px;"/>
+                                    </td>
+                                </t>
+                                <t t-if="line.august">
+                                    <td align="center"
+                                        style="color:black;border-left:1px;vertical-align: middle;font-size:25px;">
+                                        <i class="fa fa-check-square" style="font-size:25px;"/>
+                                    </td>
+                                </t>
+                                <t t-else="">
+                                    <td align="center"
+                                        style="color:black;border-left:1px;vertical-align: middle;font-size:25px;">
+                                        <i class="fa fa-square-o" style="font-size:25px;"/>
+                                    </td>
+                                </t>
+                                <t t-if="line.september">
+                                    <td align="center"
+                                        style="color:black;border-left:1px;vertical-align: middle;font-size:25px;">
+                                        <i class="fa fa-check-square" style="font-size:25px;"/>
+                                    </td>
+                                </t>
+                                <t t-else="">
+                                    <td align="center"
+                                        style="color:black;border-left:1px;vertical-align: middle;font-size:25px;">
+                                        <i class="fa fa-square-o" style="font-size:25px;"/>
+                                    </td>
+                                </t>
+                                <t t-if="line.october">
+                                    <td align="center"
+                                        style="color:black;border-left:1px;vertical-align: middle;font-size:25px;">
+                                        <i class="fa fa-check-square" style="font-size:25px;"/>
+                                    </td>
+                                </t>
+                                <t t-else="">
+                                    <td align="center"
+                                        style="color:black;border-left:1px;vertical-align: middle;font-size:25px;">
+                                        <i class="fa fa-square-o" style="font-size:25px;"/>
+                                    </td>
+                                </t>
+                                <t t-if="line.november">
+                                    <td align="center"
+                                        style="color:black;border-left:1px;vertical-align: middle;font-size:25px;">
+                                        <i class="fa fa-check-square" style="font-size:25px;"/>
+                                    </td>
+                                </t>
+                                <t t-else="">
+                                    <td align="center"
+                                        style="color:black;border-left:1px;vertical-align: middle;font-size:25px;">
+                                        <i class="fa fa-square-o" style="font-size:25px;"/>
+                                    </td>
+                                </t>
+                                <t t-if="line.december">
+                                    <td align="center"
+                                        style="color:black;border-left:1px;vertical-align: middle;font-size:25px;">
+                                        <i class="fa fa-check-square" style="font-size:25px;"/>
+                                    </td>
+                                </t>
+                                <t t-else="">
+                                    <td align="center"
+                                        style="color:black;border-left:1px;vertical-align: middle;font-size:25px;">
+                                        <i class="fa fa-square-o" style="font-size:25px;"/>
+                                    </td>
+                                </t>
+                                <t t-if="line.january">
+                                    <td align="center"
+                                        style="color:black;border-left:1px;vertical-align: middle;font-size:25px;">
+                                        <i class="fa fa-check-square" style="font-size:25px;"/>
+                                    </td>
+                                </t>
+                                <t t-else="">
+                                    <td align="center"
+                                        style="color:black;border-left:1px;vertical-align: middle;font-size:25px;">
+                                        <i class="fa fa-square-o" style="font-size:25px;"/>
+                                    </td>
+                                </t>
+                                <t t-if="line.february">
+                                    <td align="center"
+                                        style="color:black;border-left:1px;vertical-align: middle;font-size:25px;">
+                                        <i class="fa fa-check-square" style="font-size:25px;"/>
+                                    </td>
+                                </t>
+                                <t t-else="">
+                                    <td align="center"
+                                        style="color:black;border-left:1px;vertical-align: middle;font-size:25px;">
+                                        <i class="fa fa-square-o" style="font-size:25px;"/>
+                                    </td>
+                                </t>
+                                <t t-if="line.march">
+                                    <td align="center"
+                                        style="color:black;border-left:1px;vertical-align: middle;font-size:25px;">
+                                        <i class="fa fa-check-square" style="font-size:25px;"/>
+                                    </td>
+                                </t>
+                                <t t-else="">
+                                    <td align="center"
+                                        style="color:black;border-left:1px;vertical-align: middle;font-size:25px;">
+                                        <i class="fa fa-square-o" style="font-size:25px;"/>
+                                    </td>
+                                </t>
+                                <t t-if="line.april">
+                                    <td align="center"
+                                        style="color:black;border-left:1px;vertical-align: middle;font-size:25px;">
+                                        <i class="fa fa-check-square" style="font-size:25px;"/>
+                                    </td>
+                                </t>
+                                <t t-else="">
+                                    <td align="center"
+                                        style="color:black;border-left:1px;vertical-align: middle;font-size:25px;">
+                                        <i class="fa fa-square-o" style="font-size:25px;"/>
+                                    </td>
+                                </t>
+                                <t t-if="line.remarks">
+                                    <td class="left"
+                                        style="color:black;border-left:1px">
+                                        <span t-esc="line.remarks"/>
+                                    </td>
+                                </t>
+                                <t t-else="">
+                                    <td align="center"
+                                        style="color:black;border-left:1px">
+                                        -
+                                    </td>
+                                </t>
+                                <t t-if="line.remarks">
+                                    <td class="left"
+                                        style="color:black;border-left:1px">
+                                        <span t-esc="line.remarks"/>
+                                    </td>
+                                </t>
+                                <t t-else="">
+                                    <td align="center"
+                                        style="color:black;border-left:1px">
+                                        -
+                                    </td>
+                                </t>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+                <div class="row" style="border-left:1px solid black;
+                                                                border-right:1px solid black;border-top:1px solid black;">
+                    <div class="col-6">
+                        <div style="border-right:1px solid black;margin-left:5px;">
+                            <strong>Prepared By</strong>
+                            <strong>:</strong>
+                            <span t-field="o.prepared_by"/>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div style="margin-left:5px;">
+                            <strong>Approved By</strong>
+                            <strong>:</strong>
+                            <span t-field="o.approved_by"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="border-bottom:1px solid black;border-left:1px solid black;
+                                                                border-right:1px solid black;border-top:1px solid black;">
+                    <div class="col-6" style="border-right:1px solid black;">
+                        <strong style="margin-left:5px;">PLAN</strong>
+                        <strong>:</strong>
+                        <i class="fa fa-square-o" style="font-size:25px;"/>
+                    </div>
+                    <div class="col-6">
+                        <strong style="margin-left:5px;">ACTUAL</strong>
+                        <strong>:</strong>
+                        <i class="fa fa-check-square" style="font-size:25px;"/>
+                    </div>
+                </div>
+            </t>
+        </template>
+        <template id="layout_inspection_plan_report">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="quality_extension.layout_inspection_plan_report_header"/>
+                    <t t-call="quality_extension.layout_inspection_plan_report_body"/>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

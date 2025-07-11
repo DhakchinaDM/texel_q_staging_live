@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="spc_plan_template_id" model="mail.template">
+            <field name="name">Email Notification</field>
+            <field name="model_id" ref="model_spc_plan"/>
+            <field name="subject">SPC Plan Notification</field>
+            <field name="email_from">${(object.user_id.email or '').replace('@domain.com', '@example.com')}</field>
+            <field name="email_to">${object.email_to}</field>
+            <field name="body_html" type="html">
+                <table border="0" cellpadding="0" cellspacing="0"
+                       style="background-color: #F1F1F1; font-family:Verdana, Arial,sans-serif; color: #454748;
+                       width: 100%; border-collapse:separate;">
+                    <tr>
+                        <td align="center">
+                            <table border="0" cellpadding="0" cellspacing="0" width="590"
+                                   style="background-color: white; color: #454748; border-collapse:separate; padding: 16px;">
+                                <tbody>
+                                    <tr>
+                                        <td align="center" style="min-width: 590px;">
+                                            <table border="0" cellpadding="0" cellspacing="0" width="590"
+                                                   style="padding: 0px 8px 0px 8px; border-collapse:separate;">
+                                                <tr>
+                                                    <td valign="middle" align="left">
+                                                        <span style="font-size: 14px;">Dear Team,</span>
+                                                        <br/>
+                                                        <br/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="middle" align="left">
+                                                        <span style="font-size: 12px;">
+                                                            This is to inform you that the Parameters is Expiry month is
+                                                            soon.
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                                <br/>
+                                                <br/>
+                                                <tr>
+                                                    <td>
+                                                        <br/>
+                                                        <br/>
+                                                        <span style="font-size: 12px;">
+                                                            <strong>SPC Plan:</strong>
+                                                            <table style="border-collapse: collapse; margin-top: 10px; font-size: 12px;">
+                                                                <thead>
+                                                                    <tr style="background-color: #f2f2f2;">
+                                                                        <th style="border: 1px solid black; text-align: center; padding: 8px;">
+                                                                            Part No
+                                                                        </th>
+                                                                        <th style="border: 1px solid black; text-align: center; padding: 8px;">
+                                                                            Part Name
+                                                                        </th>
+                                                                        <th style="border: 1px solid black; text-align: center; padding: 8px;">
+                                                                            Parameters
+                                                                        </th>
+                                                                        <th style="border: 1px solid black; text-align: center; padding: 8px;">
+                                                                            Specification
+                                                                        </th>
+                                                                        <th style="border: 1px solid black; text-align: center; padding: 8px;">
+                                                                            Customer Name
+                                                                        </th>
+                                                                        <th style="border: 1px solid black; text-align: center; padding: 8px;">
+                                                                            Month
+                                                                        </th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody style="font-size: 12px;">
+                                                                    <t t-foreach="ctx['spc_record']" t-as="spc">
+                                                                        <tr style="border: 1px solid black; text-align: left; padding: 8px;">
+                                                                            <td style="border: 1px solid black;">
+                                                                                <span t-out="spc['part_no']"/>
+                                                                            </td>
+                                                                            <td style="border: 1px solid black;">
+                                                                                <span t-out="spc['product_id']"/>
+                                                                            </td>
+                                                                            <td style="border: 1px solid black;">
+                                                                                <span t-out="spc['parameter']"/>
+                                                                            </td>
+                                                                            <td style="border: 1px solid black;">
+                                                                                <span t-out="spc['specification']"/>
+                                                                            </td>
+                                                                            <td style="border: 1px solid black;">
+                                                                                <span t-out="spc['partner_id']"/>
+                                                                            </td>
+                                                                            <td style="border: 1px solid black;">
+                                                                                <span t-out="spc['month']"/>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </t>
+                                                                </tbody>
+                                                            </table>
+                                                        </span>
+                                                        <br/>
+                                                        <br/>
+                                                        <span style="font-size: 12px;">
+                                                            Please review the parameters of the SPC Plan at your
+                                                            earliest convenience and take the necessary action as soon
+                                                            as possible.
+                                                        </span>
+                                                        <br/>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </field>
+        </record>
+    </data>
+</odoo>
+
+

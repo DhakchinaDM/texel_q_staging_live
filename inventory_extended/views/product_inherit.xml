@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="product_template_form_view_inherit" model="ir.ui.view">
+            <field name="name">product.template.form</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="mrp.product_template_form_view_bom_button"/>
+            <field name="arch" type="xml">
+                <field name="default_code" position="after">
+                    <field name="fg_bool" invisible="1"/>
+                </field>
+                <field name="image_1920" position="attributes">
+                    <attribute name="options">{"zoom": true}</attribute>
+                </field>
+                <button name="%(mrp.template_open_bom)d" position="attributes">
+                    <attribute name="invisible">fg_bool == False</attribute>
+                </button>
+            </field>
+        </record>
+
+        <record id="view_template_product_screen_form" model="ir.ui.view">
+            <field name="name">product.template.stock.property.form.inherit</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <field name="categ_id" position="after">
+                    <!--                    <field name="l10n_in_hsn_code" invisible="'IN' not in fiscal_country_codes"/>-->
+                    <field name="l10n_in_hsn_description" invisible="1"/>
+                </field>
+                <field name="categ_id" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </field>
+                <field name="detailed_type" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </field>
+                <page name="general_information" position="before">
+                    <page string="Product Information" name="add_info">
+                        <group>
+                            <group string="Description">
+                                <field name="default_code" string="Part No" required="0"/>
+                                <field name="is_spare_bool" invisible="1"/>
+                                <field name="fg_bool" invisible="1"/>
+                                <field name="name" required="1" string="Part Name"/>
+                                <field name="detailed_type"/>
+                                <field name="part_type"/>
+                                <field name="part_status"/>
+                                <field name="categ_id"/>
+                                <field name="weight" string="Piece Weight" required="1"/>
+                                <field name="grade"/>
+<!--                                <field name="revision"/>-->
+<!--                                <field name="revision_drawing"/>-->
+                                <field name="make"/>
+                                <field name="specification"/>
+                            </group>
+                            <group string="Other Info">
+                                <field name="min_stock_quan"/>
+                                <field name="max_stock_quan"/>
+                                <field name="cycle_frequency"/>
+                                <field name="sale_delay"/>
+                            </group>
+                        </group>
+                    </page>
+                </page>
+                <page name="general_information" position="attributes">
+                    <attribute name="string">Sales Price Information</attribute>
+                    <attribute name="invisible">sale_ok != True</attribute>
+                </page>
+                <page name="sales" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </page>
+
+                <xpath expr="//group[@name='purchase']/group" position="after">
+                    <group string="Unit of Measures">
+                        <field name="uom_id" groups="uom.group_uom" options="{'no_create': True}"/>
+                        <field name="uom_po_id" groups="uom.group_uom" options="{'no_create': True}"/>
+                    </group>
+                </xpath>
+
+                <field name="product_variant_count" position="after">
+                    <field name="visible_expense_policy" invisible="1"/>
+                </field>
+
+                <field name="detailed_type" position="after">
+                    <field name="invoice_policy" required="1" invisible="1"/>
+                    <field name="expense_policy" widget="radio" invisible="not visible_expense_policy"/>
+                </field>
+                <field name="product_tooltip" position="after">
+                    <label for="product_tooltip" string=""
+                           invisible="type not in ('product', 'consu')"/>
+                    <div invisible="type not in ('product', 'consu')"
+                         class="fst-italic text-muted">
+                        You can invoice them before they are delivered.
+                    </div>
+                    <label for="product_tooltip" string=""
+                           invisible="type not in ('product', 'consu')"/>
+                    <div invisible="type not in ('product', 'consu')"
+                         class="fst-italic text-muted">
+                        Invoice after delivery, based on quantities delivered, not ordered.
+                    </div>
+                </field>
+
+                <xpath expr="//form" position="attributes">
+                    <attribute name="name">Product Template</attribute>
+                </xpath>
+                <field name="categ_id" position="after">
+                    <field name="active" invisible="1"/>
+                    <field name="default_code" invisible="1"/>
+                    <field name="valid_product_template_attribute_line_ids" invisible="1"/>
+                </field>
+
+                <field name="default_code" position="attributes">
+                    <attribute name="string">Part No</attribute>
+                </field>
+
+                <div name="button_box" position="inside">
+                    <button name="%(product.product_variant_action)d" type="action"
+                            icon="fa-sitemap" class="oe_stat_button"
+                            invisible="product_variant_count &lt;= 1"
+                            groups="product.group_product_variant">
+                        <field string="Variants" name="product_variant_count" widget="statinfo"/>
+                    </button>
+                </div>
+                <xpath expr="//group[@name='group_standard_price']" position="after">
+                    <field name="product_properties" columns="2"/>
+                </xpath>
+
+                <xpath expr="//notebook/page[@name='general_information']//field[@name='categ_id']"
+                       position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+
+                <xpath expr="//notebook/page[@name='inventory']//group[@name='group_lots_and_weight']"
+                       position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+                <xpath expr="//notebook/page[@name='general_information']//field[@name='detailed_type']"
+                       position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="product_template_form_view_inherited_to_user_id">
+            <field name="name">product.template</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_only_form_view"/>
+            <field name="priority" eval="15"/>
+            <field name="arch" type="xml">
+                <xpath expr="//label[@for='weight']" position="replace">
+                    <label for="weight"/>
+                    <field name="responsible_id" domain="[('share', '=', False)]" widget="many2one_avatar_user"
+                           groups="stock.group_stock_user" invisible="1"/>
+                </xpath>
+                <xpath expr="//field[@name='taxes_id']" position="before">
+                    <field name="sales_price"/>
+                </xpath>
+                <xpath expr="//field[@name='list_price']" position="attributes">
+                    <attribute name="invisible">0</attribute>
+                    <attribute name="string">Sales Price INR</attribute>
+                </xpath>
+                <field name="tax_string" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="stock_picking_inherited_for_bill">
+            <field name="name">stock.picking</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='origin']"
+                       position="after">
+                    <field name="bill_ref" readonly="state in 'cancel'"/>
+                </xpath>
+                <button name="button_validate" position="attributes">
+                    <attribute name="string">Move to Stock</attribute>
+                </button>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="stock_quant_inherited">
+            <field name="name">stock.quant.form</field>
+            <field name="model">stock.quant</field>
+            <field name="inherit_id" ref="stock.view_stock_quant_tree_inventory_editable"/>
+            <field name="arch" type="xml">
+                <field name="product_id" position="attributes">
+                    <attribute name="string">Part No</attribute>
+                </field>
+                <field name="product_id" position="after">
+                    <field name="product_name"/>
+                </field>
+            </field>
+        </record>
+
+        <!--        product template action-->
+        <record id="stock.product_template_action_product" model="ir.actions.act_window">
+            <field name="name">Products</field>
+            <field name="res_model">product.template</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="search_view_id" ref="stock.product_template_search_form_view_stock"/>
+            <field name="context">{"search_default_consumable": 1, 'default_detailed_type':
+                'product','search_default_categ_id_asc': 1}
+            </field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No product found. Let's create one!
+                </p>
+                <p>
+                    Track your stock quantities by creating storable products.
+                </p>
+            </field>
+        </record>
+
+        <!--        product template list part no ascending-->
+        <record model="ir.ui.view" id="product_template_list_inherit">
+            <field name="name">product.template.inherit.list</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_tree_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="default_order">default_code asc</attribute>
+                </xpath>
+                <field name="list_price" position="attributes">
+                    <attribute name="string">Sales Price INR</attribute>
+                </field>
+                <field name="list_price" position="after">
+                    <field name="sales_price"/>
+                </field>
+            </field>
+        </record>
+        <!--        product template search Category group by-->
+        <record model="ir.ui.view" id="product_template_search_view_inherit">
+            <field name="name">product.template.inherit.search</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="stock.product_template_search_form_view_stock"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='real_stock_negative']" position="after">
+                    <filter string="Product Category"
+                            name="categ_id_asc"
+                            context="{'group_by': 'categ_id'}"
+                            domain="[]"/>
+                </xpath>
+            </field>
+        </record>
+
+
+        <!--        product product action-->
+
+        <record id="stock.stock_product_normal_action" model="ir.actions.act_window">
+            <field name="name">Product Variants</field>
+            <field name="res_model">product.product</field>
+            <field name="view_mode">tree,form,kanban</field>
+            <field name="search_view_id" ref="stock.stock_product_search_form_view"/>
+            <field name="context">{'search_default_categ_id_asc': 1}
+            </field>
+        </record>
+
+        <!--        product product search Category group by-->
+        <record model="ir.ui.view" id="product_product_search_view_inherit">
+            <field name="name">product.template.inherit.search</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="stock.stock_product_search_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='real_stock_negative']" position="after">
+                    <filter string="Product Category"
+                            name="categ_id_asc"
+                            context="{'group_by': 'categ_id'}"
+                            domain="[]"/>
+                </xpath>
+            </field>
+        </record>
+
+        <menuitem id="menu_bom_new"
+                  name="Bills of Materials"
+                  action="mrp.mrp_bom_form_action"
+                  parent="stock.menu_stock_inventory_control"
+                  sequence="3"/>
+
+        <menuitem id="menu_bom_purchase_new"
+                  name="Bills of Materials"
+                  action="mrp.mrp_bom_form_action"
+                  parent="purchase.menu_purchase_products"
+                  sequence="3"/>
+
+        <record id="product_category_list_view_inherit_part_no" model="ir.ui.view">
+            <field name="name">product.category.list.part_no</field>
+            <field name="model">product.category</field>
+            <field name="inherit_id" ref="product.product_category_list_view"/>
+            <field name="arch" type="xml">
+                <field name="display_name" position="after">
+                    <field name="part_prefix"/>
+                    <field name="next_no" optional="hide"/>
+                    <field name="sequence_size" optional="hide"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="product_category_form_view_inherit_part_no" model="ir.ui.view">
+            <field name="name">product.category.form.part_no</field>
+            <field name="model">product.category</field>
+            <field name="inherit_id" ref="product.product_category_form_view"/>
+            <field name="arch" type="xml">
+                <field name="parent_id" position="after">
+                    <field name="part_prefix" class="oe_inline"/>
+                    <field name="next_no" class="oe_inline"/>
+                    <field name="sequence_size" class="oe_inline"/>
+                </field>
+            </field>
+        </record>
+    </data>
+</odoo>

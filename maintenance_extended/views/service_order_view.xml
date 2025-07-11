@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="seq_maintenance_requisition_id" model="ir.sequence">
+            <field name="name">Maintenance Requisition</field>
+            <field name="code">maintenance.requisition</field>
+            <field name="prefix">MAIN-REQ/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record model="ir.ui.view" id="view_maintenance_requisition_tree_view">
+            <field name="name">maintenance.requisition.tree</field>
+            <field name="model">maintenance.requisition</field>
+            <field name="arch" type="xml">
+                <tree string="Maintenance Request" default_order="request_code desc">
+                    <field name="request_code"/>
+                    <field name="name"/>
+                    <field name="equipment_id"/>
+                    <field name="machine_id"/>
+                    <field name="category_id"/>
+                    <field name="subcat_id"/>
+                    <field name="request_date" readonly="1"/>
+                    <field name="maintenance_team_id" optional="hide"/>
+                    <field name="user_id" optional="hide"/>
+                    <field name="scheduled_date" optional="hide"/>
+                    <field name="priority" widget="priority" optional="hide"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id='view_maintenance_requisition_form_view' model='ir.ui.view'>
+            <field name="name">maintenance.requisition.form</field>
+            <field name="model">maintenance.requisition</field>
+            <field name="arch" type="xml">
+                <form string="Maintenance Requisition">
+                    <header>
+                        <button name="maintenance_requisition_approve_remarks" string="Approve" type="object"
+                                class="oe_highlight"
+                                invisible="state != 'to_be_approved'"/>
+                        <button name="maintenance_requisition_reject_remarks" string="Reject" type="object"
+                                class="oe_highlight"
+                                invisible="state != 'to_be_approved'"/>
+                        <button name="maintenance_requisition_cancel_remarks" string="Cancel" type="object"
+                                class="oe_highlight"
+                                invisible="state != 'to_be_approved'"/>
+                        <button name="maintenance_requisition_approve_remarks" string="Approve" type="object"
+                                class="oe_highlight"
+                                invisible="state != 'leader_approval'"/>
+                        <button name="maintenance_requisition_reject_remarks" string="Reject" type="object"
+                                class="oe_highlight"
+                                invisible="state != 'leader_approval'"/>
+                        <button name="maintenance_requisition_cancel_remarks" string="Cancel" type="object"
+                                class="oe_highlight"
+                                invisible="state != 'leader_approval'"/>
+                        <button name="maintenance_requisition_approve_remarks" string="Approve" type="object"
+                                class="oe_highlight"
+                                invisible="state != 'manager_approval'"/>
+                        <button name="maintenance_requisition_reject_remarks" string="Reject" type="object"
+                                class="oe_highlight"
+                                invisible="state != 'manager_approval'"/>
+                        <button name="maintenance_requisition_cancel_remarks" string="Cancel" type="object"
+                                class="oe_highlight"
+                                invisible="state != 'manager_approval'"/>
+                        <button name="maintenance_requisition_approve_remarks" string="Approve" type="object"
+                                class="oe_highlight"
+                                invisible="state != 'director_approval'"/>
+                        <button name="maintenance_requisition_reject_remarks" string="Reject" type="object"
+                                class="oe_highlight"
+                                invisible="state != 'director_approval'"/>
+                        <button name="maintenance_requisition_cancel_remarks" string="Cancel" type="object"
+                                class="oe_highlight"
+                                invisible="state != 'director_approval'"/>
+                        <button name="maintenance_requisition_approve_remarks" string="Approve" type="object"
+                                class="oe_highlight"
+                                invisible="state != 'ceo_approval'"/>
+                        <button name="maintenance_requisition_reject_remarks" string="Reject" type="object"
+                                class="oe_highlight"
+                                invisible="state != 'ceo_approval'"/>
+                        <button name="maintenance_requisition_cancel_remarks" string="Cancel" type="object"
+                                class="oe_highlight"
+                                invisible="state != 'ceo_approval'"/>
+                        <button name="indent_confirm" string="Submit for Approval" type="object"
+                                class="oe_highlight"
+                                invisible="state not in ('draft', 'request_approved')"/>
+
+                        <button name="maintenance_request"
+                                icon="fa-indent"
+                                string="Maintenance request"
+                                type="object"
+                                class="oe_highlight"
+                                invisible="state != 'approved'"/>
+                        <field name="state"
+                               widget="statusbar"
+                               statusbar_visible="draft,done,approved"
+                               clickable="1"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="maintenance_requisition_service_request_view"
+                                    class="oe_stat_info"
+                                    icon="fa-indent"
+                                    type="object"
+                                    invisible="maintenance_service_request_count == 0">
+                                <field name="maintenance_service_request_count" widget="statinfo"
+                                       options="{'reload_on_button': true}"/>
+                            </button>
+                        </div>
+                        <field name="image"
+                               widget="image"
+                               force_save="1"
+                               class="oe_avatar oe_right"/>
+                        <widget name="web_ribbon" title="Request Generated" bg_color="bg-success"
+                                invisible="maintenance_service_request_count == 0"/>
+                        <h1>
+                            <strong>
+                                <field name="request_code"/>
+                            </strong>
+                        </h1>
+                        <div class="oe_title">
+                            <label for="name" string="Request"/>
+                            <h1>
+                                <field name="name"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="responsible"/>
+                                <field name="department_id"/>
+                                <field name="current_job_id"/>
+                                <field name="current_reporting_manager"/>
+                                <field name="purpose"/>
+                                <field name="equipment_id"/>
+                                <field name="machine_id"/>
+                                <field name="category_id"/>
+                                <field name="subcat_id"/>
+                                <field name="request_date"/>
+                                <field name="maintenance_type" widget="radio"/>
+                            </group>
+                            <group>
+                                <field name="employee_id" string="Responsible" readonly="1"
+                                       force_save="1"/>
+                                <field name="requester_department_id"
+                                       readonly="1"
+                                       force_save="1"
+                                       invisible="employee_id == False"/>
+                                <field name="requester_current_job_id"
+                                       readonly="1"
+                                       force_save="1"
+                                       invisible="employee_id == False"/>
+                                <field name="requester_current_reporting_manager"
+                                       readonly="1"
+                                       force_save="1"
+                                       invisible="employee_id == False"/>
+                                <field name="maintenance_team_id" options="{'no_create': True, 'no_open': True}"/>
+                                <field name="scheduled_date"/>
+                                <field name="priority" widget="priority"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name='description' placeholder="Internal Notes"/>
+                        </group>
+                        <notebook>
+                            <page string="Internal Notes">
+                                <group>
+                                    <group>
+<!--                                        <field name="type_of_purchase"/>-->
+<!--                                        <field name="approval_stages"/>-->
+                                    </group>
+<!--                                    <group>-->
+<!--                                        <field name="approver1"/>-->
+<!--                                        <field name="approver2"-->
+<!--                                               invisible="approval_stages == 'first_level'"-->
+<!--                                               required="approval_stages != 'first_level'"/>-->
+<!--                                        <field name="approver3"-->
+<!--                                               invisible="approval_stages in ('first_level','second_level')"-->
+<!--                                               required="approval_stages not in ('first_level','second_level')"/>-->
+<!--                                        <field name="approver4"-->
+<!--                                               invisible="approval_stages in ('first_level','second_level', 'third_level')"-->
+<!--                                               required="approval_stages not in ('first_level','second_level', 'third_level')"/>-->
+<!--                                        <field name="approver5"-->
+<!--                                               invisible="approval_stages in ('first_level','second_level', 'third_level', 'fourth_level')"-->
+<!--                                               required="approval_stages not in ('first_level','second_level', 'third_level', 'fourth_level')"/>-->
+<!--                                    </group>-->
+                                </group>
+                            </page>
+
+                            <page string="Approval Remarks"
+                                  invisible="approver1_approve_reason == False">
+                                <group>
+                                    <field name="approver1_approve_reason"
+                                           invisible="approver1_approve_reason == False"/>
+                                    <field name="approver2_approve_reason"
+                                           invisible="approver2_approve_reason == False"/>
+                                    <field name="approver3_approve_reason"
+                                           invisible="approver3_approve_reason == False"/>
+                                    <field name="approver4_approve_reason"
+                                           invisible="approver4_approve_reason == False"/>
+                                    <field name="approver5_approve_reason"
+                                           invisible="approver5_approve_reason == False"/>
+                                </group>
+                                <group>
+                                </group>
+                            </page>
+                            <page string="Reject Remarks"
+                                  invisible="approver1_reject_reason == False">
+                                <group>
+                                    <field name="approver1_reject_reason"
+                                           invisible="approver1_reject_reason == False"/>
+                                    <field name="approver2_reject_reason"
+                                           invisible="approver2_reject_reason == False"/>
+                                    <field name="approver3_reject_reason"
+                                           invisible="approver3_reject_reason == False"/>
+                                    <field name="approver4_reject_reason"
+                                           invisible="approver4_reject_reason == False"/>
+                                    <field name="approver5_reject_reason"
+                                           invisible="approver5_reject_reason == False"/>
+                                </group>
+                                <group>
+                                </group>
+                            </page>
+                            <page string="Cancel Remarks"
+                                  invisible="approver1_cancel_reason == False">
+                                <group>
+                                    <field name="approver1_cancel_reason"
+                                           invisible="approver1_cancel_reason == False"/>
+                                    <field name="approver2_cancel_reason"
+                                           invisible="approver2_cancel_reason == False"/>
+                                    <field name="approver3_cancel_reason"
+                                           invisible="approver3_cancel_reason == False"/>
+                                    <field name="approver4_cancel_reason"
+                                           invisible="approver4_cancel_reason == False"/>
+                                    <field name="approver5_cancel_reason"
+                                           invisible="approver5_cancel_reason == False"/>
+                                </group>
+                                <group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+
+                </form>
+            </field>
+        </record>
+
+        <record model='ir.actions.act_window' id='maintenance_service_request_action'>
+            <field name="name">Maintenance Requisition</field>
+            <field name="res_model">maintenance.requisition</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!--        <menuitem id="main_menu_service_order" web_icon="maintenance_extended,static/description/images7.png"-->
+        <!--                  name="Service Order" sequence="70"/>-->
+        <menuitem id="main_menu_service_order"
+                  name="Service Order" sequence="70" active="False" parent="maintenance.menu_maintenance_title"/>
+        <menuitem id="menu_service_order_menu" name="Service Order" parent="main_menu_service_order" sequence="3"
+                  active="False"/>
+        <menuitem id="menu_maintenance_requisition_new"
+                  name="Maintenance"
+                  parent="maintenance_extended.main_menu_service_order"
+                  sequence="1"/>
+
+<!--        <menuitem name="Maintenance Requisition"-->
+<!--                  id="maintenance_requisition_service"-->
+<!--                  parent="menu_maintenance_requisition_new"-->
+<!--                  action="maintenance_service_request_action"-->
+<!--                  sequence="19"/>-->
+
+        <menuitem
+                id="maintenance.menu_maintenance_teams"
+                name="Maintenance Teams"
+                active="False"/>
+
+        <menuitem
+                id="maintenance.menu_maintenance_stage_configuration"
+                active="False"
+                sequence="3"/>
+        <menuitem id="maintenance.maintenance_menu_config_activity_type"
+                  active="False"/>
+
+
+        <record id="maintenance_requisition_approve_remarks_wizard" model="ir.ui.view">
+            <field name="name">maintenance.requisition.approve.remarks.view</field>
+            <field name="model">maintenance.requisition.approve.remarks</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="is_default_remark"/>
+                        </group>
+                        <field name="remarks" required="1" placeholder="Please enter the Approvals remarks..."/>
+                        <field name="default_remark" invisible="1"/>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                    <footer>
+                        <button name="tick_ok" type='object' string="Submit" class="oe_highlight"
+                                icon="fa-check-circle"/>
+                        <button name="tick_cancel" type='object' string="Cancel" class="oe_highlight" special="cancel"
+                                icon="fa-times-circle"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="maintenance_requisition_reject_remarks_wizard" model="ir.ui.view">
+            <field name="name">maintenance.requisition.reject.remarks.view</field>
+            <field name="model">maintenance.requisition.reject.remarks</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <field name="remarks" required="1" placeholder="Please enter the Rejection remarks..."/>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                    <footer>
+                        <button name="tick_ok" type='object' string="Submit" class="oe_highlight"
+                                icon="fa-check-circle"/>
+                        <button name="tick_cancel" type='object' string="Cancel" class="oe_highlight" special="cancel"
+                                icon="fa-times-circle"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="maintenance_requisition_cancel_remarks_wizard" model="ir.ui.view">
+            <field name="name">maintenance.requisition.cancel.remarks.view</field>
+            <field name="model">maintenance.requisition.cancel.remarks</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <field name="remarks" required="1" placeholder="Please enter the Cancellation remarks..."/>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                    <footer>
+                        <button name="tick_ok" type='object' string="Submit" class="oe_highlight"
+                                icon="fa-check-circle"/>
+                        <button name="tick_cancel" type='object' string="Cancel" class="oe_highlight" special="cancel"
+                                icon="fa-times-circle"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record id="job_order_tracking_form_view" model="ir.ui.view">
+            <field name="name">Job Order Tracking Form</field>
+            <field name="model">job.order.tracking</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_force_close" type="object" string="Force Close" class="oe_highlight" invisible="state != 'progress'"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group string="Job Order Tracking">
+                                <field name="partner_id" domain="[('customer_rank','=',1)]"
+                                       context="{'res_partner_search_mode': 'customer', 'default_is_company': True, 'default_customer_rank': 1}"
+                                       required="1"/>
+                                <field name="part_no" required="1"/>
+                                <field name="job_qty"/>
+                                <field name="job_prod"/>
+                                <field name="inv_qty"/>
+                                <field name="job_allocation"/>
+                                <field name="job_type"/>
+                                <!--      INVISIBLE FIELDS    -->
+                                <field name='company_id' invisible="1"/>
+                                <field name='currency_symbol' invisible="1"/>
+                                <field name='active' invisible="1"/>
+                            </group>
+                            <group string="Job Order Tracking">
+                                <field name="job_priority"/>
+                                <field name="status_current_operation"/>
+                                <field name="schedule_job_complete"/>
+                                <field name="job_due" required="1"/>
+                                <field name="order_ref"/>
+                                <field name="order_due"/>
+                                <field name="quantity"/>
+                            </group>
+                            <notebook>
+                                <page name="part_operation" string="Part Operation">
+                                    <field name="operation_ids">
+                                        <tree editable="bottom" create="0" delete="0">
+                                            <field name="sequence"/>
+                                            <field name="operation_code"/>
+                                            <field name="operation_id" optional="hide"/>
+                                            <field name="job_id"/>
+                                            <field name="status"/>
+                                            <field name="operation_qty"/>
+<!--                                            <field name="balance_qty" optional="hide"/>-->
+                                            <field name="done_qty"/>
+                                            <field name="workorder_id" optional="hide"/>
+                                            <field name="workcenter_id" optional="hide"/>
+                                            <field name="bom_id" optional="hide"/>
+                                            <field name="operation_type"/>
+                                            <field name="out_product_id"/>
+                                            <field name="supplier_id"/>
+                                            <field name="job_work_ids" widget="many2many_tags" optional="hide"/>
+                                            <field name="final_inspection_id" optional="hide"/>
+                                            <field name="job_work_status" optional="hide"/>
+                                            <field name="final_inspection_need" optional="hide"/>
+                                            <field name="income_inspection" optional="hide"/>
+                                            <field name="production_op" optional="hide"/>
+                                            <field name="shippable" optional="hide"/>
+                                            <field name="lot_ids" widget="many2many_tags" optional="hide"/>
+                                            <field name="mo_ids" widget="many2many_tags" optional="hide"/>
+                                            <field name="quality_ids" widget="many2many_tags" optional="hide"/>
+                                            <field name="final_inspection_ids" widget="many2many_tags" optional="hide"/>
+                                            <field name="customer_release_ids" widget="many2many_tags" optional="hide"/>
+                                            <field name="productivity_line_ids" optional="hide"/>
+                                            <button name="create_job_order" type="object" string="Create Job Work"
+                                                    class="oe_highlight" invisible="1"/>
+<!--                                            <button name="create_job_order" type="object" string="Create Job Work"-->
+<!--                                                    class="oe_highlight" invisible="status not in ['ready', 'progress'] or operation_type == 'internal'"/>-->
+                                            <button name="create_final_inspection" type="object" string="Final Inspection"
+                                                    class="oe_highlight"
+                                                    invisible="1"/>
+<!--                                            <button name="create_final_inspection" type="object" string="Final Inspection"-->
+<!--                                                    class="oe_highlight"-->
+<!--                                                    invisible="status not in ['ready', 'progress'] or final_inspection == False"/>-->
+                                            <button name="create_customer_release" type="object" string="Customer Release"
+                                                    class="oe_highlight"
+                                                    invisible="1"/>
+<!--                                            <button name="create_customer_release" type="object" string="Customer Release"-->
+<!--                                                    class="oe_highlight"-->
+<!--                                                    invisible="status not in ['ready', 'progress'] or shippable == False"/>-->
+                                        </tree>
+                                    </field>
+                                </page>
+                            </notebook>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="job_order_tracking_tree_view" model="ir.ui.view">
+            <field name="name">Job Order Tracking Tree</field>
+            <field name="model">job.order.tracking</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <field name="part_no"/>
+                    <field name="job_id" string="Job Order"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="job_order_tracking_action" model="ir.actions.act_window">
+            <field name="name">Job Order Tracking</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">job.order.tracking</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="menu_job_order_tracking" name="Job Order Tracking" parent="mrp.menu_mrp_manufacturing"
+                  action="job_order_tracking_action"/>
+
+    </data>
+</odoo>

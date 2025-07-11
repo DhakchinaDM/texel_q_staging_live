@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="package_type_01" model="purchase.agreement.type">
+            <field name="name">Open Tender</field>
+        </record>
+         <record id="package_type_02" model="purchase.agreement.type">
+            <field name="name">Selective Tender</field>
+        </record>
+        <record id="package_type_03" model="purchase.agreement.type">
+            <field name="name">Restricted Tender</field>
+        </record>
+         <record id="package_type_04" model="purchase.agreement.type">
+            <field name="name">Single-Stage Tendering</field>
+        </record>
+        <record id="package_type_05" model="purchase.agreement.type">
+            <field name="name">Two-Stage Tendering</field>
+        </record>
+         <record id="package_type_06" model="purchase.agreement.type">
+            <field name="name">Request for Proposals (RFP)</field>
+        </record>
+        <record id="package_type_07" model="purchase.agreement.type">
+            <field name="name">Request for Quotation (RFQ)</field>
+        </record>
+         <record id="package_type_08" model="purchase.agreement.type">
+            <field name="name">Request for Information (RFI)</field>
+        </record>
+        <record id="package_type_09" model="purchase.agreement.type">
+            <field name="name">Expression of Interest (EOI)</field>
+        </record>
+         <record id="package_type_10" model="purchase.agreement.type">
+            <field name="name">Framework Agreement</field>
+        </record>
+        <record id="package_type_11" model="purchase.agreement.type">
+            <field name="name">Reverse Auction</field>
+        </record>
+    </data>
+</odoo>

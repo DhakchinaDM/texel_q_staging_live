@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="preventive_maintenance_check_sequence" model="ir.sequence">
+        <field name="name">Preventive Maintenance Check</field>
+        <field name="code">preventive.maintenance.check</field>
+        <field name="prefix">PMC/%(y)s/</field>
+        <field name="padding">4</field>
+        <field name="number_increment">1</field>
+        <field name="company_id" eval="False"/>
+        <field name="implementation">standard</field>
+    </record>
+
+    <record id="corrective_maintenance_sequence" model="ir.sequence">
+        <field name="name">Break Down</field>
+        <field name="code">corrective.maintenance</field>
+        <field name="prefix">CM/%(y)s/</field>
+        <field name="padding">4</field>
+        <field name="number_increment">1</field>
+        <field name="company_id" eval="False"/>
+        <field name="implementation">standard</field>
+    </record>
+    <record id="predictive_maintenance_sequence" model="ir.sequence">
+        <field name="name">Predictive Maintenance</field>
+        <field name="code">predictive.maintenance</field>
+        <field name="prefix">PM/%(y)s/</field>
+        <field name="padding">4</field>
+        <field name="number_increment">1</field>
+        <field name="company_id" eval="False"/>
+        <field name="implementation">standard</field>
+    </record>
+</odoo>

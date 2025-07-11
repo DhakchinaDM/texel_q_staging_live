@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_iqc_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.iqc.form.inherit.calendar</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="Quality" string="Quality" name="quality_control" groups="base.group_system">
+                    <block title="Quality Settings" name="calendar">
+                        <setting string="Approve IQC"  help="Enable to Approve IQC Without Parameters">
+                            <field name="approve_iqc"/>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+    <record id="hr_department_iqc_view_form" model="ir.ui.view">
+        <field name="name">hr.department.view.form.inherit</field>
+        <field name="model">hr.department</field>
+        <field name="inherit_id" ref="hr.view_department_tree" />
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="inside">
+               <field name="gauges"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

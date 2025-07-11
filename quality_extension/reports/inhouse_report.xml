@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="paper_format_inhouse" model="report.paperformat">
+            <field name="name">Inhouse List Report</field>
+            <field name="default" eval="False"/>
+            <field name="disable_shrinking" eval="True"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">7</field>
+            <field name="margin_bottom">20</field>
+            <field name="margin_left">5</field>
+            <field name="margin_right">5</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">22</field>
+            <field name="dpi">150</field>
+        </record>
+        <record id="report_inhouse_nc" model="ir.actions.report">
+            <field name="name">In-House Non Conformance</field>
+            <field name="model">in.house.wizard</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">quality_extension.in_house_template_pdf</field>
+            <field name="report_file">quality_extension.in_house_template_pdf</field>
+            <field name="print_report_name">'In House Non Conformance'</field>
+            <field name="binding_model_id" ref="quality_extension.model_in_house_wizard"/>
+            <field name="paperformat_id" ref="quality_extension.paper_format_inhouse"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <template id="in_house_template_pdf">
+            <t t-call="web.html_container">
+                <t t-call="web.basic_layout">
+                    <div style="border: 1px solid black;">
+                        <div class="row" style="vertical-align: middle;">
+                            <div class="col-3" style="border-right:1px solid black;">
+                                <img src='/web/binary/company_logo' class="img-fluid img-thumbnail"
+                                     style="width:100%;margin-top:1px;"/>
+                            </div>
+                            <div class="col-6" style="border-right:1px solid black;">
+                                <div style="text-align:center;color:black;margin:25px; padding:25px;">
+                                    <h4>
+                                        INHOUSE NON CONFORMANCE
+                                    </h4>
+                                </div>
+                            </div>
+                            <div class="col-3" style="margin:25px;">
+                                <div>
+                                    <strong>Doc No</strong>
+                                    <strong>:</strong>
+                                    <span>QA/DI/R/10</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table_content">
+                        <table class="table table-sm" style="border-bottom:1px solid black;border-left:1px solid black;
+                                                                    border-right:1px solid black;">
+                            <thead style="border-top: 1px solid black;">
+                                <tr>
+                                    <th rowspan="2">S No</th>
+                                    <th rowspan="2">Date</th>
+                                    <th rowspan="2">Category</th>
+                                    <th rowspan="2">PART NO</th>
+                                    <th rowspan="2">PART NAME</th>
+                                    <th rowspan="2">VENDOR / CUSTOMER</th>
+                                    <th rowspan="2"># OPN</th>
+                                    <th rowspan="2">PROBLEM</th>
+                                    <th rowspan="2">Actual</th>
+                                    <th rowspan="2">PROCESS REJ QTY</th>
+                                    <th rowspan="2">For R/W</th>
+                                    <th rowspan="2">Machine No</th>
+                                    <th rowspan="2">Stage</th>
+                                    <th rowspan="2">4M CAUSE</th>
+                                    <th rowspan="2">DISPOSITION ACTION</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="data" t-as="l">
+                                    <tr>
+                                        <td style="color:black;text-align:center;">
+                                            <span t-esc="l_index+1"/>
+                                        </td>
+                                        <t t-if="l['date']">
+                                            <td align="left"
+                                                style="color:black;">
+                                                <span t-esc="l['date']"/>
+                                            </td>
+                                        </t>
+                                        <t t-else="">
+                                            <td align="center"
+                                                style="color:black;">
+                                                -
+                                            </td>
+                                        </t>
+                                        <t t-if="l['category']">
+                                            <td align="left"
+                                                style="color:black;">
+                                                <span t-esc="l['category']"/>
+                                            </td>
+                                        </t>
+                                        <t t-else="">
+                                            <td align="center"
+                                                style="color:black;">
+                                                -
+                                            </td>
+                                        </t>
+                                        <t t-if="l['part_no']">
+                                            <td align="left"
+                                                style="color:black;">
+                                                <span t-esc="l['part_no']"/>
+                                            </td>
+                                        </t>
+                                        <t t-else="">
+                                            <td align="center"
+                                                style="color:black;">
+                                                -
+                                            </td>
+                                        </t>
+                                        <t t-if="l['part_name']">
+                                            <td align="left"
+                                                style="color:black;">
+                                                <span t-esc="l['part_name']"/>
+                                            </td>
+                                        </t>
+                                        <t t-else="">
+                                            <td align="center"
+                                                style="color:black;">
+                                                -
+                                            </td>
+                                        </t>
+                                        <t t-if="l['partner_id']">
+                                            <td align="left"
+                                                style="color:black;">
+                                                <span t-esc="l['partner_id']"/>
+                                            </td>
+                                        </t>
+                                        <t t-else="">
+                                            <td align="center"
+                                                style="color:black;">
+                                                -
+                                            </td>
+                                        </t>
+                                        <t t-if="l['op_no']">
+                                            <td align="left"
+                                                style="color:black;">
+                                                <span t-esc="l['op_no']"/>
+                                            </td>
+                                        </t>
+                                        <t t-else="">
+                                            <td align="center"
+                                                style="color:black;">
+                                                -
+                                            </td>
+                                        </t>
+                                        <t t-if="l['problem_id']">
+                                            <td align="left"
+                                                style="color:black;">
+                                                <span t-esc="l['problem_id']"/>
+                                            </td>
+                                        </t>
+                                        <t t-else="">
+                                            <td align="center"
+                                                style="color:black;">
+                                                -
+                                            </td>
+                                        </t>
+                                        <t t-if="l['actual']">
+                                            <td align="left"
+                                                style="color:black;">
+                                                <span t-esc="l['actual']"/>
+                                            </td>
+                                        </t>
+                                        <t t-else="">
+                                            <td align="center"
+                                                style="color:black;">
+                                                -
+                                            </td>
+                                        </t>
+
+                                        <t t-if="l['process_rejected_qty']">
+                                            <td align="left"
+                                                style="color:black;">
+                                                <span t-esc="l['process_rejected_qty']"/>
+                                            </td>
+                                        </t>
+                                        <t t-else="">
+                                            <td align="center"
+                                                style="color:black;">
+                                                -
+                                            </td>
+                                        </t>
+                                        <t t-if="l['for_rework_qty']">
+                                            <td align="left"
+                                                style="color:black;">
+                                                <span t-esc="l['for_rework_qty']"/>
+                                            </td>
+                                        </t>
+                                        <t t-else="">
+                                            <td align="center"
+                                                style="color:black;">
+                                                -
+                                            </td>
+                                        </t>
+                                        <t t-if="l['machine_no']">
+                                            <td align="left"
+                                                style="color:black;">
+                                                <span t-esc="l['machine_no']"/>
+                                            </td>
+                                        </t>
+                                        <t t-else="">
+                                            <td align="center"
+                                                style="color:black;">
+                                                -
+                                            </td>
+                                        </t>
+                                        <t t-if="l['stage']">
+                                            <td align="left"
+                                                style="color:black;">
+                                                <span t-esc="l['stage']"/>
+                                            </td>
+                                        </t>
+                                        <t t-else="">
+                                            <td align="center"
+                                                style="color:black;">
+                                                -
+                                            </td>
+                                        </t>
+                                        <t t-if="l['four_m_cause']">
+                                            <td align="left"
+                                                style="color:black;">
+                                                <span t-esc="l['four_m_cause']"/>
+                                            </td>
+                                        </t>
+                                        <t t-else="">
+                                            <td align="center"
+                                                style="color:black;">
+                                                -
+                                            </td>
+                                        </t>
+                                        <t t-if="l['disposition_action']">
+                                            <td align="left"
+                                                style="color:black;">
+                                                <span t-esc="l['disposition_action']"/>
+                                            </td>
+                                        </t>
+                                        <t t-else="">
+                                            <td align="center"
+                                                style="color:black;">
+                                                -
+                                            </td>
+                                        </t>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!--                    <div>-->
+                    <!--                        <div class="row" style="border:1px solid black;">-->
+                    <!--                            <div class="col-6" style="border-right:1px solid black;">-->
+                    <!--                                <strong style="margin-left:5px;">Prepared by</strong>-->
+                    <!--                                <strong>:</strong>-->
+                    <!--                                <t t-if="form['prepared_by']">-->
+                    <!--                                    <span t-esc="form['prepared_by']"/>-->
+                    <!--                                </t>-->
+                    <!--                                <t t-else="">-->
+                    <!--                                    - -->
+                    <!--                                </t>-->
+                    <!--                            </div>-->
+                    <!--                            <div class="col-6">-->
+                    <!--                                <strong style="margin-left:5px;">Approved by</strong>-->
+                    <!--                                <strong>:</strong>-->
+                    <!--                                <t t-if="form['approved_by']">-->
+                    <!--                                    <span t-esc="form['approved_by']"/>-->
+                    <!--                                </t>-->
+                    <!--                                <t t-else="">-->
+                    <!--                                    - -->
+                    <!--                                </t>-->
+                    <!--                            </div>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

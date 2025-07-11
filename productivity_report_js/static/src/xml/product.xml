@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-name="productivity_report_js.OdooServices" owl="1">
+        <div class="o_content">
+            <div class="container" align="center">
+                <h1><span style="color:#b0b386">I</span>NVENTORY <span style="color:#b0b386">T</span>RACKING</h1>
+                <br/>
+
+                <div class="d-flex justify-content-center">
+                    <select class="form-select w-50 border-primary shadow-sm" t-model="state.selectedProductId"
+                            t-on-change="onProductChange">
+                        <option value="">-- Select Product --</option>
+                        <t t-foreach="state.products" t-as="product" t-key="product.id">
+                            <option t-att-value="product.id">
+                                <t t-esc="product.default_code"/>
+                            </option>
+                        </t>
+                    </select>
+                </div>
+
+                <div class="d-flex justify-content-center mt-3">
+                    <input type="date" name="fromDate" class="form-control w-25 mx-2 border-primary shadow-sm"
+                           t-att-value="state.fromDate" t-on-change="onDateChange"/>
+                    <input type="date" name="toDate" class="form-control w-25 mx-2 border-primary shadow-sm"
+                           t-att-value="state.toDate" t-on-change="onDateChange"/>
+                </div>
+
+                <div class="record_table mt-4 p-3 rounded bg-white shadow-sm" style="height: 450px; overflow-y: auto;">
+                    <table class="table table-hover text-center table-bordered">
+                        <thead>
+                            <tr style="background:#b0b386;">
+                                <th>Operation Code</th>
+                                <th>Lot No</th>
+                                <th>Lot Type</th>
+                                <th>Operation Name</th>
+                                <th>Operation</th>
+                                <th>Date</th>
+                                <th>Qty</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="state.routingLines" t-as="line" t-key="line.operation_code">
+                                <t t-set="moves" t-value="line.stock_moves or []"/>
+                                <t t-if="moves.length > 0">
+                                    <td t-att-rowspan="moves.length + 1" class="align-middle text-center fw-bold text-primary">
+                                        <t t-esc="line.operation_code"/>
+                                    </td>
+                                    <t t-foreach="moves" t-as="move" t-key="move.id">
+                                        <tr>
+                                            <td>
+                                                <t t-if="move.lot_names.length">
+                                                    <t t-foreach="move.lot_names" t-as="lot" t-key="lot">
+                                                        <span class="badge bg-success me-1"><t t-esc="lot"/></span>
+                                                    </t>
+                                                </t>
+                                                <t t-if="!move.lot_names.length">
+                                                    <span class="text-muted">--</span>
+                                                </t>
+                                            </td>
+                                            <td>
+                                                <t t-esc="move.lot_states.join(', ') || '--'"/>
+                                            </td>
+                                            <td><t t-esc="move.operation_list_id or '--'"/></td>
+                                            <td><t t-esc="move.op_no or '--'"/></td>
+                                            <td><t t-esc="move.date or '--'"/></td>
+                                            <td><t t-esc="move.quantity or 0"/></td>
+                                        </tr>
+                                    </t>
+                                </t>
+                                <t t-if="moves.length === 0">
+                                    <tr>
+                                        <td><t t-esc="line.operation_code"/></td>
+                                        <td colspan="6" align="center">--</td>
+                                    </tr>
+                                </t>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

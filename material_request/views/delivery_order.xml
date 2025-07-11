@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_picking_form_inherit" model="ir.ui.view">
+            <field name="name">stock.picking.form.inherit</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <field name="picking_type_id" position="after">
+                    <field name="show_lot_serial" invisible="1"/>
+                    <field name="move_line_ids_without_package" string="Lot/Serial No" invisible="picking_type_code != 'income'">
+                        <tree editable="bottom" decoration-muted="(state == 'done' and is_locked == True)"
+                              multi_edit="1"
+                              default_order="result_package_id desc, location_id asc, location_dest_id asc, picking_id asc, id">
+                            <header>
+                                <button class="btn-primary" name="action_put_in_pack" type="object" string="Put in Pack"
+                                        groups="stock.group_tracking_lot"/>
+                            </header>
+                            <field name="product_id" context="{'default_detailed_type': 'product'}" required="1"
+                                   readonly="state == 'done' or move_id"/>
+                            <field name="company_id" column_invisible="True"/>
+                            <field name="move_id" column_invisible="True"/>
+                            <field name="picking_id" column_invisible="True"/>
+                            <field name="picking_code" column_invisible="True"/>
+                            <field name="picking_location_id" column_invisible="True"/>
+                            <field name="picking_location_dest_id" column_invisible="True"/>
+                            <field name="product_uom_category_id" column_invisible="True"/>
+                            <field name="location_id" column_invisible="True"/>
+                            <field name="location_dest_id" column_invisible="True"/>
+                            <field name="quant_id" column_invisible="1"
+                                   domain="[('product_id', '=', product_id), ('location_id', 'child_of', picking_location_id)]"
+                                   context="{'default_location_id': location_id, 'default_product_id': product_id, 'search_view_ref': 'stock.quant_search_view', 'tree_view_ref': 'stock.view_stock_quant_tree_simple', 'form_view_ref': 'stock.view_stock_quant_form', 'readonly_form': False}"
+                                   readonly="state in ('done', 'cancel') and is_locked" widget="pick_from"
+                                   options="{'no_open': True, 'no_create': True}"/>
+                            <field name="lot_id" column_invisible="context.get('show_lots_text')"
+                                   groups="stock.group_production_lot" invisible="not lots_visible"
+                                   readonly="state in ('done', 'cancel') and is_locked"
+                                   context="{'default_product_id': product_id, 'default_company_id': company_id, 'active_picking_id': picking_id}"
+                                   />
+                            <field name="lot_name" column_invisible="not context.get('show_lots_text')"
+                                   groups="stock.group_production_lot" invisible="not lots_visible"
+                                   readonly="state in ('done', 'cancel') and is_locked"
+                                   context="{'default_product_id': product_id}"/>
+                            <field name="location_dest_id" options="{'no_create': True}"
+                                   column_invisible="1"
+                                   readonly="state in ('done', 'cancel') and is_locked"
+                                   groups="stock.group_stock_multi_locations"
+                                   domain="[('id', 'child_of', picking_location_dest_id), '|', ('company_id', '=', False), ('company_id', '=', company_id), ('usage', '!=', 'view')]"/>
+                            <field name="package_id" readonly="state in ('done', 'cancel') and is_locked"
+                                   column_invisible="True"/>
+                            <field name="result_package_id" column_invisible="True"/>
+                            <field name="result_package_id" readonly="state in ('done', 'cancel') and is_locked"
+                                   groups="stock.group_tracking_lot"/>
+                            <field name="lots_visible" column_invisible="True"/>
+                            <field name="owner_id" groups="stock.group_tracking_owner"
+                                   column_invisible="context.get('picking_code') == 'incoming'"
+                                   readonly="state in ('done', 'cancel') and is_locked"/>
+                            <field name="state" column_invisible="True"/>
+                            <field name="is_locked" column_invisible="True"/>
+                            <field name="quantity" readonly="state in ('done', 'cancel') and is_locked" force_save="1"/>
+                            <field name="product_uom_id" column_invisible="True" force_save="1"
+                                   readonly="state != 'draft' and id" groups="uom.group_uom"/>
+                        </tree>
+                    </field>
+                </field>
+                <field name="process_no" position="attributes">
+                    <attribute name="invisible">show_lot_serial == True</attribute>
+                </field>
+            </field>
+
+        </record>
+
+
+        <record id="view_picking_form_product_return_inherit" model="ir.ui.view">
+            <field name="name">stock.return.picking.form.inherit</field>
+            <field name="model">stock.return.picking</field>
+            <field name="inherit_id" ref="stock.view_stock_return_picking_form"/>
+            <field name="arch" type="xml">
+                <field name="product_return_moves" position="before">
+                    <group>
+                        <group>
+                            <field name="picking_id" invisible="0" force_save="1" options='{"no_open": False, "no_create": True,"no_edit": True}'/>
+                        </group>
+                        <group>
+                            <field name="mr_delivery_ids" widget="many2many_tags" force_save="1" invisible="1"/>
+                        </group>
+                    </group>
+                </field>
+            </field>
+        </record>
+    </data>
+</odoo>

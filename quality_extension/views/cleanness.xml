@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="clean_sequence" model="ir.sequence">
+            <field name="name">clean</field>
+            <field name="code">clean.seq</field>
+            <field name="prefix">CN/</field>
+            <field name="padding">4</field>
+        </record>
+
+
+        <record id="clean_ness_view" model="ir.ui.view">
+            <field name="name">clean.ness.form</field>
+            <field name="model">clean.ness</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <!--                        <button name="inspector_btn"-->
+                        <!--                                string="Inspection Done"-->
+                        <!--                                invisible="not (inspector and layout_state in ('inspector', 're_inspect'))"-->
+                        <!--                                type="object"-->
+                        <!--                                icon="fa-check"-->
+                        <!--                                class="oe_highlight"/>-->
+                        <button name="state_testing"
+                                string="Approve Done"
+                                type="object" invisible="resecheduled_boolean"
+                                icon="fa-check-square-o"
+                                class="oe_highlight"/>
+                        <button name="recreate_function_retesting"
+                                string="Re-Testing" invisible="status == 'accept' or re_testing_bool"
+                                type="object"
+                                icon="fa-spinner"
+                                class="oe_highlight"/>
+                        <field name="status" widget="statusbar"
+                               options="{'clickable': '1'}" readonly="resecheduled_boolean"
+                        />
+                        <field name="year_calculation_selection" widget="statusbar"
+                               options="{'clickable': '1'}" readonly="resecheduled_boolean"
+                        />
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="view_old_records" string="Related Record" type="object"
+                                    class="oe_stat_button"
+                                    icon="fa-refresh">
+                                <field name="related_record"/>Related Record
+                            </button>
+                        </div>
+                        <widget name="web_ribbon" title="Live" bg_color="text-bg-success"
+                                invisible="year_calculation_selection != 'live'"/>
+                        <widget name="web_ribbon" title="Request" bg_color="text-bg-light"
+                                invisible="year_calculation_selection != 'none'"/>
+                        <h1>
+                            <field name="name" nolabel="1" readonly="1"/>
+                        </h1>
+                        <group>
+                            <group>
+                                <field name="part_no" required="1" readonly="resecheduled_boolean"
+                                />
+
+                                <field name="part_char_name" readonly="resecheduled_boolean"
+                                />
+                                <field name="part_drawing_no" readonly="resecheduled_boolean"
+                                />
+                                <field name="part_drawing_date" readonly="resecheduled_boolean"
+                                />
+                                <field name="pdf_file" widget='many2many_binary' readonly="resecheduled_boolean" required="1"/>
+                                <field name="remarks" readonly="resecheduled_boolean"/>
+                                <field name="re_testing_bool" invisible="1"/>
+                                <field name="year_calculation_selection" invisible="1"/>
+                            </group>
+                            <group>
+                                <field name="customer_name" readonly="resecheduled_boolean"/>
+                                <field name="start_date" readonly="resecheduled_boolean"/>
+                                <field name="re_testing" invisible="not re_testing"/>
+                                <field name="specification" readonly="resecheduled_boolean"/>
+                                <field name="resecheduled_boolean" invisible="1"/>
+                                <field name="year_calculation_selection" invisible="1"/>
+                                <field name="testing_result" readonly="resecheduled_boolean"/>
+                                <field name="filter_paper" readonly="resecheduled_boolean" widget="radio" options="{'horizontal': true}"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <record id="clean_ness_tree_view" model="ir.ui.view">
+            <field name="name">clean.ness.tree</field>
+            <field name="model">clean.ness</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="part_no"/>
+                    <field name="part_char_name"/>
+                    <field name="part_drawing_no"/>
+                    <field name="part_drawing_date"/>
+                    <field name="start_date"/>
+                    <field name="status" decoration-success="status == 'accept'"
+                           decoration-danger="status == 'reject'" widget="badge"/>
+                    <field name="year_calculation_selection" string="State"
+                           decoration-success="year_calculation_selection == 'live'"
+                           decoration-danger="year_calculation_selection == 'none'" widget="badge"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_clean_ness_search_view" model="ir.ui.view">
+            <field name="name">clean.ness.search</field>
+            <field name="model">clean.ness</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <!--                    <separator/>-->
+                    <!--                    <searchpanel>-->
+                    <!--                        <field name="mmr_state" icon="fa-filter"/>-->
+                    <!--                    </searchpanel>-->
+                </search>
+            </field>
+        </record>
+
+        <record id="clean_ness_action" model="ir.actions.act_window">
+            <field name="name">Cleanness Data</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">clean.ness</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_no content_smiling_face">
+                    No Records
+                </p>
+            </field>
+        </record>
+        <!--        <record id="clean_action_history" model="ir.actions.act_window">-->
+        <!--            <field name="name">Layout History</field>-->
+        <!--            <field name="type">ir.actions.act_window</field>-->
+        <!--            <field name="res_model">clean.ness</field>-->
+        <!--            <field name="view_mode">tree,form</field>-->
+        <!--            <field name="help" type="html">-->
+        <!--                <p class="o_view_no content_smiling_face">-->
+        <!--                    No Records-->
+        <!--                </p>-->
+        <!--            </field>-->
+        <!--        </record>-->
+
+        <menuitem id="clean_ness_action_main_menu"
+                  name="CleanNess data" action="clean_ness_action"
+                  parent="quality_control.menu_quality_control"
+                  sequence="22"/>
+        <!--        <menuitem id="clean_action_main_1"-->
+        <!--                  name="Cleanness Data"-->
+        <!--                  parent="clean_ness_action_main_menu"-->
+        <!--                  action="clean_ness_action"-->
+        <!--                  sequence="22"/>-->
+        <!--        <menuitem id="clean_action_main_2"-->
+        <!--                  name="Cleanness History"-->
+        <!--                  parent="clean_ness_action_main_menu"-->
+        <!--                  action="clean_action_history"-->
+        <!--                  sequence="22"/>-->
+
+
+    </data>
+</odoo>

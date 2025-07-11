@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="email_template_edi_purchase_tender" model="mail.template">
+            <field name="name">Purchase Tender: Send Purchase Tender</field>
+            <field name="email_from">{{ (object.user_id.email_formatted) }}</field>
+            <field name="partner_to">{{ object.partner_id.id }}</field>
+            <field name="subject">Tender {{ object.name or 'n/a' }}</field>
+            <field name="model_id" ref="apps_tender_management.model_purchase_agreement"/>
+            <field name="auto_delete" eval="False"/>
+            <field name="report_template_ids" eval="[(4, ref('apps_tender_management.action_purchase_agreement_report'))]"/>
+            <field name="body_html" type="html">
+				<div style="margin: 0px; padding: 0px;">
+				    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+				        Here is in attachment a for Purchase Tender <strong t-out="object.name or ''"/>
+				        <br/><br/>
+				        If you have any questions, please do not hesitate to contact us.
+				        <br/><br/>
+				        Best regards,
+				    </p>
+				</div>
+			</field>
+        </record>
+
+    </data>
+</odoo>

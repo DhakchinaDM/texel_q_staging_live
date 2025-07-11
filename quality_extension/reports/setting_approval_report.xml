@@ -1,0 +1,730 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="paper_format_setting_approval_report" model="report.paperformat">
+            <field name="name">Setting Approval Report</field>
+            <field name="default" eval="False"/>
+            <field name="disable_shrinking" eval="True"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">30</field>
+            <field name="margin_bottom">30</field>
+            <field name="margin_left">5</field>
+            <field name="margin_right">5</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">22</field>
+            <field name="dpi">150</field>
+        </record>
+        <record id="report_setting_approval_report" model="ir.actions.report">
+            <field name="name">Setting Approval</field>
+            <field name="model">setting.approval</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">quality_extension.setting_approval_report</field>
+            <field name="report_file">quality_extension.setting_approval_report</field>
+            <field name="print_report_name">'Approval'</field>
+            <field name="binding_model_id" ref="quality_extension.model_setting_approval"/>
+            <field name="paperformat_id" ref="quality_extension.paper_format_setting_approval_report"/>
+            <field name="binding_type">report</field>
+        </record>
+        <template id="setting_approval_report_header">
+            <div class="header" style="border: 1px solid black;">
+                <div class="row">
+                    <div class="col-3" style="border-right:1px solid black;">
+                        <div>
+                            <img src='/web/binary/company_logo' class="img-fluid img-thumbnail"
+                                 style="width:100%;margin-top:1px;"/>
+                        </div>
+                    </div>
+                    <div class="col-6" style="border-right:1px solid black;">
+                        <div style="text-align:center;color:black;margin:25px; padding:25px;">
+                            <h4>
+                                SETTING APPROVAL
+                            </h4>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div style="text-align:center;font-size:23px;margin:25px; padding:25px;
+                                                            color:black;">
+                            <strong>QA/DI/R/05</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <template id="setting_approval_report_body">
+            <t t-call="web.basic_layout">
+                <div class="row"
+                     style="border:1px solid black;">
+                    <div class="col-6" style="border-right:1px solid black;padding: 5px;">
+                        <strong>Part No</strong>
+                        <strong>:</strong>
+                        <span t-field="o.product_id.default_code"/>
+                    </div>
+                    <div class="col-6" style="padding:5px">
+                        <strong>MC No</strong>
+                        <strong>:</strong>
+                        <span t-field="o.machine_no"/>
+                    </div>
+                </div>
+                <div class="row" style="border-bottom:1px solid black;border-left:1px solid black;
+                                                                border-right:1px solid black;">
+                    <div class="col-6" style="padding:5px;border-right:1px solid black;">
+                        <strong>Part Name</strong>
+                        <strong>:</strong>
+                        <span t-field="o.product_id.name"/>
+                    </div>
+                    <div class="col-6" style="padding:5px;">
+                        <strong>Date</strong>
+                        <strong>:</strong>
+                        <span t-field="o.date"/>
+                    </div>
+                </div>
+                <div class="row" style="border-bottom:1px solid black;border-left:1px solid black;
+                border-right:1px solid black;">
+                    <div class="col-6" style="padding:5px;border-right:1px solid black;">
+                        <strong>Part Name</strong>
+                        <strong>:</strong>
+                        <span t-field="o.product_id.name"/>
+                    </div>
+                    <div class="col-3" style="padding:5px;border-right:1px solid black;">
+                        <strong>Date</strong>
+                        <strong>:</strong>
+                        <span t-field="o.date"/>
+                    </div>
+                    <div class="col-3" style="padding:5px;">
+                        <strong>Shift</strong>
+                        <strong>:</strong>
+                        <span t-field="o.shift"/>
+                    </div>
+                </div>
+                <div class="row" style="border-bottom:1px solid black;border-left:1px solid black;
+                border-right:1px solid black;">
+                    <div class="col-6" style="padding:5px;border-right:1px solid black;">
+                        <strong>Customer Name</strong>
+                        <strong>:</strong>
+                        <span t-field="o.partner_id.name"/>
+                    </div>
+                    <div class="col-2" style="padding:5px;border-right:1px solid black;">
+                        <strong>Start time</strong>
+                        <strong>:</strong>
+                        <span t-field="o.setting_start_time"/>
+                    </div>
+                    <div class="col-2" style="padding:5px;border-right:1px solid black;">
+                        <strong>End Time</strong>
+                        <strong>:</strong>
+                        <span t-field="o.setting_end_time"/>
+                    </div>
+                    <div class="col-2" style="padding:5px;">
+                        <strong>Approval Time</strong>
+                        <strong>:</strong>
+                        <span t-field="o.qc_approval_time"/>
+                    </div>
+                </div>
+                <div class="row"
+                     style="border-left:1px solid black;border-right:1px solid black;border-bottom:1px solid black;">
+                    <div class="col-6" style="padding:5px;border-right:1px solid black;">
+                        <strong>Process No &amp; Name</strong>
+                        <strong>:</strong>
+                        <span t-field="o.process_no"/>
+                    </div>
+                    <div class="col-6" style="padding:5px;">
+                        <strong>Supervisor Name</strong>
+                        <strong>:</strong>
+                        <span t-field="o.supervisor_id"/>
+                    </div>
+                </div>
+                <div class="row"
+                     style="margin-top:12px;border-left:1px solid black;border-right:1px solid black;border-top:1px solid black;">
+                    <h5 align="center">PROCESS PARAMETER</h5>
+                </div>
+                <table class="table table-sm" style="border:1px solid black;">
+                    <thead>
+                        <th>#</th>
+                        <th>Characteristics</th>
+                        <th>Specification</th>
+                        <th>Method of check</th>
+                        <th>Observations</th>
+                        <th>Remarks</th>
+                    </thead>
+                    <tbody style="border-top: 1px solid black;">
+                        <t t-foreach="o.parameter_ids" t-as="para">
+                            <tr>
+                                <td colspan="1"
+                                    style="color:black;border-left:1px;text-align:center;">
+                                    <span t-esc="para_index+1"/>
+                                </td>
+                                <t t-if="para.characteristics.name">
+                                    <td style="color:black;border-left:1px" align="left">
+                                        <span t-esc="para.characteristics.name"/>
+                                    </td>
+                                </t>
+                                <t t-else="">
+                                    <td align="center"
+                                        style="color:black;border-left:1px">
+                                        -
+                                    </td>
+                                </t>
+                                <t t-if="para.specification">
+                                    <td align="left"
+                                        style="color:black;border-left:1px">
+                                        <span t-esc="para.specification"/>
+                                    </td>
+                                </t>
+                                <t t-else="">
+                                    <td align="center"
+                                        style="color:black;border-left:1px">
+                                        -
+                                    </td>
+                                </t>
+                                <t t-if="para.method_of_check.name">
+                                    <td align="left"
+                                        style="color:black;border-left:1px">
+                                        <span t-esc="para.method_of_check.name"/>
+                                    </td>
+                                </t>
+                                <t t-else="">
+                                    <td align="center"
+                                        style="color:black;border-left:1px">
+                                        -
+                                    </td>
+                                </t>
+                                <t t-if="para.observation">
+                                    <td align="left"
+                                        style="color:black;border-left:1px">
+                                        <span t-esc="para.observation"/>
+                                    </td>
+                                </t>
+                                <t t-else="">
+                                    <td align="center"
+                                        style="color:black;border-left:1px">
+                                        -
+                                    </td>
+                                </t>
+                                <t t-if="para.remarks">
+                                    <td align="left"
+                                        style="color:black;border-left:1px">
+                                        <span t-esc="para.remarks"/>
+                                    </td>
+                                </t>
+                                <t t-else="">
+                                    <td align="center"
+                                        style="color:black;border-left:1px">
+                                        -
+                                    </td>
+                                </t>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+
+
+                <div class="row"
+                     style="margin-top:12px;border-left:1px solid black;border-right:1px solid black;border-top:1px solid black;">
+                    <h5 align="center">TOOLS DETAILS</h5>
+                </div>
+                <table class="table table-sm" style="border:1px solid black;">
+                    <thead>
+                        <th>#</th>
+                        <th>Characteristics</th>
+                        <th>No of Edges</th>
+                        <th>Method of check</th>
+                        <th colspan="2">Specification</th>
+                        <th>Speed</th>
+                        <th>Feed</th>
+                        <th>Tool &amp; Life</th>
+                        <th>Observations</th>
+                        <th>Remarks</th>
+                    </thead>
+                    <tbody style="border-top: 1px solid black;">
+                        <t t-foreach="o.tool_detail_ids" t-as="tools">
+                            <tr>
+                                <td style="color:black;border-left:1px;text-align:center;">
+                                    <span t-esc="tools_index+1"/>
+                                </td>
+                                <t t-if="tools.characteristics.name">
+                                    <td align="left"
+                                        style="color:black;border-left:1px">
+                                        <span t-esc="tools.characteristics.name"/>
+                                    </td>
+                                </t>
+                                <t t-else="">
+                                    <td align="center"
+                                        style="color:black;border-left:1px">
+                                        -
+                                    </td>
+                                </t>
+                                <t t-if="tools.no_of_edges">
+                                    <td align="center"
+                                        style="color:black;border-left:1px">
+                                        <span t-esc="tools.no_of_edges"/>
+                                    </td>
+                                </t>
+                                <t t-else="">
+                                    <td align="center"
+                                        style="color:black;border-left:1px">
+                                        -
+                                    </td>
+                                </t>
+                                <t t-if="tools.method_of_check.name">
+                                    <td align="left"
+                                        style="color:black;border-left:1px">
+                                        <span t-esc="tools.method_of_check.name"/>
+                                    </td>
+                                </t>
+                                <t t-else="">
+                                    <td align="center"
+                                        style="color:black;border-left:1px">
+                                        -
+                                    </td>
+                                </t>
+                                <t t-if="tools.holder.name">
+                                    <td align="left"
+                                        style="color:black;border-left:1px">
+                                        <span t-esc="tools.holder.name"/>
+                                    </td>
+                                </t>
+                                <t t-else="">
+                                    <td align="center"
+                                        style="color:black;border-left:1px">
+                                        -
+                                    </td>
+                                </t>
+                                <t t-if="tools.insert.name">
+                                    <td align="left"
+                                        style="color:black;border-left:1px">
+                                        <span t-esc="tools.insert.name"/>
+                                    </td>
+                                </t>
+                                <t t-else="">
+                                    <td align="center"
+                                        style="color:black;border-left:1px">
+                                        -
+                                    </td>
+                                </t>
+                                <t t-if="tools.speed">
+                                    <td align="center"
+                                        style="color:black;border-left:1px">
+                                        <span t-esc="tools.speed"/>
+                                    </td>
+                                </t>
+                                <t t-else="">
+                                    <td align="center"
+                                        style="color:black;border-left:1px">
+                                        -
+                                    </td>
+                                </t>
+                                <t t-if="tools.feed">
+                                    <td align="center"
+                                        style="color:black;border-left:1px">
+                                        <span t-esc="tools.feed"/>
+                                    </td>
+                                </t>
+                                <t t-else="">
+                                    <td align="center"
+                                        style="color:black;border-left:1px">
+                                        -
+                                    </td>
+                                </t>
+                                <t t-if="tools.tool_life">
+                                    <td align="center"
+                                        style="color:black;border-left:1px">
+                                        <span t-esc="tools.tool_life"/>
+                                    </td>
+                                </t>
+                                <t t-else="">
+                                    <td align="center"
+                                        style="color:black;border-left:1px">
+                                        -
+                                    </td>
+                                </t>
+                                <t t-if="tools.observations">
+                                    <td align="left"
+                                        style="color:black;border-left:1px">
+                                        <span t-esc="tools.observations"/>
+                                    </td>
+                                </t>
+                                <t t-else="">
+                                    <td align="center"
+                                        style="color:black;border-left:1px">
+                                        -
+                                    </td>
+                                </t>
+                                <t t-if="tools.remarks">
+                                    <td align="left"
+                                        style="color:black;border-left:1px">
+                                        <span t-esc="tools.remarks"/>
+                                    </td>
+                                </t>
+                                <t t-else="">
+                                    <td align="center"
+                                        style="color:black;border-left:1px">
+                                        -
+                                    </td>
+                                </t>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+
+
+                <div class="row"
+                     style="margin-top:12px;border-left:1px solid black;border-right:1px solid black;border-top:1px solid black;">
+                    <h5 align="center">PRODUCT PARAMETER</h5>
+                </div>
+                <table class="table table-sm" style="border:1px solid black;">
+                    <thead>
+                        <tr>
+                            <th rowspan="2">#</th>
+                            <th rowspan="2">Characteristics</th>
+                            <th rowspan="2">SPL/Class</th>
+                            <th rowspan="2">Specification</th>
+                            <th rowspan="2">Minimum</th>
+                            <th rowspan="2">Maximum</th>
+                            <th rowspan="2">Method of check</th>
+                            <th colspan="5">Observations</th>
+                            <th rowspan="2">Remarks</th>
+                            <th rowspan="2">Status</th>
+                        </tr>
+                        <tr>
+                            <th>1</th>
+                            <th>2</th>
+                            <th>3</th>
+                            <th>4</th>
+                            <th>5</th>
+                        </tr>
+                    </thead>
+                    <tbody style="border-top: 1px solid black;">
+                        <t t-foreach="o.product_parameter_ids" t-as="product">
+                            <tr>
+                                <td style="color:black;border-left:1px;text-align:center;">
+                                    <span t-esc="product_index+1"/>
+                                </td>
+                                <t t-if="product.characteristics.name">
+                                    <td align="left"
+                                        style="color:black;border-left:1px">
+                                        <span t-esc="product.characteristics.name"/>
+                                    </td>
+                                </t>
+                                <t t-else="">
+                                    <td align="center"
+                                        style="color:black;border-left:1px">
+                                        -
+                                    </td>
+                                </t>
+                                <t t-if="product.spl_class">
+                                    <td align="left"
+                                        style="color:black;border-left:1px">
+                                        <span t-esc="product.spl_class"/>
+                                    </td>
+                                </t>
+                                <t t-else="">
+                                    <td align="center"
+                                        style="color:black;border-left:1px">
+                                        -
+                                    </td>
+                                </t>
+                                <t t-if="product.specification">
+                                    <td align="left"
+                                        style="color:black;border-left:1px">
+                                        <span t-esc="product.specification"/>
+                                    </td>
+                                </t>
+                                <t t-else="">
+                                    <td align="center"
+                                        style="color:black;border-left:1px">
+                                        -
+                                    </td>
+                                </t>
+                                <t t-if="product.minimum">
+                                    <td align="left"
+                                        style="color:black;border-left:1px">
+                                        <span t-esc="'%.2f'%product.minimum"/>
+                                    </td>
+                                </t>
+                                <t t-else="">
+                                    <td align="center"
+                                        style="color:black;border-left:1px">
+                                        -
+                                    </td>
+                                </t>
+                                <t t-if="product.maximum">
+                                    <td align="left"
+                                        style="color:black;border-left:1px">
+                                        <span t-esc="'%.2f'%product.maximum"/>
+                                    </td>
+                                </t>
+                                <t t-else="">
+                                    <td align="center"
+                                        style="color:black;border-left:1px">
+                                        -
+                                    </td>
+                                </t>
+                                <t t-if="product.method_of_check.name">
+                                    <td align="left"
+                                        style="color:black;border-left:1px">
+                                        <span t-esc="product.method_of_check.name"/>
+                                    </td>
+                                </t>
+                                <t t-else="">
+                                    <td align="center"
+                                        style="color:black;border-left:1px">
+                                        -
+                                    </td>
+                                </t>
+                                <t t-if="product.observation1">
+                                    <td align="left"
+                                        style="color:black;border-left:1px">
+                                        <span t-esc="product.observation1"/>
+                                    </td>
+                                </t>
+                                <t t-else="">
+                                    <td align="center"
+                                        style="color:black;border-left:1px">
+                                        -
+                                    </td>
+                                </t>
+                                <t t-if="product.observation2">
+                                    <td align="left"
+                                        style="color:black;border-left:1px">
+                                        <span t-esc="product.observation2"/>
+                                    </td>
+                                </t>
+                                <t t-else="">
+                                    <td align="center"
+                                        style="color:black;border-left:1px">
+                                        -
+                                    </td>
+                                </t>
+                                <t t-if="product.observation3">
+                                    <td align="left"
+                                        style="color:black;border-left:1px">
+                                        <span t-esc="product.observation3"/>
+                                    </td>
+                                </t>
+                                <t t-else="">
+                                    <td align="center"
+                                        style="color:black;border-left:1px">
+                                        -
+                                    </td>
+                                </t>
+                                <t t-if="product.observation4">
+                                    <td align="left"
+                                        style="color:black;border-left:1px">
+                                        <span t-esc="product.observation4"/>
+                                    </td>
+                                </t>
+                                <t t-else="">
+                                    <td align="center"
+                                        style="color:black;border-left:1px">
+                                        -
+                                    </td>
+                                </t>
+                                <t t-if="product.observation5">
+                                    <td align="left"
+                                        style="color:black;border-left:1px">
+                                        <span t-esc="product.observation5"/>
+                                    </td>
+                                </t>
+                                <t t-else="">
+                                    <td align="center"
+                                        style="color:black;border-left:1px">
+                                        -
+                                    </td>
+                                </t>
+                                <t t-if="product.remarks">
+                                    <td align="left"
+                                        style="color:black;border-left:1px">
+                                        <span t-esc="product.remarks"/>
+                                    </td>
+                                </t>
+                                <t t-else="">
+                                    <td align="center"
+                                        style="color:black;border-left:1px">
+                                        -
+                                    </td>
+                                </t>
+                                <t t-if="product.obs_status">
+                                    <td align="left"
+                                        style="color:black;border-left:1px">
+                                        <span t-esc="dict(product._fields['obs_status'].selection).get(product.obs_status)"/>
+                                    </td>
+                                </t>
+                                <t t-else="">
+                                    <td align="center"
+                                        style="color:black;border-left:1px">
+                                        -
+                                    </td>
+                                </t>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+                <div class="row">
+                    <div class="col-6">
+                        <strong>Is there any parts rejected during setting</strong>
+                        <strong>:</strong>
+                    </div>
+                    <div class="col-6">
+                        <t t-if="o.is_there_any_parts">
+                            <i class="fa fa-check-square" style="font-size:25px;"/>
+                        </t>
+                        <t t-else="">
+                            <i class="fa fa-square-o" style="font-size:25px;"/>
+                        </t>
+                    </div>
+                </div>
+                <t t-if="o.is_there_any_parts">
+                    <div class="row">
+                        <div class="col-6">
+                            <strong>How many parts rejected</strong>
+                            <strong>:</strong>
+                        </div>
+                        <div class="col-6">
+                            <span t-esc="o.how_many"/>
+                        </div>
+                    </div>
+                </t>
+                <div class="row">
+                    <div class="col-6">
+                        <strong>If Disposition status (Scrap with Red Paint)</strong>
+                    </div>
+                    <div class="col-6">
+                        <t t-if="o.disposition_status">
+                            <i class="fa fa-check-square" style="font-size:25px;"/>
+                        </t>
+                        <t t-else="">
+                            <i class="fa fa-square-o" style="font-size:25px;"/>
+                        </t>
+                    </div>
+                </div>
+
+                <div class="row"
+                     style="border-left:1px solid black;border-right:1px solid black;border-bottom:1px solid black;border-top:1px solid black;">
+                    <div class="col-3" style="padding:5px;border-right:1px solid black;">
+                        <strong>Status</strong>
+                    </div>
+                    <div class="col-2" style="padding:5px;border-right:1px solid black;">
+                        <strong>OK [Accept]</strong>
+                    </div>
+
+                    <div class="col-1" style="padding:5px;border-right:1px solid black;text-align:center;">
+                        <t t-if="o.state == 'accept'">
+                            <i class="fa fa-check-square" style="font-size:25px;"/>
+                        </t>
+                        <t t-else="">
+                            <i class="fa fa-square-o" style="font-size:25px;"/>
+                        </t>
+                    </div>
+                    <div class="col-2" style="padding:5px;border-right:1px solid black;">
+                        <strong>NOT OK [Reject]</strong>
+                    </div>
+                    <div class="col-1" style="padding:5px;border-right:1px solid black;text-align:center;">
+                        <t t-if="o.state == 'reject'">
+                            <i class="fa fa-check-square" style="font-size:25px;"/>
+                        </t>
+                        <t t-else="">
+                            <i class="fa fa-square-o" style="font-size:25px;"/>
+                        </t>
+                    </div>
+                    <div class="col-2" style="padding:5px;border-right:1px solid black;">
+                        <strong>Conditionally Accept</strong>
+                    </div>
+                    <div class="col-1" style="padding:5px;text-align:center;">
+                        <t t-if="o.state == 'conditionally_accept'">
+                            <i class="fa fa-check-square" style="font-size:25px;"/>
+                        </t>
+                        <t t-else="">
+                            <i class="fa fa-square-o" style="font-size:25px;"/>
+                        </t>
+                    </div>
+                </div>
+
+                <div class="row"
+                     style="border-left:1px solid black;border-right:1px solid black;border-bottom:1px solid black;">
+                    <div class="col-6" style="padding:5px;border-right:1px solid black;">
+                        <strong>Are Previous Parts Gauges Removed?</strong>
+                    </div>
+
+                    <div class="col-2" style="padding:5px;border-right:1px solid black;">
+                        <strong>Yes</strong>
+                    </div>
+                    <div class="col-1" style="padding:5px;text-align:center;border-right:1px solid black;">
+                        <t t-if="o.are_previous">
+                            <i class="fa fa-check-square" style="font-size:25px;"/>
+                        </t>
+                        <t t-else="">
+                            <i class="fa fa-square-o" style="font-size:25px;"/>
+                        </t>
+                    </div>
+                    <div class="col-2" style="padding:5px;border-right:1px solid black;">
+                        <strong>No</strong>
+                    </div>
+                    <div class="col-1" style="padding:5px;text-align:center;">
+                        <t t-if="o.are_previous">
+                            <i class="fa fa-check-square" style="font-size:25px;"/>
+                        </t>
+                        <t t-else="">
+                            <i class="fa fa-square-o" style="font-size:25px;"/>
+                        </t>
+                    </div>
+                </div>
+                <div class="row"
+                     style="border-left:1px solid black;border-right:1px solid black;border-bottom:1px solid black;">
+                    <div class="col-6" style="padding:5px;border-right:1px solid black;">
+                        <strong>Are issued all the Gauges as per the SOP?</strong>
+                    </div>
+
+                    <div class="col-2" style="padding:5px;border-right:1px solid black;">
+                        <strong>Yes</strong>
+                    </div>
+                    <div class="col-1" style="padding:5px;text-align:center;border-right:1px solid black;">
+                        <t t-if="o.are_all_the">
+                            <i class="fa fa-check-square" style="font-size:25px;"/>
+                        </t>
+                        <t t-else="">
+                            <i class="fa fa-square-o" style="font-size:25px;"/>
+                        </t>
+                    </div>
+                    <div class="col-2" style="padding:5px;border-right:1px solid black;">
+                        <strong>No</strong>
+                    </div>
+                    <div class="col-1" style="padding:5px;text-align:center;">
+                        <t t-if="o.are_all_the">
+                            <i class="fa fa-check-square" style="font-size:25px;"/>
+                        </t>
+                        <t t-else="">
+                            <i class="fa fa-square-o" style="font-size:25px;"/>
+                        </t>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6" style="text-align:center;">
+                        <t t-if="o.quality_sign">
+                            <img t-att-src="image_data_uri(o.quality_sign)"
+                                 style="max-width: 100mm; max-height: 100mm;"/>
+                        </t>
+                        <h3>Quality Sign</h3>
+                    </div>
+                    <div class="col-6" style="text-align:center;">
+                        <t t-if="o.production_sign">
+                            <img t-att-src="image_data_uri(o.production_sign)"
+                                 style="max-width: 100mm; max-height: 100mm;"/>
+                        </t>
+                        <h3>Production Sign</h3>
+                    </div>
+                </div>
+            </t>
+        </template>
+        <template id="setting_approval_report">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="quality_extension.setting_approval_report_header"/>
+                    <t t-call="quality_extension.setting_approval_report_body"/>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

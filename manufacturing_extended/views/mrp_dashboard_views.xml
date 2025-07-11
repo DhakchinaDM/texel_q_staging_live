@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="action_mrp_dashboard" model="ir.actions.client">
+        <field name="name">MRP Dashboard</field>
+        <field name="tag">mrp_dashboard</field>
+    </record>
+    <menuitem id="menu_mrp_dashboard" name="MRP Dashboard"
+              parent="mrp.menu_mrp_reporting"
+              sequence="2"
+              action="action_mrp_dashboard"/>
+</odoo>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record id="action_analyze_quotations" model="ir.actions.report">
+            <field name="name">Analyze Quotations</field>
+            <field name="model">purchase.agreement</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">apps_tender_management.analyze_quotations_template</field>
+            <field name="report_file">apps_tender_management.analyze_quotations_template</field>
+            <field name="print_report_name">'Purchase Analyze - %s' % (object.name)</field>
+            <field name="binding_model_id" ref="model_purchase_agreement"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <template id="analyze_quotations_template">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="web.external_layout">
+                        <div class="page">
+                            <div class="oe_structure"/>
+                            <div class="row">
+                                <div class="col-12 mx-auto">
+                                    <div class="text-center">
+                                        <b>
+                                            <h4>Analyze Quotations</h4>
+                                        </b>
+                                    </div>
+                                </div>
+                            </div>
+                            <br/>
+                            <br/>
+
+                            <t t-if="partner_quote_dic">
+                                <t t-foreach="partner_quote_dic.keys()" t-as="partner">
+                                    <t t-set="partner_dic" t-value="partner_quote_dic[partner]"/>
+                                    <strong>
+                                        <t t-esc="partner_quote_dic[partner]['partner_name']"/>
+                                    </strong>
+                                    <br/>
+                                    <t t-foreach="partner_quote_dic[partner]['orders'].sorted(key=lambda quotation: quotation.name)"
+                                       t-as="quote">
+                                        <center>
+                                            <strong>
+                                                <t t-esc="quote.name"/>
+                                            </strong>
+                                        </center>
+                                        <table class="table table-condensed" style="border: 1px solid black;">
+                                            <thead>
+                                                <tr style="border: 1px solid black;">
+                                                    <th style="border: 1px solid black;">Description</th>
+                                                    <th style="border: 1px solid black;">Product</th>
+                                                    <th style="border: 1px solid black;">Price</th>
+                                                    <th style="border: 1px solid black;">Quantity</th>
+                                                    <th style="border: 1px solid black;">Amount</th>
+                                                </tr>
+                                                <t t-set="total_amount" t-value="0.0"/>
+                                                <tr t-foreach="quote.order_line" t-as="quote_line">
+                                                    <t t-set="total_amount"
+                                                       t-value="total_amount+quote_line.price_subtotal"/>
+                                                    <td style="border: 1px solid black;">
+                                                        <span t-esc="quote_line.name"/>
+                                                    </td>
+                                                    <td style="border: 1px solid black;">
+                                                        <span t-esc="quote_line.product_id.name"/>
+                                                    </td>
+                                                    <td style="border: 1px solid black;">
+                                                        <span t-esc="'%.2f'%quote_line.price_unit"/>
+                                                    </td>
+                                                    <td style="border: 1px solid black;">
+                                                        <span t-esc="'%.2f'%quote_line.product_qty"/>
+                                                    </td>
+                                                    <td style="border: 1px solid black;">
+                                                        <span t-esc="'%.2f'%quote_line.price_subtotal"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="7" style="border: 1px solid black;text-align:right;">
+                                                        <span t-esc="'%.2f'%total_amount"/>
+                                                    </td>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </t>
+                                </t>
+                            </t>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+    </data>
+</odoo>

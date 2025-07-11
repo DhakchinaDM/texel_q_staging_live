@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="seq_in_house_nc" model="ir.sequence">
+            <field name="name">In house Nc</field>
+            <field name="code">in.house.nc</field>
+            <field name="prefix">IN-NC/</field>
+            <field name="padding">3</field>
+            <field name="number_increment">1</field>
+            <field name="company_id" eval="False"/>
+            <field name="implementation">standard</field>
+        </record>
+        <record id="in_house_nc_form_view" model="ir.ui.view">
+            <field name="name">in.house.nc.form</field>
+            <field name="model">in.house.nc</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <field name="stage" widget="statusbar" options="{'clickable':1}"/>
+                    </header>
+                    <sheet>
+                        <h1>
+                            <field name='name' readonly="1" force_save="1"/>
+                        </h1>
+                        <group>
+                            <group string="In House Non Conformance">
+                                <field name="process_no"/>
+                                <field name="partner_id"/>
+                                <field name="product_id"/>
+                                <field name="category"/>
+                                <field name="problem_id"/>
+                                <field name="machine_no"/>
+                            </group>
+                            <group string="In House Non Conformance">
+                                <field name="date"/>
+                                <field name="actual"/>
+                                <field name="process_rejected_qty"/>
+                                <field name="for_rework_qty"/>
+                                <field name="four_m_cause"/>
+                                <field name="disposition_action"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <record id="in_house_nc_tree_view" model="ir.ui.view">
+            <field name="name">in.house.nc.tree</field>
+            <field name="model">in.house.nc</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name='name'/>
+                    <field name='date'/>
+                </tree>
+            </field>
+        </record>
+        <record id="in_house_action" model="ir.actions.act_window">
+            <field name="name">In House Non Conformance</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">in.house.nc</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_no content_smiling_face">
+                    In House Non Conformance Information
+                </p>
+            </field>
+        </record>
+        <menuitem id="in_house_nc_main_menu"
+                  name="In House Non Conformance"
+                  parent="quality_control.menu_quality_control"
+                  action="in_house_action"
+                  sequence="11"/>
+    </data>
+</odoo>

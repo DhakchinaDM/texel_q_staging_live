@@ -1,0 +1,21 @@
+.attendance_table{
+    float:left;
+    margin:22px 10px;
+}
+.attendance_cust {
+}
+.attendance_cust th,
+.attendance_cust thead,
+.attendance_cust tr,
+.attendance_cust tbody,
+.attendance_cust tfoot {
+    padding: 1em;
+    border: 1px solid #ccc;
+}
+
+.table-data{
+    background: #ffffff;
+    border-width: 0px 1px 0px 1px !important;
+    border-color: #bfb7b7;
+    border-style: solid;
+}

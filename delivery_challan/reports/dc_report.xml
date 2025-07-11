@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="paperformat_dc_report_new" model="report.paperformat">
+            <field name="name">Delivery Challan Report</field>
+            <field name="default" eval="False"/>
+            <field name="disable_shrinking" eval="True"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">10</field>
+            <field name="margin_bottom">10</field>
+            <field name="margin_left">5</field>
+            <field name="margin_right">5</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">32</field>
+            <field name="dpi">140</field>
+        </record>
+
+        <record id="report_dc_report" model="ir.actions.report">
+            <field name="name">Delivery Challan Report</field>
+            <field name="model">stock.picking</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">delivery_challan.delivery_challan_report_header</field>
+            <field name="report_file">delivery_challan.delivery_challan_report_header</field>
+            <field name="paperformat_id" ref="delivery_challan.paperformat_dc_report_new"/>
+            <field name="print_report_name">'Delivery Challan Report'</field>
+            <field name="binding_type">report</field>
+        </record>
+
+        <template id="delivery_challan_report_header">
+            <t t-call="web.html_container">
+                <t t-call="web.basic_layout">
+                    <t t-foreach="docs" t-as="o">
+                        <div class="page">
+                            <div class="row  align-items-center justify-content-center"
+                                 style="border: 1px solid black;height: 40mm;">
+                                <div class="col-6 d-flex align-items-center justify-content-center p-4">
+                                    <img src="/web/image/res.company/1/logo" style="width: 300px; height: 100px;"/>
+                                </div>
+                                <div class="col-6 text-center">
+                                    <h3 style="text-align:center; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">
+                                        <strong t-esc="res_company.name"/>
+                                    </h3>
+                                    <t t-if="res_company.street">
+                                        <span t-field="res_company.street"/>,
+                                    </t>
+                                    <t t-if="res_company.street2">
+                                        <span t-field="res_company.street2"/>,
+                                    </t>
+                                    <t t-if="res_company.city">
+                                        <span t-field="res_company.city"/>,
+                                    </t>
+                                    <br/>
+                                    <t t-if="res_company.state_id.name">
+                                        <span t-field="res_company.state_id.name"/>,
+                                    </t>
+                                    <t t-if="res_company.zip">
+                                        -
+                                        <span t-field="res_company.zip"/>
+                                    </t>
+                                </div>
+                            </div>
+                            <!--                            <div style="border: 1px solid #000;">-->
+                            <!--                                <section class="body" style="min-height: 220mm;">-->
+                            <div class="row m-3">
+                                <div class="col-12">
+                                    <h2 style="text-align:center; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;font-size: 20px;">
+                                        <strong>DELIVERY CHALLAN</strong>
+                                    </h2>
+                                </div>
+                            </div>
+
+                            <div class="row"
+                                 style="border-top: 1px solid #000;border-left: 1px solid #000;border-right: 1px solid #000;">
+                                <div class="col-6 p-2" style="border-right: 1px solid #000;">
+                                    <strong>DC No. :</strong>
+                                    <span t-esc="o.name"/>
+                                    <br/>
+                                    <strong>DC Date :</strong>
+                                    <span t-esc="o.scheduled_date" t-options='{"widget": "date"}'/>
+                                </div>
+                                <div class="col-6 p-2">
+                                    <strong>Transport :</strong>
+                                    <span t-esc="o.vehicle"/>
+                                    <br/>
+                                    <strong>Vehicle No. :</strong>
+                                    <span t-esc="o.vehicle_no"/>
+                                    <br/>
+                                    <strong>Contact Person Email :</strong>
+                                    <span>kevin.j@texelq.com</span>
+                                    <br/>
+                                    <strong>Contact Person Phone No. :</strong>
+                                    <span>+91 7092600094</span>
+                                </div>
+                            </div>
+
+                            <div class="row"
+                                 style="border-top: 1px solid #000;border-left: 1px solid #000;border-right: 1px solid #000;">
+                                <div class="col-6 p-2" style="border-right: 1px solid #000;">
+                                    <strong style="font-size:17px;">Billed To:</strong>
+                                    <br/>
+                                    <span>
+                                        <t t-set="address">
+                                            <address class="mb-0" t-field="o.partner_id"
+                                                     t-options='{"widget": "contact", "fields": ["name","address","phone","vat"], "no_marker": True}'/>
+                                        </t>
+                                        <span t-esc="address"/>
+                                    </span>
+                                </div>
+                                <div class="col-6 p-2">
+                                    <strong style="font-size:17px;">Shipped To:</strong>
+                                    <br/>
+                                    <span>
+                                        <t t-set="address">
+                                            <address class="mb-0" t-field="o.partner_id"
+                                                     t-options='{"widget": "contact", "fields": ["name","address","phone","vat"], "no_marker": True}'/>
+                                        </t>
+                                        <span t-esc="address"/>
+                                    </span>
+                                </div>
+                            </div>
+                            <table class="table table-sm">
+                                <thead>
+                                    <th class="text-center"
+                                        style="border-top: 1px solid #000;border-right: 1px solid #000;border-left: 1px solid #000; font-size: 17px;">
+                                        S.No.
+                                    </th>
+                                    <th class="text-center" style="border: 1px solid #000; font-size: 17px;"
+                                        t-if="o.picking_dc_type == 'standard'">Part No
+                                    </th>
+                                    <th class="text-center" style="border: 1px solid #000; font-size: 17px;">
+                                        Description of Goods
+                                    </th>
+                                    <th class="text-center" style="border: 1px solid #000; font-size: 17px;">
+                                        Purpose
+                                    </th>
+                                    <th class="text-center" style="border: 1px solid #000; font-size: 17px;">HSN
+                                        Code
+                                    </th>
+                                    <th class="text-center" style="border: 1px solid #000; font-size: 17px;">UoM
+                                    </th>
+                                    <th class="text-center" style="border: 1px solid #000; font-size: 17px;">Qty
+                                    </th>
+                                    <th class="text-center" style="border: 1px solid #000; font-size: 17px;">
+                                        Rate
+                                    </th>
+                                    <th class="text-center"
+                                        style="border-top: 1px solid #000;border-right: 1px solid #000; font-size: 17px;">
+                                        Total
+                                        Value
+                                    </th>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="o.move_ids_without_package" t-as="line">
+                                        <tr>
+                                            <td class="text-center"
+                                                style="border: 1px solid #000; font-size: 17px;">
+                                                <span t-esc="line_index + 1"/>
+                                            </td>
+                                            <t t-if="o.picking_dc_type == 'standard'">
+                                                <t t-if="line.product_id">
+                                                    <td class="text-center"
+                                                        style="border: 1px solid #000; font-size: 17px;">
+                                                        <span t-esc="line.product_id.default_code"/>
+                                                    </td>
+                                                </t>
+                                                <t t-else="">
+                                                    <td class="text-center"
+                                                        style="border: 1px solid #000; font-size: 17px;">
+                                                        -
+                                                    </td>
+                                                </t>
+                                                <t t-if="line.dc_description">
+                                                    <td class="text-center"
+                                                        style="border: 1px solid #000; font-size: 17px;">
+                                                        <span t-esc="line.dcdc_description_des"/>
+                                                    </td>
+                                                </t>
+                                                <t t-else="">
+                                                    <td class="text-center"
+                                                        style="border: 1px solid #000; font-size: 17px;">
+                                                        -
+                                                    </td>
+                                                </t>
+                                            </t>
+                                            <t t-if="o.picking_dc_type != 'standard'">
+                                                <td class="text-center"
+                                                    style="border: 1px solid #000; font-size: 17px;">
+                                                    <span style="margin-right: 10px;"
+                                                          t-esc="line.supplier_part_no"/>
+                                                    <span t-esc="line.dc_description"/>
+                                                </td>
+
+
+                                            </t>
+
+                                            <t t-if="line.job_work_id">
+                                                <td class="text-center"
+                                                    style="border: 1px solid #000; font-size: 17px;">
+                                                    <span t-esc="line.job_work_id.name"/>
+                                                </td>
+                                            </t>
+                                            <t t-else="">
+                                                <td class="text-center"
+                                                    style="border: 1px solid #000; font-size: 17px;">
+                                                    -
+                                                </td>
+                                            </t>
+
+                                            <t t-if="line.hsn_code">
+                                                <td class="text-center"
+                                                    style="border: 1px solid #000; font-size: 17px;">
+                                                    <span t-esc="line.hsn_code"/>
+                                                </td>
+                                            </t>
+                                            <t t-else="">
+                                                <td class="text-center"
+                                                    style="border: 1px solid #000; font-size: 17px;">
+                                                    -
+                                                </td>
+                                            </t>
+                                            <t t-if="line.product_uom.name">
+                                                <td class="text-center"
+                                                    style="border: 1px solid #000; font-size: 17px;">
+                                                    <span t-esc="line.product_uom.name"/>
+                                                </td>
+                                            </t>
+                                            <t t-else="">
+                                                <td class="text-center"
+                                                    style="border: 1px solid #000; font-size: 17px;">
+                                                    -
+                                                </td>
+                                            </t>
+                                            <t t-if="line.product_uom_qty">
+                                                <td class="text-center"
+                                                    style="border: 1px solid #000; font-size: 17px;">
+                                                    <span t-esc="line.product_uom_qty"/>
+                                                </td>
+                                            </t>
+                                            <t t-else="">
+                                                <td class="text-center"
+                                                    style="border: 1px solid #000; font-size: 17px;">
+                                                    -
+                                                </td>
+                                            </t>
+                                            <t t-if="line.price_unit">
+                                                <td class="text-center"
+                                                    style="border: 1px solid #000; font-size: 17px;">
+                                                    <span t-esc="line.price_unit"/>
+                                                </td>
+                                            </t>
+                                            <t t-else="">
+                                                <td class="text-center"
+                                                    style="border: 1px solid #000; font-size: 17px;">
+                                                    -
+                                                </td>
+                                            </t>
+                                            <t t-if="line.total_amount">
+                                                <td class="text-center"
+                                                    style="border: 1px solid #000; font-size: 17px;">
+                                                    <span t-esc="line.total_amount"/>
+                                                </td>
+                                            </t>
+                                            <t t-else="">
+                                                <td class="text-center"
+                                                    style="border: 1px solid #000; font-size: 17px;">
+                                                    -
+                                                </td>
+                                            </t>
+
+
+                                        </tr>
+                                    </t>
+                                    <tr>
+                                        <td colspan="5" class="text-end"
+                                            style="border: 1px solid #000; font-size: 17px;"
+                                            t-if="o.picking_dc_type == 'standard'">
+                                            <strong>Grand Total</strong>
+                                        </td>
+                                        <td colspan="4" class="text-end"
+                                            style="border: 1px solid #000; font-size: 17px;"
+                                            t-if="o.picking_dc_type == 'non-standard'">
+                                            <strong>Grand Total</strong>
+                                        </td>
+                                        <td class="text-center"
+                                            style="border: 1px solid #000; font-size: 17px;">
+                                            <strong style="font-size:17px;">Nos</strong>
+                                        </td>
+                                        <td class="text-center"
+                                            style="border: 1px solid #000; font-size: 17px;">
+                                            <t t-set="total_qty" t-value="0"/>
+                                            <t t-foreach="o.move_ids_without_package" t-as="line">
+                                                <t t-set="total_qty"
+                                                   t-value="total_qty + line.product_uom_qty"/>
+                                            </t>
+                                            <strong t-esc="total_qty"/>
+                                        </td>
+                                        <td class="text-center"
+                                            style="border: 1px solid #000; font-size: 17px;">
+                                            <t t-set="total_rate" t-value="0"/>
+                                            <t t-foreach="o.move_ids_without_package" t-as="line">
+                                                <t t-set="total_rate" t-value="total_rate + line.price_unit"/>
+                                            </t>
+                                            <strong t-esc="total_rate"/>
+                                        </td>
+                                        <td class="text-center"
+                                            style="border: 1px solid #000; font-size: 17px;">
+                                            <t t-set="total_value" t-value="0"/>
+                                            <t t-foreach="o.move_ids_without_package" t-as="line">
+                                                <t t-set="total_value"
+                                                   t-value="total_value + (float(line.product_uom_qty or 0.0) * float(line.price_unit or 0.0))"/>
+                                            </t>
+                                            <strong t-esc="total_value"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="9" class="text-start"
+                                            t-if="o.picking_dc_type == 'standard'"
+                                            style="border: 1px solid #000; font-size: 17px;">
+                                            <strong t-esc="o.company_id.currency_id.amount_to_text(int(total_value))"/>
+                                        </td>
+                                        <td colspan="8" class="text-start"
+                                            t-if="o.picking_dc_type == 'non-standard'"
+                                            style="border: 1px solid #000; font-size: 17px;">
+                                            <strong t-esc="o.company_id.currency_id.amount_to_text(int(total_value))"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <!--                                </section>-->
+                            <!--                            </div>-->
+                            <div class="notes"
+                                 style="border: 1px solid #000;height: 130mm;page-break-inside: avoid;">
+                                <div class="row p-2" style="border-bottom: 1px solid #000;">
+                                    <strong>Notes:</strong>
+                                    <br/>
+                                    <t t-esc="o.remarks"/>
+                                </div>
+                                <div class="row" style="border-bottom: 1px solid #000;">
+                                    <div class="col-6 p-2" style="border-right: 1px solid #000;">
+                                        <strong>Declaration:</strong>
+                                        <br/>
+                                        <t t-esc="o.note"/>
+                                    </div>
+                                    <div class="col-6 p-2">
+                                        For
+                                        <strong t-esc="o.company_id.name"/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <strong>Authorised Signatory</strong>
+                                    </div>
+                                </div>
+                                <div style="text-align: center;">
+                                    <strong>******This is computer generated document and requires no signature******
+                                    </strong>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

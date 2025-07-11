@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="product_template_inherit_form_view" model="ir.ui.view">
+            <field name="name">product.template.form.view.inherit</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_only_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook" position="inside">
+                    <page name="quality" string="Quality">
+                        <group>
+                            <group>
+                                <field name="material_grade"/>
+                                <field name="draw_rev_no"/>
+                                <field name="draw_rev_date"/>
+                                <field name="attachment" filename="file_name"/>
+                                <field name="third_party_certificate"/>
+                                <field name="third_party_certificate_attach" filename="file_name"/>
+                                <field name="parameter_type" invisible="0"/>
+                            </group>
+                            <group>
+                            </group>
+                            <separator string="Incoming Inspection" invisible="parameter_type != 'raw'"/>
+                            <field name="quality_parameters" invisible="parameter_type != 'raw'">
+                                <tree editable="bottom">
+                                    <field name="baloon_no"/>
+                                    <field name="parameter_id" options="{'no_create': True}"/>
+                                    <field name="specification"/>
+                                    <field name="min_level"/>
+                                    <field name="max_level"/>
+                                    <field name="check_method_id" widget="many2many_tags"
+                                           options="{'no_create': True}"/>
+                                </tree>
+                            </field>
+                            <group>
+                            </group>
+                            <separator string="Final Parameters" groups="quality_extension.group_production_quality"
+                                       invisible="parameter_type != 'parts'"/>
+                            <field name="final_parameters" invisible="parameter_type != 'parts'"
+                                   groups="quality_extension.group_production_quality">
+                                <tree editable="bottom">
+                                    <field name="balloon_no"/>
+                                    <field name="characteristics"/>
+                                    <field name="final_specification"/>
+                                    <field name="min_final"/>
+                                    <field name="max_final"/>
+                                    <field name="check_method_final"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

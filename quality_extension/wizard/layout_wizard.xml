@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="layout_remarks_wizard" model="ir.ui.view">
+            <field name="name">layout.remarks.remarks.view</field>
+            <field name="model">layout.remarks</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="remarks" required="1" placeholder="Please enter the Re-Inspection remarks..."/>
+                        </group>
+                        <field name="remarks_id"/>
+                    </sheet>
+
+                    <footer>
+                        <button name="tick_ok" type='object' string="Submit" class="oe_highlight"
+                                icon="fa-check-circle"/>
+                        <button name="tick_cancel" type='object' string="Cancel" class="oe_highlight" special="cancel"
+                                icon="fa-times-circle"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

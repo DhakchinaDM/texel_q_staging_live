@@ -1,0 +1,10 @@
+<odoo>
+    <data noupdate="1">
+        <record id="hr_skill_type1" model="hr.skill.type">
+            <field name="name">Common Skills</field>
+        </record>
+        <record id="hr_skill_type2" model="hr.skill.type">
+            <field name="name">Finished Goods</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_picking_tree_inherit_dc_tree" model="ir.ui.view">
+            <field name="name">stock.picking.tree.inherit.dc</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.vpicktree"/>
+            <field name="arch" type="xml">
+                <field name="state" position="after">
+                   <field name="products_ids" widget="many2many_tags" optional="hide"/>
+                </field>
+
+            </field>
+        </record>
+
+        <record id="view_picking_form_inherit_dc" model="ir.ui.view">
+            <field name="name">stock.picking.form.inherit.dc</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <button name="purchase_revision" position="attributes">
+                    <attribute name="invisible">state != 'assigned' or revision &gt; 0 or show_lot_serial == False
+                    </attribute>
+                </button>
+                <field name="partner_id" position="attributes">
+                    <attribute name="domain">[('is_company', '=', True)]</attribute>
+                    <attribute name="readonly">state not in 'draft'</attribute>
+                    <attribute name="required">1</attribute>
+                </field>
+<!--                <button name="print_grn_label" position="attributes">-->
+<!--                    <attribute name="invisible">show_lot_serial == False or state != 'done'</attribute>-->
+<!--                </button>-->
+                <field name="picking_type_id" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                    <attribute name="force_save">1</attribute>
+                </field>
+                <field name="process_no" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="ins_type" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <button name="action_assign" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </button>
+                <field name="picking_type_id" position="after">
+                    <field name="dc_records" invisible="1"/>
+                    <field name="products_ids" invisible="1" widget="many2many_tags"/>
+                    <field name="stock_return_type" widget="radio" options="{'horizontal': True}"
+                           invisible="dc_entry_type not in ['dc']"/>
+                    <field name="picking_dc_type" widget="radio" options="{'horizontal': True}"
+                           invisible="dc_entry_type not in ['dc','jw']"/>
+                    <field name="dc_entry_type" invisible="1" force_save="True"/>
+                    <field name="transport_mode" widget="radio" options="{'horizontal': True}"
+                           invisible="dc_entry_type not in ['dc']"/>
+                    <field name="contact_person" options='{"no_open": False, "no_create": True,"no_edit": True}'
+                           invisible="1"/>
+                    <field name="contact_person_str"
+                           invisible="dc_entry_type not in ['dc']"/>
+                </field>
+                <field name="date_done" position="after">
+                    <field name="place_of_supply" invisible="dc_entry_type not in ['jw', 'dc']"/>
+                    <field name="vehicle_no" invisible="dc_entry_type not in ['jw', 'dc']"/>
+                    <field name="vehicle" invisible="dc_entry_type not in ['jw', 'dc']"/>
+                </field>
+                <xpath expr="//field[@name='move_ids_without_package']/tree//field[@name='product_uom_qty']"
+                       position="attributes">
+                    <attribute name="string">Qty</attribute>
+                </xpath>
+                <xpath expr="//field[@name='move_ids_without_package']/tree//field[@name='quantity']"
+                       position="attributes">
+                    <attribute name="string">Received Qty</attribute>
+                </xpath>
+                <xpath expr="//field[@name='move_ids_without_package']/tree//field[@name='lot_ids']" position="before">
+
+                    <field name="picking_dc_type" column_invisible="1"/>
+                    <field name="dc_description" column_invisible="parent.dc_entry_type not in ['dc']" required="1"/>
+                    <field name="job_work_service" column_invisible="1"/>
+                    <field name="job_work_id" column_invisible="parent.dc_entry_type not in ['dc','jw', 'sjw']" required="1"/>
+                    <field name="price_unit" column_invisible="parent.dc_entry_type not in ['dc','jw','r_sjw']"/>
+                    <field name="total_amount" column_invisible="parent.dc_entry_type not in ['dc', 'jw','r_sjw']"
+                           sum="Total"/>
+                </xpath>
+                <xpath expr="//header/button[@name='action_cancel']" position="after">
+                    <button name="action_dc_report"  string="Print DC" type="object" class="oe_highlight" invisible="dc_entry_type != 'dc' or state != 'done'"/>
+                    <button name="action_jobdc_report"  string="Print JOB DC" type="object" class="oe_highlight" invisible="dc_entry_type != 'jw' or state != 'done'"/>
+                </xpath>
+                <xpath expr="//field[@name='move_ids_without_package']/tree//field[@name='description_picking']" position="after">
+                    <field name="supplier_part_no" editable="True"/>
+                    <field name="hsn_code"/>
+
+
+                </xpath>
+                <xpath expr="//field[@name='move_ids_without_package']/tree//field[@name='price_unit']" position="after">
+                    <field name="taxes" />
+                    <field name="taxe_value" />
+                </xpath>
+                <xpath expr="//field[@name='move_ids_without_package']/tree//field[@name='product_uom_qty']"
+                       position="attributes">
+                    <attribute name="string">Qty</attribute>
+                </xpath>
+                <xpath expr="//field[@name='move_ids_without_package']/tree//field[@name='product_uom_qty']"
+                       position="before">
+                    <field name="product_qty_available" column_invisible="parent.dc_entry_type not in ['dc','jw']"
+                           string="Available Qty"/>
+                </xpath>
+                <xpath expr="//field[@name='move_ids_without_package']/tree//field[@name='product_id']"
+                       position="attributes">
+                    <attribute name="readonly">picking_dc_type == 'non-standard'</attribute>
+                </xpath>
+
+                <xpath expr="//div[hasclass('o_td_label')]" position="replace">
+                    <div class="o_td_label">
+                        <label for="partner_id" string="Vendor" style="font-weight:bold;"
+                               invisible="picking_type_code != 'outgoing' or dc_entry_type not in ['dc', 'r_dc', 'jw', 'r_jw']"/>
+                        <label for="partner_id" string="Delivery Address" style="font-weight:bold;"
+                               invisible="picking_type_code != 'outgoing' or dc_entry_type not in []"/>
+                        <label for="partner_id" string="Receive From" style="font-weight:bold;"
+                               invisible="picking_type_code != 'incoming' or dc_entry_type in []"/>
+                        <label for="partner_id" string="Contact" style="font-weight:bold;"
+                               invisible="picking_type_code in ['incoming', 'outgoing']"/>
+                    </div>
+                </xpath>
+                <field name="inv_date" position="attributes">
+                    <attribute name="invisible">dc_entry_type in ['dc','jw','r_dc','r-jw','sjw','r_sjw']</attribute>
+                </field>
+                <field name="bill_ref" position="attributes">
+                    <attribute name="invisible">dc_entry_type in ['dc','jw','r_dc','r-jw','sjw','r_sjw']</attribute>
+                </field>
+                <field name="supplier_reference" position="attributes">
+                    <attribute name="invisible">dc_entry_type in ['dc','jw','r_dc','r-jw','sjw','r_sjw']</attribute>
+                </field>
+                <field name="bill_ref" position="after">
+                    <field name="supplier_reference" invisible="dc_entry_type not in ['dc','jw','r_dc','r-jw','sjw','r_sjw']"/>
+                </field>
+                <field name="description_picking" position="attributes">
+                    <attribute name="string">Part Name</attribute>
+                </field>
+            </field>
+        </record>
+    </data>
+    <menuitem id="menu_delivery_challan"
+              name="Delivery Challan"
+              sequence="3"
+              parent="stock.menu_stock_root"/>
+
+    <record id="action_picking_tree_dc" model="ir.actions.act_window">
+        <field name="name">Delivery Challan</field>
+        <field name="res_model">stock.picking</field>
+        <field name="view_mode">tree,kanban,form,calendar</field>
+        <field name="domain">[('dc_entry_type','in',['dc'])]</field>
+        <field name="context">{'contact_display': 'partner_address', 'default_company_id': allowed_company_ids[0],
+            'restricted_picking_type_code': 'outgoing', 'restricted_dc_entry': 'dc'}
+        </field>
+        <field name="search_view_id" ref="stock.view_picking_internal_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No transfer found. Let's create one!
+            </p>
+            <p>
+                Transfers allow you to move products from one location to another.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_regular_delivery_challan"
+              name="DC"
+              sequence="1"
+              action="delivery_challan.action_picking_tree_dc"
+              parent="menu_delivery_challan"/>
+
+    <record id="action_picking_tree_rdc" model="ir.actions.act_window">
+        <field name="name">Return Delivery Challan</field>
+        <field name="res_model">stock.picking</field>
+        <field name="view_mode">tree,kanban,form,calendar</field>
+        <field name="domain">[('dc_entry_type','in',['r_dc'])]</field>
+        <field name="context">{'contact_display': 'partner_address', 'default_company_id': allowed_company_ids[0],
+            'restricted_picking_type_code': 'incoming', 'restricted_dc_entry': 'r_dc'}
+        </field>
+        <field name="search_view_id" ref="stock.view_picking_internal_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No transfer found. Let's create one!
+            </p>
+            <p>
+                Transfers allow you to move products from one location to another.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_return_delivery_challan"
+              name="Return DC"
+              sequence="2"
+              action="delivery_challan.action_picking_tree_rdc"
+              parent="menu_delivery_challan"/>
+
+    <record id="view_picking_form_inherited" model="ir.ui.view">
+        <field name="name">stock.picking.form.custom</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+        
+            <xpath expr="//field[@name='supplier_reference']" position="after">
+                    <field name="quality" invisible="picking_type_code != 'outgoing'"/>
+                    <firld name="quality_checked" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='picking_dc_type']" position="after">
+                    <field name="remarks" />
+            </xpath>
+
+<!--            <xpath expr="//header" position="inside">-->
+<!--                <button name="quality_check" -->
+<!--                        string="Quality Check" -->
+<!--                        type="object" -->
+<!--                        class="oe_highlight" -->
+<!--                        invisible="state != 'assigned' or picking_type_code != 'incoming' or quality == False" />-->
+<!--            </xpath>-->
+            
+        </field>
+    </record>
+
+    <record id="action_picking_tree_jw" model="ir.actions.act_window">
+        <field name="name">Job Work</field>
+        <field name="res_model">stock.picking</field>
+        <field name="view_mode">tree,kanban,form,calendar</field>
+        <field name="domain">[('dc_entry_type','in',['jw'])]</field>
+        <field name="context">{'contact_display': 'partner_address', 'default_company_id': allowed_company_ids[0],
+            'restricted_picking_type_code': 'outgoing', 'restricted_dc_entry': 'jw','default_ins_type':
+            'incoming_part',}
+        </field>
+        <field name="search_view_id" ref="stock.view_picking_internal_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No transfer found. Let's create one!
+            </p>
+            <p>
+                Transfers allow you to move products from one location to another.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_job_work"
+              name="Job Work"
+              sequence="2"
+              action="delivery_challan.action_picking_tree_jw"
+              parent="menu_delivery_challan"/>
+
+    <record id="action_picking_tree_rjw" model="ir.actions.act_window">
+        <field name="name">Return Job Work</field>
+        <field name="res_model">stock.picking</field>
+        <field name="view_mode">tree,kanban,form,calendar</field>
+        <field name="domain">[('dc_entry_type','in',['r_jw'])]</field>
+        <field name="context">{'contact_display': 'partner_address', 'default_company_id': allowed_company_ids[0],
+            'restricted_picking_type_code': 'incoming', 'restricted_dc_entry': 'r_jw'}
+        </field>
+        <field name="search_view_id" ref="stock.view_picking_internal_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No transfer found. Let's create one!
+            </p>
+            <p>
+                Transfers allow you to move products from one location to another.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_return_job_work"
+              name="Return Job Work"
+              sequence="2"
+              action="delivery_challan.action_picking_tree_rjw"
+              parent="menu_delivery_challan"/>
+
+    <record id="action_picking_tree_sjw" model="ir.actions.act_window">
+        <field name="name">Service Job Work</field>
+        <field name="res_model">stock.picking</field>
+        <field name="view_mode">tree,kanban,form,calendar</field>
+        <field name="domain">[('dc_entry_type','in',['sjw'])]</field>
+        <field name="context">{'contact_display': 'partner_address', 'default_company_id': allowed_company_ids[0],
+            'restricted_picking_type_code': 'incoming', 'restricted_dc_entry': 'sjw'}
+        </field>
+        <field name="search_view_id" ref="stock.view_picking_internal_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No transfer found. Let's create one!
+            </p>
+            <p>
+                Transfers allow you to move products from one location to another.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_service_job_work"
+              name="Service Job Work"
+              sequence="2"
+              action="delivery_challan.action_picking_tree_sjw"
+              parent="menu_delivery_challan"/>
+
+    <record id="action_picking_tree_r_sjw" model="ir.actions.act_window">
+        <field name="name">Return Service Job Work</field>
+        <field name="res_model">stock.picking</field>
+        <field name="view_mode">tree,kanban,form,calendar</field>
+        <field name="domain">[('dc_entry_type','in',['r_sjw'])]</field>
+        <field name="context">{'contact_display': 'partner_address', 'default_company_id': allowed_company_ids[0],
+            'restricted_picking_type_code': 'outgoing', 'restricted_dc_entry': 'r_sjw'}
+        </field>
+        <field name="search_view_id" ref="stock.view_picking_internal_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No transfer found. Let's create one!
+            </p>
+            <p>
+                Transfers allow you to move products from one location to another.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_return_service_job_work"
+              name="Return Service Job Work"
+              sequence="2"
+              action="delivery_challan.action_picking_tree_r_sjw"
+              parent="menu_delivery_challan"/>
+
+
+</odoo>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="internal_service_order_wizard_form" model="ir.ui.view">
+        <field name="name">internal.service.wizard.form</field>
+        <field name="model">internal.service.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Update Internal Service Status">
+                <group>
+                    <field name="maintenance_service_order_ref" readonly='1'/>
+                    <field name="equipment_id" readonly="1"/>
+                    <field name="machine" readonly="1"/>
+                    <field name="category" readonly="1"/>
+                    <field name="remarks" placeholder="Enter the Service Remarks"
+                           required="1"/>
+                    <field name="service_started" string="Service Started" invisible="1"/>
+                    <field name="service_ended" string="Service Ended" invisible="1"/>
+                </group>
+                <group>
+                    <group>
+                        <field name="service_duration" invisible="service_started != True"
+                               required="service_started == True"/>
+                    </group>
+                    <group>
+                        <field name="service_end_duration" invisible="service_started != True"
+                               required="service_started == True"/>
+                    </group>
+                </group>
+                <footer>
+                    <button string='Start Service Button' name='tick_ok'
+                            type='object'
+                            invisible="service_started == True"
+                            class='btn-primary'/>
+                    <button string='Finish Service Button' name='service_finish'
+                            type='object'
+                            invisible="service_started != True"
+                            class='btn-primary'/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="internal_service_order_wizard_action" model="ir.actions.act_window">
+        <field name="name">Update Internal Service Status</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">internal.service.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="internal_service_order_wizard_form"/>
+    </record>
+
+</odoo>
+

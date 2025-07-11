@@ -1,0 +1,88 @@
+<templates xml:space="preserve">
+    <t t-name="productivity_dashboard_template">
+        <section class="oe_container">
+            <div class="card p-4 shadow-lg border-0 rounded-4">
+                <h2 class="text-center text-primary fw-bold mb-3">Productivity Dashboard</h2>
+
+                <!-- Product Selection Dropdown -->
+                <div class="d-flex justify-content-center">
+                    <select class="form-select w-50 border-primary shadow-sm" t-on-change="onProductChange">
+                        <option value="">Select a Product</option>
+                        <t t-foreach="state.products" t-as="product" t-key="product.id">
+                            <option t-att-value="product.id" t-esc="product.default_code"/>
+                        </t>
+                    </select>
+                </div>
+                <!-- Date Filter Section -->
+                <div class="d-flex justify-content-center mt-3">
+                    <input type="date" class="form-control w-25 mx-2 border-primary shadow-sm"
+                        t-att-value="state.startDate"
+                        t-on-change="onStartDateChange"/>
+
+                    <input type="date" class="form-control w-25 mx-2 border-primary shadow-sm"
+                        t-att-value="state.endDate"
+                        t-on-change="onEndDateChange"/>
+                </div>
+
+
+                <!-- Table Container -->
+                <div class="record_table mt-4 p-3 rounded bg-white shadow-sm" style="height: 450px; overflow-y: auto;">
+                    <table class="table table-hover text-center table-sm">
+                        <thead class="table-primary sticky-top">
+                            <tr>
+                                <th>Operation Code</th>
+                                <th>Lot No</th>
+                                <th>Job</th>
+                                <th>Produced Qty</th>
+                                <th>Qty</th>
+                                <th>Status</th>
+                                <th>Notes</th>
+                                <th>Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="state.groupedData" t-as="op_code" t-key="op_code.op_code">
+                                <t t-set="rowspan" t-value="op_code.records.length + 1"/>
+                                    <td t-att-rowspan="rowspan" class="align-middle text-center fw-bold text-primary" t-esc="op_code.op_code" style="border-bottom: 1px solid #374151;"/>
+                                <t t-foreach="op_code.records" t-as="record" t-key="record.id">
+                                    <tr class="align-middle">
+                                        <td t-esc="record.lot_id[1]"/>
+                                        <td t-esc="record.job_id[1]"/>
+                                        <td t-esc="record.total_produced_qty"/>
+                                        <td t-esc="record.produced_qty"/>
+
+                                        <!-- Status Badge -->
+                                        <td>
+                                            <span class="badge px-3 py-2"
+                                                t-att-class="record.qty_type == 'ok' ? 'bg-success' :
+                                                             record.qty_type == 'm_reject' ? 'bg-warning' :
+                                                             record.qty_type == 'p_reject' ? 'bg-danger' :
+                                                             record.qty_type == 'rework' ? 'bg-info' : 'bg-secondary'">
+                                                <t t-if="record.qty_type == 'ok'">OK</t>
+                                                <t t-if="record.qty_type == 'm_reject'">Material</t>
+                                                <t t-if="record.qty_type == 'p_reject'">Process</t>
+                                                <t t-if="record.qty_type == 'rework'">Rework</t>
+                                            </span>
+                                        </td>
+
+                                        <td t-esc="record.remarks"/>
+                                        <td t-esc="record.date"/>
+
+                                        <!-- Print Report Button -->
+                                        <td>
+                                            <button type="button" class="btn btn-outline-primary btn-sm px-3 fw-bold"
+                                                t-on-click="() => printReport(record.id)">
+                                                📄 Print
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </t>
+</templates>

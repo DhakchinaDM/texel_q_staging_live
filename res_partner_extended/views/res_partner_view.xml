@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_partner_form_salesperson_inherited" model="ir.ui.view">
+            <field name="name">res.partner.form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[hasclass('oe_chatter')]" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//h1" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//div[hasclass('oe_title')]" position="after">
+                    <group>
+                        <group>
+                            <field id="company" options="{'line_breaks': False}" widget="text" class="text-break"
+                                   name="name" default_focus="1" placeholder="e.g. Lumber Inc"
+                                   invisible="not is_company"
+                                   required="type == 'contact'"/>
+                            <field id="individual" options="{'line_breaks': False}" widget="text" class="text-break"
+                                   name="name" default_focus="1" placeholder="e.g. Brandom Freeman"
+                                   invisible="is_company"
+                                   required="type == 'contact'"/>
+                        </group>
+                        <group>
+                        </group>
+                    </group>
+                </xpath>
+                <xpath expr="//page[@name='sales_purchases']//field[@name='user_id']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//page[@name='sales_purchases']//group[@name='misc']" position="attributes">
+                    <attribute name="groups">base.group_no_one</attribute>
+                </xpath>
+                <xpath expr="//page[@name='sales_purchases']//field[@name='user_id']" position="after">
+                    <field name="sales_person"/>
+                </xpath>
+                <xpath expr="//field[@name='function']" position="before">
+                    <field name="supplier_id" readonly="1" invisible="supplier_rank != 1"/>
+                    <!--                    <field name="supplier_code" invisible="supplier_rank != 1"/>-->
+                    <field name="supplier_type" invisible="supplier_rank != 1" required="1"
+                           options="{'no_quick_create': True, 'no_create_edit': True, 'no_open': True}"/>
+                    <field name="supplier_rank" invisible="1"/>
+                </xpath>
+                <xpath expr="//page[@name='sales_purchases']" position="attributes">
+                    <attribute name="string">Purchase Contact</attribute>
+                </xpath>
+                <field name="street" position="attributes">
+                    <attribute name="required">1</attribute>
+                </field>
+                <field name="city" position="attributes">
+                    <attribute name="required">1</attribute>
+                </field>
+                <field name="state_id" position="attributes">
+                    <attribute name="required">1</attribute>
+                </field>
+                <field name="country_id" position="attributes">
+                    <attribute name="required">1</attribute>
+                </field>
+                <field name="zip" position="attributes">
+                    <attribute name="required">1</attribute>
+                </field>
+                <field name="mobile" position="attributes">
+                    <attribute name="required">1</attribute>
+                </field>
+                <field name="email" position="attributes">
+                    <attribute name="required">1</attribute>
+                </field>
+                <field name="category_id" position="attributes">
+                    <attribute name="required">1</attribute>
+                </field>
+                <field name="parent_id" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="function" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="title" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+            </field>
+        </record>
+
+
+        <record id="base.action_partner_supplier_form" model="ir.actions.act_window">
+            <field name="name">Supplier</field>
+            <field name="res_model">res.partner</field>
+            <field name="domain">[]</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="context">{'res_partner_search_mode': 'supplier', 'default_is_company': True}</field>
+            <field name="filter" eval="True"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new vendor in your address book
+                </p>
+                <p>
+                    Odoo helps you easily track all activities related to a vendor.
+                </p>
+            </field>
+        </record>
+
+        <record id="account.res_partner_action_supplier" model="ir.actions.act_window">
+            <field name="name">Supplier</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="domain">[('parent_id', '=', False)]</field>
+            <field name="context">{'search_default_supplier': 1,'res_partner_search_mode': 'supplier',
+                'default_is_company': True, 'default_supplier_rank': 1}
+            </field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new supplier in your address book
+                </p>
+                <p>
+                    Odoo helps you easily track all activities related to a supplier.
+                </p>
+            </field>
+        </record>
+
+
+        <menuitem id="menu_supplier_main_name" name="Supplier"
+                  parent="purchase.menu_purchase_root" sequence="2"/>
+
+        <menuitem id="menu_procurement_management_supplier_name_new" name="Supplier"
+                  parent="menu_supplier_main_name"
+                  action="account.res_partner_action_supplier" sequence="15"/>
+
+
+        <record id="supplier_type_form_view" model="ir.ui.view">
+            <field name="name">supplier.type.form</field>
+            <field name="model">supplier.type</field>
+            <field name="arch" type="xml">
+                <form string="Supplier Type">
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name"/>
+                            <h1>
+                                <field name="name" placeholder="Outside Service"/>
+                            </h1>
+                        </div>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="supplier_type_tree_view" model="ir.ui.view">
+            <field name="name">supplier.type.tree</field>
+            <field name="model">supplier.type</field>
+            <field name="arch" type="xml">
+                <tree string="Supplier Type">
+                    <field name="create_date"/>
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="supplier_type_search_view" model="ir.ui.view">
+            <field name="name">supplier.type.search</field>
+            <field name="model">supplier.type</field>
+            <field name="arch" type="xml">
+                <search string="Supplier Type">
+                    <group expand="1" string="Group By">
+                        <filter string="Supplier Type" name="name" domain="[]"
+                                context="{'group_by':'name'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="supplier_type_act_window" model="ir.actions.act_window">
+            <field name="name">Supplier Type</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">supplier.type</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    There is no examples click here to add new Supplier Type.
+                </p>
+            </field>
+        </record>
+
+        <menuitem name="Supplier Type" id="supplier_type_manin_menu" parent="contacts.res_partner_menu_config"/>
+
+        <menuitem name="Supplier Type" id="supplier_type_menu" parent="supplier_type_manin_menu"
+                  action="supplier_type_act_window"/>
+
+    </data>
+</odoo>

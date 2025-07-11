@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="paperformat_purchase_order_report_new" model="report.paperformat">
+            <field name="name">Purchase Order Report</field>
+            <field name="default" eval="False"/>
+            <field name="disable_shrinking" eval="True"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">25</field>
+            <field name="margin_bottom">30</field>
+            <field name="margin_left">0</field>
+            <field name="margin_right">0</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">22</field>
+            <field name="dpi">150</field>
+        </record>
+
+        <record id="report_purchase_order_report" model="ir.actions.report">
+            <field name="name">Purchase Order Report</field>
+            <field name="model">purchase.order</field>
+            <field name="report_type">qweb-html</field>
+            <field name="report_name">purchase_report.purchase_order_report_header</field>
+            <field name="report_file">purchase_report.purchase_order_report_header</field>
+            <field name="paperformat_id" ref="purchase_report.paperformat_purchase_order_report_new"/>
+            <field name="print_report_name">'Purchase Order Report'</field>
+            <field name="binding_model_id" ref="purchase.model_purchase_order"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <template id="purchase_order_report_header">
+            <t t-call="web.html_container">
+                <t t-call="web.basic_layout">
+                    <t t-foreach="docs" t-as="o">
+                        <div class="page">
+                            <div class="header">
+                                <table class="table table-sm" style="border:2px solid #000;border-color: #005ce6;">
+                                    <tr>
+                                        <td style="background: #80d4ff">
+                                            <img width="90%"
+                                                 t-attf-src="/purchase_report/static/img.png"
+                                                 alt="Logo"/>
+                                        </td>
+                                        <td colspan="5" align="center" style="background: #80d4ff">
+                                            <div style="color: #005ce6; font-size: 20px">
+                                                <Strong>TexelQ Engineering India (P) Ltd</Strong>
+                                                <br/>
+                                                <span>77/2, Kuthamabakkam Road, Mevalurkuppam, Sriperumbudur-TK,
+                                                    Kanchipuram
+                                                    Dist
+                                                </span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <div align="center"
+                                     style="border-left: 1px solid #143980;!important;border-right: 1px solid #143980;!important;">
+                                    <strong>Purchase Order</strong>
+                                </div>
+                            </div>
+                            <style>
+                                .table-container {
+                                display: flex;
+                                flex-direction: column;
+                                }
+
+                                .table {
+                                border: 1px solid black;
+                                margin-bottom: 0px;
+                                }
+                            </style>
+                            <table class="table table-sm table-bordered" style="width:100%;border:1px solid #143980;">
+                                <tr>
+                                    <td colspan="4">
+                                        <strong style="font-size:12px;">GST:</strong>
+                                        <span style="color:black;font-size:12px;"
+                                              t-esc="o.partner_id.vat"/>
+                                    </td>
+                                    <td colspan="4" align="center" style="border-bottom:0px !important;">
+                                        <strong style="font-size:12px;">PO:</strong>
+                                        <span style="color:black;font-style:12px;"
+                                              t-esc="o.name"/>
+                                    </td>
+                                    <td colspan="4" align="center" style="border-bottom:0px !important;">
+                                        <strong style="font-size:12px;">PO:</strong>
+                                        <span style="color:black;font-style:12px;"
+                                              t-esc="o.name"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4">
+                                        <strong style="font-size:12px;border-bottom:0px !important;">Phone:</strong>
+                                        <span style="color:black;font-size:12px;"
+                                              t-esc="o.partner_id.mobile"/>
+                                    </td>
+                                    <td colspan="8" align="center">
+                                        <strong style="font-size:12px;border-bottom:0px !important;">Date:</strong>
+                                        <span style="color:black;font-size:12px"
+                                              t-esc="o.partner_id.vat"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4">
+                                    </td>
+                                    <td colspan="8" align="center">
+                                        <strong style="font-size:12px;border-bottom:0px !important;">Supplier ID:
+                                        </strong>
+                                        <span style="color:black;font-size:12px"
+                                              t-esc="o.partner_id.supplier_id"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4">
+                                        <strong style="font-size:12px;border-bottom:0px !important;">Vendor:</strong>
+                                        <span style="color:black;font-size:12px"
+                                              t-esc="o.partner_id.name"/>
+                                    </td>
+                                    <td colspan="8" align="center">
+                                        <strong style="font-size:12px;border-bottom:0px !important;">Ship To:</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" align="center"
+                                        style="color:white;background-color:#83b2d4;border:2px solid #000;border-color: #005ce6;">
+                                        <strong style="font-size:12px;">SHIPPING METHOD</strong>
+
+                                    </td>
+                                    <td colspan="5" align="center"
+                                        style="color:white;background-color:#83b2d4;border:2px solid #000;border-color: #005ce6;">
+                                        <strong style="font-size:12px;">SHIPPING TERMS</strong>
+                                    </td>
+                                    <td colspan="5" align="center"
+                                        style="color:white;background-color:#83b2d4;border:2px solid #000;border-color: #005ce6;">
+                                        <strong style="font-size:12px;">DELIVERY DUE DATE</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" align="center">
+                                        <span style="font-size:12px;">BY Hand</span>
+
+                                    </td>
+                                    <td colspan="5" align="center">
+                                        <span style="font-size:12px;">TO YOUR ACCOUNT</span>
+                                    </td>
+                                    <td colspan="5" align="center">
+                                        <span style="color:black;font-style: normal;"
+                                              t-esc="o.date_planned"/>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="2" align="center"
+                                        style="color:white;background-color:#83b2d4;border:2px solid #000;border-color: #005ce6;">
+                                        <strong style="font-size:12px;">SUPPLIER REFERENCE / DATE</strong>
+                                    </td>
+                                    <td colspan="5" align="center"
+                                        style="color:white;background-color:#83b2d4;border:2px solid #000;border-color: #005ce6;">
+                                        <strong style="font-size:12px;">PAYMENT TERMS</strong>
+                                    </td>
+                                    <td colspan="5" align="center"
+                                        style="color:white;background-color:#83b2d4;border:2px solid #000;border-color: #005ce6;">
+                                        <strong style="font-size:12px;">SUPPLIER CONTACT</strong>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="2" align="center">
+                                        <strong style="font-size:12px;">SUPPLIER REFERENCE / DATE</strong>
+                                    </td>
+                                    <td colspan="5" align="center">
+                                        <strong style="font-size:12px;">PAYMENT TERMS</strong>
+                                    </td>
+                                    <td colspan="5" align="center">
+                                        <strong style="font-size:12px;">SUPPLIER CONTACT</strong>
+                                    </td>
+                                </tr>
+                                <tr style="color:#143980;height:3px !important;font-size:12px;">
+                                    <th class="text-center"
+                                        style="border-right:1px solid #143980;color:white;background-color:#83b2d4;border:2px solid #000;border-color: #005ce6;">
+                                        QTY
+                                    </th>
+                                    <th class="text-center"
+                                        style="border-right:1px solid #143980;color:white;background-color:#83b2d4;border:2px solid #000;border-color: #005ce6;">
+                                        UNITS
+                                    </th>
+                                    <th class="text-center"
+                                        style="border-right:1px solid #143980;color:white;background-color:#83b2d4;border:2px solid #000;border-color: #005ce6;">
+                                        TEXELQ PART NO
+                                    </th>
+                                    <th class="text-center"
+                                        style="border-right:1px solid #143980;color:white;background-color:#83b2d4;border:2px solid #000;border-color: #005ce6;">
+                                        PART #
+                                    </th>
+                                    <th colspan="3" class="text-center"
+                                        style="border-right:1px solid #143980;color:white;background-color:#83b2d4;border:2px solid #000;border-color: #005ce6;">
+                                        DESCRIPTION
+                                    </th>
+                                    <th colspan="3" class="text-center"
+                                        style="border-right:1px solid #143980;color:white;background-color:#83b2d4;border:2px solid #000;border-color: #005ce6;">
+                                        UNIT PRICE
+                                    </th>
+                                    <th class="text-center"
+                                        style="border-right:1px solid #143980;color:white;background-color:#83b2d4;border:2px solid #000;border-color: #005ce6;">
+                                        LINE TOTAL
+                                    </th>
+                                </tr>
+                                <tbody style="width:100%;border:1px solid #143980;font-size:12px;page-break-inside: avoid;">
+                                    <t t-if="o.order_line">
+                                        <t t-foreach="o.order_line" t-as="line">
+                                            <tr style="height:1px;border-right:1px solid black !important;">
+                                                <t t-if="line.product_qty">
+                                                    <td class="text-right"
+                                                        style="width:1%;color:black;border-left:1px solid #143980;border-bottom:none !important;">
+                                                        <span t-esc="line.product_qty"/>
+                                                    </td>
+                                                </t>
+
+                                                <t t-if="line.product_uom">
+                                                    <td class="text-right"
+                                                        style="width:1%;color:black;border-left:1px solid #143980;border-bottom:none !important;">
+                                                        <span t-esc="line.product_uom.name"/>
+                                                    </td>
+                                                </t>
+
+                                                <t t-if="line.product_id.default_code">
+                                                    <td class="text-right"
+                                                        style="width:1%;color:black;border-left:1px solid #143980;border-bottom:none !important;">
+                                                        <span t-esc="line.product_id.default_code"/>
+                                                    </td>
+                                                </t>
+
+
+                                                <t t-if="line.product_id.name">
+                                                    <td class="text-right"
+                                                        style="width:1%;color:black;border-left:1px solid #143980;border-bottom:none !important;">
+                                                        <span t-esc="line.product_id.name"/>
+                                                    </td>
+                                                </t>
+
+                                                <t t-if="line.name">
+                                                    <td class="text-right" colspan="3"
+                                                        style="width:1%;color:black;border-left:1px solid #143980;border-bottom:none !important;">
+                                                        <span t-esc="line.name"/>
+                                                    </td>
+                                                </t>
+
+                                                <t t-if="line.price_unit">
+                                                    <td class="text-right" colspan="3"
+                                                        style="width:1%;color:black;border-left:1px solid #143980;border-bottom:none !important;">
+                                                        <span t-esc="line.price_unit"/>
+                                                    </td>
+                                                </t>
+
+                                                <t t-if="line.price_subtotal">
+                                                    <td class="text-right"
+                                                        style="width:1%;color:black;border-left:1px solid #143980;border-bottom:none !important;">
+                                                        <span t-esc="line.price_unit"/>
+                                                    </td>
+                                                </t>
+                                            </tr>
+                                        </t>
+                                    </t>
+                                </tbody>
+                            </table>
+                            <table class="table table-sm table-bordered"
+                                   style="width:100%;border:1px solid #143980;font-size:12px;">
+                                <tr>
+                                    <td rowspan="3" align="center" style="color:#143980">
+                                        <strong>Total</strong>
+                                    </td>
+                                    <td rowspan="2" align="center" style="color:#143980">
+                                        <strong>Taxable Value</strong>
+                                    </td>
+
+                                    <td colspan="2" align="center" style="color:#143980">
+                                        <strong>State Tax</strong>
+                                    </td>
+                                    <td colspan="2" align="center" style="color:#143980">
+                                        <strong>Central Tax</strong>
+                                    </td>
+                                    <td align="center" style="color:#143980">
+                                        <strong>Total</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <t>
+                                        <td align="center" style="color:#143980">
+                                            <strong>Rate</strong>
+                                        </td>
+                                        <td align="center" style="color:#143980">
+                                            <strong>Amount</strong>
+                                        </td>
+                                        <td align="center" style="color:#143980">
+                                            <strong>Rate</strong>
+                                        </td>
+                                        <td align="center" style="color:#143980">
+                                            <strong>Amount</strong>
+                                        </td>
+                                        <td align="center" style="color:#143980">
+                                            <strong>Value</strong>
+                                        </td>
+                                    </t>
+                                </tr>
+                                <tr>
+                                    <t>
+                                        <td align="center" style="color:#143980">
+                                            <strong>0.00</strong>
+                                        </td>
+                                        <td align="center" style="color:#143980">
+                                            <strong>0.00</strong>
+                                        </td>
+                                        <td align="center" style="color:#143980">
+                                            <strong>0.00</strong>
+                                        </td>
+                                        <td align="center" style="color:#143980">
+                                            <strong>0.00</strong>
+                                        </td>
+                                        <td align="center" style="color:#143980">
+                                            <strong>0.00</strong>
+                                        </td>
+                                        <td align="center" style="color:#143980">
+                                            <strong>Final</strong>
+                                        </td>
+                                    </t>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" rowspan="2">
+                                        <span>
+                                            Amount In Words
+                                        </span>
+                                    </td>
+                                    <td colspan="2">
+                                        <span>
+                                            Round Off
+                                        </span>
+                                    </td>
+                                    <td colspan="2">
+                                        <span>
+                                            RV 00
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <span>
+                                            Total Amount Value
+                                        </span>
+                                    </td>
+                                    <td colspan="2">
+                                        <span>
+                                            OVER ALL 0.00
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5">
+                                        <span>Note</span>
+                                        <br/>
+                                        <!--                                        <span style="font-size:9px" t-field="o.notes"/>-->
+                                    </td>
+                                    <td colspan="2">
+                                        <span>Authorised By</span>
+                                        <br/>
+                                        <span>Date</span>
+                                    </td>
+
+                                </tr>
+                            </table>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+
+    </data>
+</odoo>

@@ -1,0 +1,44 @@
+<odoo>
+    <record id="view_spare_make_form" model="ir.ui.view">
+        <field name="name">spare.make.form</field>
+        <field name="model">spare.make</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="user_id" invisible="1"/>
+                        <field name="company_id" invisible="1"/>
+                        <field name="currency_symbol" invisible="1"/>
+                        <field name="logged_user" invisible="1"/>
+                        <field name="active" invisible="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_spare_make_tree" model="ir.ui.view">
+        <field name="name">spare.make.tree</field>
+        <field name="model">spare.make</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="create_date"/>
+                <field name="create_uid"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="machine_spare_make_action" model="ir.actions.act_window">
+        <field name="name">Spare Make</field>
+        <field name="res_model">spare.make</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_spare_make_details_root"
+              name="Spare Make"
+              sequence="4"
+              parent="maintenance.menu_maintenance_configuration"
+              action="machine_spare_make_action"/>
+</odoo>

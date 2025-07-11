@@ -1,0 +1,12 @@
+.fixed-col {
+    position: sticky;
+    left: 0;
+    background-color: white;  /* Ensure it's above other elements when scrolling */
+    z-index: 2;  /* Ensure it's above other table cells */
+}
+.fixed-row {
+    position: sticky;
+    top: 0;
+    background-color: white; /* Ensure it's above other elements when scrolling */
+    z-index: 3; /* Ensure it's above other table rows */
+}

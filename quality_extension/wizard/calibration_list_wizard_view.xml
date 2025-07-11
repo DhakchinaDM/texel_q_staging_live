@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="calibration_list_wizard_view" model="ir.ui.view">
+            <field name="name">calibration.list.wizard.view</field>
+            <field name="model">calibration.list.wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="instrument_type" widget="radio" options="{'horizontal':True}" string="Type"
+                                       required="1"/>
+                                <field name="prepared_by" options="{'no_open': True}"/>
+                            </group>
+                            <group>
+                                <label for="quality_instruments" string="Gauges List"
+                                       invisible="instrument_type != 'gauges'"/>
+                                <label for="quality_instruments" string="Instruments List"
+                                       invisible="instrument_type != 'calibration'"/>
+                                <field name="quality_instruments" widget="many2many_tags" nolabel="1"/>
+                                <field name="quality_instrument_domain" invisible="1" widget="many2many_tags"/>
+                                <field name="approved_by" options="{'no_open': True}"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button name="print_pdf" type="object"
+                                string="Generate" class="oe_highlight" icon="fa-print"/>
+                        <button name="action_cancel" type="object"
+                                string="Cancel" class="oe_highlight" special="cancel"
+                                icon="fa-times-circle"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        <record id="calibration_list_wizard_action" model="ir.actions.act_window">
+            <field name="name">Gauges/Instruments List</field>
+            <field name="res_model">calibration.list.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+        <menuitem id="menu_quality_master_reporting"
+                  name="Reporting"
+                  parent="quality_control.menu_quality_root"
+                  sequence="21"/>
+        <menuitem id="menu_calibration_list_wizard"
+                  name="Gauges/Instruments List"
+                  action="calibration_list_wizard_action"
+                  parent="menu_quality_master_reporting"
+                  sequence="0"/>
+    </data>
+</odoo>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="spc_remarks_wizard" model="ir.ui.view">
+        <field name="name">spc.reject.remarks.view</field>
+        <field name="model">spc.reject.remarks</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="is_default_remark"/>
+                    </group>
+                    <field name="remarks" required="1" placeholder="Please enter the Approvals remarks..."/>
+                    <field name="default_remark" invisible="1"/>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+                <footer>
+                    <button name="tick_ok" type='object' string="Submit" class="oe_highlight"
+                            icon="fa-check-circle"/>
+                    <button name="tick_cancel" type='object' string="Cancel" class="oe_highlight" special="cancel"
+                            icon="fa-times-circle"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="spc_reject_wizard" model="ir.ui.view">
+        <field name="name">spc.reject.remarks.view</field>
+        <field name="model">spc.reject.remarks</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="is_default_remark"/>
+                    </group>
+                    <field name="remarks" required="1" placeholder="Please enter the Approvals remarks..."/>
+                    <field name="default_remark" invisible="1"/>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+                <footer>
+                    <button name="tick_ok" type='object' string="Submit" class="oe_highlight"
+                            icon="fa-check-circle"/>
+                    <button name="tick_cancel" type='object' string="Cancel" class="oe_highlight" special="cancel"
+                            icon="fa-times-circle"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

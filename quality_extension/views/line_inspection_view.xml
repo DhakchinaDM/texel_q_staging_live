@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="seq_line_inspection" model="ir.sequence">
+            <field name="name">Line Inspection</field>
+            <field name="code">line.inspection</field>
+            <field name="prefix">LIR/</field>
+            <field name="padding">3</field>
+            <field name="number_increment">1</field>
+            <field name="company_id" eval="False"/>
+            <field name="implementation">standard</field>
+        </record>
+        <record id="line_inspection_form" model="ir.ui.view">
+            <field name="name">line.inspection.form</field>
+            <field name="model">line.inspection</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="line_submit"
+                                type="object" class="oe_highlight"
+                                string="Submit"
+                                invisible="line_state in ('submit','accept','conditional_accept','reject')"/>
+                        <button name="line_accept" string="Accept"
+                                class="oe_highlight" type="object"
+                                invisible="line_state not in 'submit'"/>
+                        <button name="line_conditionally_accept"
+                                string="Conditionally Accept" class="oe_highlight"
+                                type="object" invisible="line_state not in 'submit'"/>
+                        <button name="line_reject" string="Reject"
+                                class="oe_highlight" type="object"
+                                invisible="line_state not in 'submit'"/>
+                        <button name="line_set_to_draft" string="Set to Draft"
+                                class="oe_highlight" type="object"
+                                invisible="line_state not in 'reject'"/>
+                        <field name="line_state" widget="statusbar"
+                               statusbar_visible="draft,submit,accept,conditional_accept"/>
+                    </header>
+                    <sheet>
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                        <group>
+                            <group string="Line Inspection Details">
+                                <field name="operation_no"
+                                       options="{'no_open': True}"
+                                       readonly="line_state in ('accept','conditional_accept','reject')"/>
+                                <field name="operation_name" invisible="1"/>
+                                <field name="product_id" required="1"
+                                       options="{'no_open': True}"
+                                       readonly="line_state in ('accept','conditional_accept','reject')"/>
+                                <field name="part_name"/>
+                                <label for="rev_no"
+                                       string="Rev No. &amp; Date"
+                                       invisible="rev_no == False"/>
+                                <div class="o_row" invisible="rev_no == False">
+                                    <group col="1">
+                                        <field name="rev_no" nolabel="1"/>
+                                        <field name="rev_date" nolabel="1"/>
+                                    </group>
+                                </div>
+                                <field name="inspector_name"
+                                       options="{'no_open': True}"
+                                       readonly="line_state in ('accept','conditional_accept','reject')"/>
+                                <field name="inspected_by" options="{'no_open': True}"/>
+                            </group>
+                            <group string="Line Inspection Details">
+                                <field name="machine_no"
+                                       options="{'no_open': True}"
+                                       readonly="line_state in ('accept','conditional_accept','reject')"/>
+                                <field name="machine_name" invisible="1"/>
+                                <field name="operator_name"
+                                       options="{'no_open': True}"
+                                       readonly="line_state in ('accept','conditional_accept','reject')"/>
+                                <field name="date"
+                                       readonly="line_state in ('accept','conditional_accept','reject')"/>
+                                <field name="shift"
+                                       readonly="line_state in ('accept','conditional_accept','reject')"/>
+                                <field name="approved_by"
+                                       options="{'no_open': True}"
+                                       readonly="line_state in ('accept','conditional_accept','reject')"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="Line Inspection Details">
+                                <field name="line_ids"
+                                       readonly="line_state in ('accept','conditional_accept','reject')">
+                                    <tree editable="bottom">
+                                        <field name="characteristics"
+                                               readonly="1" force_save="1"
+                                               options="{'no_open': True}"/>
+                                        <field name="spc" readonly="1" force_save="1"/>
+                                        <field name="line_specification" readonly="1" force_save="1"/>
+                                        <field name="line_min" readonly="1" force_save="1"/>
+                                        <field name="line_max" readonly="1" force_save="1"/>
+                                        <field name="method_of_check"
+                                               readonly="1" force_save="1"
+                                               options="{'no_open': True}"/>
+                                        <field name="sample_size" readonly="1" force_save="1"/>
+                                        <field name="frequency" readonly="1" force_save="1"/>
+                                        <field name="observation1" decoration-danger="obser_1_check == True"/>
+                                        <field name="observation2" decoration-danger="obser_2_check == True"
+                                               readonly="frequency in ('fq_two', 'fq_three', 'fq_four')"/>
+                                        <field name="observation3" decoration-danger="obser_3_check == True"
+                                               readonly="frequency in ('fq_three', 'fq_four')"/>
+                                        <field name="observation4" decoration-danger="obser_4_check == True"
+                                               readonly="frequency in ('fq_two', 'fq_three', 'fq_four')"/>
+                                        <field name="observation5" decoration-danger="obser_5_check == True"
+                                               readonly="frequency in 'fq_four'"/>
+                                        <field name="observation6" decoration-danger="obser_6_check == True"
+                                               readonly="frequency in ('fq_two', 'fq_three', 'fq_four')"/>
+                                        <field name="observation7" decoration-danger="obser_7_check == True"
+                                               readonly="frequency in ('fq_three', 'fq_four')"/>
+                                        <field name="observation8" decoration-danger="obser_8_check == True"
+                                               readonly="frequency in ('fq_two', 'fq_three', 'fq_four')"/>
+                                        <field name="remarks"/>
+                                        <field name="obs_status"/>
+                                        <field name="obser_1_check" column_invisible="1"/>
+                                        <field name="obser_2_check" column_invisible="1"/>
+                                        <field name="obser_3_check" column_invisible="1"/>
+                                        <field name="obser_4_check" column_invisible="1"/>
+                                        <field name="obser_5_check" column_invisible="1"/>
+                                        <field name="obser_6_check" column_invisible="1"/>
+                                        <field name="obser_7_check" column_invisible="1"/>
+                                        <field name="obser_8_check" column_invisible="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <record id="line_inspection_tree_view" model="ir.ui.view">
+            <field name="name">line.inspection.tree</field>
+            <field name="model">line.inspection</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name='name'/>
+                    <field name="part_no" string="Part No"/>
+                    <field name="part_name"/>
+                    <field name="machine_no"/>
+                    <field name="inspected_by"/>
+                    <field name="approved_by"/>
+                    <field name="shift"/>
+                    <field name="date"/>
+                    <field name="line_state" widget="badge"
+                           decoration-muted="line_state in 'draft'"
+                           decoration-info="line_state in 'submit'"
+                           decoration-success="line_state in 'accept'"
+                           decoration-warning="line_state in 'conditional_accept'"
+                           decoration-danger="line_state in 'reject'"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_line_inspection_search_view" model="ir.ui.view">
+            <field name="name">line.inspection.search</field>
+            <field name="model">line.inspection</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="product_id"/>
+                    <field name="part_name"/>
+                    <field name="machine_no"/>
+                    <field name="inspected_by"/>
+                    <field name="approved_by"/>
+                    <field name="shift"/>
+                    <field name="line_state"/>
+                    <separator/>
+                    <searchpanel>
+                        <field name="line_state" icon="fa-filter"/>
+                        <field name="shift" icon="fa-filter"/>
+                    </searchpanel>
+                </search>
+            </field>
+        </record>
+
+        <record id="line_inspection_action" model="ir.actions.act_window">
+            <field name="name">Line Inspection</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">line.inspection</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_no content_smiling_face">
+                    Line Inspection Information
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="line_inspection_main_menu"
+                  name="Line Inspection"
+                  parent="quality_control.menu_quality_control"
+                  action="line_inspection_action"
+                  sequence="4"/>
+    </data>
+</odoo>

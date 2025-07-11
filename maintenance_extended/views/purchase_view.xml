@@ -1,0 +1,17 @@
+<odoo>
+    <menuitem name="Requests"
+              id="m_request_menu"
+              parent="maintenance.menu_maintenance_title"
+              sequence="0"/>
+
+    <menuitem name="Requests for Quotation"
+              id="purchase_request_menu2"
+              parent="m_request_menu"
+              sequence="0"
+              action="purchase_request.purchase_request_action_view"/>
+    <menuitem name="Purchase Requests"
+              id="purchase_request_menu3"
+              parent="m_request_menu"
+              sequence="1"
+              action="purchase.purchase_rfq"/>
+</odoo>

@@ -1,0 +1,87 @@
+<templates xml:space="preserve">
+<t t-name="employee_skill_matrix_template">
+    <div class="container-fluid">
+
+        <!-- Filters in a Single Row -->
+        <div class="row g-3 align-items-center my-3">
+            <!-- Employee Search Input -->
+            <div class="col-md-4 col-12">
+                <label class="form-label">Search Employee:</label>
+                <input type="text" class="form-control" placeholder="Enter Name or Emp Code"
+                       t-on-input="updateSearchQuery" />
+            </div>
+
+            <!-- Skill Type Filter -->
+            <div class="col-md-4 col-12">
+                <label class="form-label">Filter by Skill Type:</label>
+                <select class="form-control" t-on-change="updateSkillType">
+                    <option value="">All</option>
+                    <option t-foreach="state.skill_types" t-as="type" t-key="type.id"
+                            t-att-value="type.id">
+                        <t t-esc="type.name"/>
+                    </option>
+                </select>
+            </div>
+
+            <!-- Multi-Select for Skills (Using Select2) -->
+<!--            <div class="col-md-4 col-12">-->
+<!--                <label class="form-label">Select Skills:</label>-->
+<!--                <select class="form-control select2" multiple="" style="width: 100%;" t-on-change="updateSelectedSkills">-->
+<!--                    <option t-foreach="state.skills" t-as="skill" t-key="skill.id"-->
+<!--                            t-att-value="skill.id">-->
+<!--                        <t t-esc="skill.code"/>-->
+<!--                    </option>-->
+<!--                </select>-->
+<!--            </div>-->
+        </div>
+
+        <!-- Fetch Button -->
+        <div class="d-flex justify-content-center my-3">
+            <button t-on-click="fetchEmployeeSkills" class="btn btn-primary">
+                <t t-if="state.isLoading">Fetching...</t>
+                <t t-else="">Fetch Employee Skills</t>
+            </button>
+        </div>
+
+        <!-- Scrollable Table -->
+        <div class="table-responsive" style="max-height: 400px;">
+            <table class="table table-bordered table-striped">
+                <thead class="table-light">
+                    <tr>
+                        <th>Employee</th>
+                        <th>Emp Code</th>
+                        <th t-foreach="state.skills" t-as="skill" t-key="skill.id" style="min-width: 250px;" t-att-title="skill.name">
+                            <t t-esc="skill.code"/>
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr t-foreach="state.employees" t-as="employee" t-key="employee.id">
+                        <td t-esc="employee.name"/>
+                        <td t-esc="employee.emp_code"/>
+                        <td t-foreach="state.skills" t-as="skill" t-key="skill.id" style="min-width: 250px;">
+                            <select t-on-change="updateSkillLevel"
+                                    t-att-data-employee-id="employee.id"
+                                    t-att-data-skill="skill.code"
+                                    class="form-select">
+                                <option value="">-</option>
+                                <option t-foreach="state.skill_levels[skill.type_id]" t-as="level"
+                                        t-key="level" t-att-value="level"
+                                        t-att-selected="employee.skills[skill.code] == level">
+                                    <t t-esc="level"/>
+                                </option>
+                            </select>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Message when No Data -->
+        <div t-if="!state.isLoading and !state.employees.length" class="alert alert-warning text-center">
+            No employee skill data found.
+        </div>
+    </div>
+</t>
+</templates>

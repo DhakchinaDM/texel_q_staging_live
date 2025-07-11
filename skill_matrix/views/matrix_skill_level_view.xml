@@ -1,0 +1,58 @@
+<odoo>
+    <record id="view_matrix_skill_level_form" model="ir.ui.view">
+        <field name="name">matrix.skill.level.form</field>
+        <field name="model">matrix.skill.level</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="description"/>
+                        <field name="progress"/>
+                        <field name="image" widget="image" style='height:70px;width:70px;'/>
+                        <field name="user_id" invisible="1"/>
+                        <field name="company_id" invisible="1"/>
+                        <field name="currency_symbol" invisible="1"/>
+                        <field name="active" invisible="1"/>
+                        <field name="logged_user" invisible="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_matrix_skill_level_tree" model="ir.ui.view">
+        <field name="name">matrix.skill.level.tree</field>
+        <field name="model">matrix.skill.level</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="description"/>
+                <field name="progress"/>
+                <field name="image"/>
+                <field name="active" column_invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_matrix_skill_level_action" model="ir.actions.act_window">
+        <field name="name">Skill Level</field>
+        <field name="res_model">matrix.skill.level</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create a New Skill Level.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="view_machine_matrix_menu" name="Skill Matrix" parent="hr.menu_human_resources_configuration"
+              sequence="1"/>
+
+    <menuitem
+            id="view_skill_level_menu"
+            name="Skill Level"
+            action="view_matrix_skill_level_action"
+            parent="view_machine_matrix_menu"
+            sequence="2"/>
+</odoo>

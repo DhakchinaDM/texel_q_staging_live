@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="category_cutting_tools" model="product.category">
+            <field name="name">Cutting Tools</field>
+        </record>
+        <record id="category_consumables" model="product.category">
+            <field name="name">Consumables</field>
+        </record>
+        <record id="category_raw_materials" model="product.category">
+            <field name="name">Raw Materials</field>
+        </record>
+        <record id="category_finished_goods" model="product.category">
+            <field name="name">Finished Goods</field>
+        </record>
+        <record id="category_semi_finished_goods" model="product.category">
+            <field name="name">Semi Finished Goods</field>
+        </record>
+        <record id="category_packing_material" model="product.category">
+            <field name="name">Packing Material</field>
+            <field name="part_prefix">P</field>
+            <field name="next_no">0124</field>
+        </record>
+        <record id="category_milling_holder" model="product.category">
+            <field name="name">Milling Holder</field>
+            <field name="part_prefix">TMH</field>
+            <field name="next_no">0148</field>
+            <field name="parent_id" ref="category_cutting_tools"/>
+        </record>
+        <record id="category_cutter" model="product.category">
+            <field name="name">Cutter</field>
+            <field name="part_prefix">TMC</field>
+            <field name="next_no">0116</field>
+            <field name="parent_id" ref="category_cutting_tools"/>
+        </record>
+        <record id="category_milling_insert" model="product.category">
+            <field name="name">Milling Insert</field>
+            <field name="part_prefix">TMI</field>
+            <field name="next_no">0093</field>
+            <field name="parent_id" ref="category_cutting_tools"/>
+        </record>
+        <record id="category_turning_insert" model="product.category">
+            <field name="name">Turning Insert</field>
+            <field name="part_prefix">TTI</field>
+            <field name="next_no">0069</field>
+            <field name="parent_id" ref="category_cutting_tools"/>
+        </record>
+        <record id="category_drill" model="product.category">
+            <field name="name">Drill</field>
+            <field name="part_prefix">TMD</field>
+            <field name="next_no">0185</field>
+            <field name="parent_id" ref="category_cutting_tools"/>
+        </record>
+        <record id="category_endmil" model="product.category">
+            <field name="name">EndMil</field>
+            <field name="part_prefix">TME</field>
+            <field name="next_no">0091</field>
+            <field name="parent_id" ref="category_cutting_tools"/>
+        </record>
+        <record id="category_reamer" model="product.category">
+            <field name="name">Reamer</field>
+            <field name="part_prefix">TMR</field>
+            <field name="next_no">0020</field>
+            <field name="parent_id" ref="category_cutting_tools"/>
+        </record>
+        <record id="category_tap" model="product.category">
+            <field name="name">Tap</field>
+            <field name="part_prefix">TMT</field>
+            <field name="next_no">0076</field>
+            <field name="parent_id" ref="category_cutting_tools"/>
+        </record>
+        <record id="category_special_tools" model="product.category">
+            <field name="name">Special Tools</field>
+            <field name="part_prefix">TMS</field>
+            <field name="next_no">0103</field>
+            <field name="parent_id" ref="category_cutting_tools"/>
+        </record>
+        <record id="category_accessories" model="product.category">
+            <field name="name">Accessories</field>
+            <field name="part_prefix">TA</field>
+            <field name="next_no">0101</field>
+            <field name="parent_id" ref="category_cutting_tools"/>
+        </record>
+
+        <record id="category_maintenance" model="product.category">
+            <field name="name">Maintenance</field>
+            <field name="part_prefix">MNA</field>
+            <field name="next_no">0016</field>
+            <field name="parent_id" ref="category_consumables"/>
+        </record>
+        <record id="category_production" model="product.category">
+            <field name="name">Production</field>
+            <field name="part_prefix">CPR</field>
+            <field name="next_no">1028</field>
+            <field name="parent_id" ref="category_consumables"/>
+        </record>
+        <record id="category_stationary" model="product.category">
+            <field name="name">Stationary</field>
+            <field name="part_prefix">CST</field>
+            <field name="next_no">1062</field>
+            <field name="parent_id" ref="category_consumables"/>
+        </record>
+        <record id="category_house_keeping" model="product.category">
+            <field name="name">House Keeping</field>
+            <field name="part_prefix">CHK</field>
+            <field name="next_no">1037</field>
+            <field name="parent_id" ref="category_consumables"/>
+        </record>
+    </data>
+</odoo>

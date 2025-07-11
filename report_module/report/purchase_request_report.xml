@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record id="paperformat_purchase_request_report" model="report.paperformat">
+            <field name="name">Custom Paperformat for Purchase Request Report</field>
+            <field name="default" eval="False"/>
+            <field name="disable_shrinking" eval="True"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">110</field>
+            <field name="margin_bottom">5</field>
+            <field name="margin_left">5</field>
+            <field name="margin_right">5</field>
+            <field name="header_spacing">100</field>
+            <field name="dpi">120</field>
+        </record>
+
+        <record id="report_purchase_request_new" model="ir.actions.report">
+            <field name="name">Purchase Request</field>
+            <field name="model">purchase.order</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">report_module.report_purchase_request_view</field>
+            <field name="report_file">report_module.report_purchase_request_view</field>
+            <field name="print_report_name">'Purchase Request - %s' % (object.name)</field>
+            <field name="binding_model_id" ref="purchase.model_purchase_order"/>
+            <field name="paperformat_id" ref="report_module.paperformat_purchase_request_report"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <template id="purchase_request_report_header">
+            <t t-foreach="docs" t-as="o">
+                <div class="header">
+                    <table class="table table-sm"
+                           style="border:0px solid #000;border-bottom: 0px;border: 0px solid black;">
+                        <tr>
+                            <td width="20%" colspan="3">
+                                <img width="100%"
+                                     t-attf-src="/web/binary/company_logo"
+                                     alt="Logo"/>
+                            </td>
+                            <td colspan="6" width="60%" align="center">
+                                <strong style="font-size:30px;">Purchase Request</strong>
+                            </td>
+                            <td width="20%" colspan="3">
+                                <div>
+                                    <strong style="font-size:12px;">DCC NO</strong>
+                                    <strong style="font-size:12px;">:</strong>
+                                    <strong style="font-size:12px;" t-field="o.name"/>
+                                </div>
+                                <div>
+                                    <strong style="font-size:12px;">REV NO</strong>
+                                    <strong style="font-size:12px;">:</strong>
+                                    <strong style="font-size:12px;" t-field="o.name"/>
+                                </div>
+                                <div>
+                                    <strong style="font-size:12px;">REV DATE</strong>
+                                    <strong style="font-size:12px;">:</strong>
+                                    <strong style="font-size:12px;" t-field="o.date_order"
+                                            t-options='{"widget": "date"}'/>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <strong>Requested by</strong>
+                            </td>
+                            <td colspan="3">
+                                <strong>Department Manager</strong>
+                            </td>
+                            <td colspan="3">
+                                <strong>GM Approval</strong>
+                            </td>
+                            <td colspan="3">
+                                <strong>MD Approval</strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <strong t-field="o.user_id.name"/>
+                            </td>
+                            <td colspan="3">
+                                <strong t-field="o.approver_one.name"/>
+                            </td>
+                            <td colspan="3">
+                                <strong t-field="o.approver_two.name"/>
+                            </td>
+                            <td colspan="3">
+                                <strong t-field="o.approver_three.name"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <strong>
+                                    Req No :
+                                </strong>
+                            </td>
+                            <td colspan="2">
+                                <span t-field="o.name"/>
+                            </td>
+                            <td colspan="2">
+                                <strong>
+                                    Date Needed
+                                </strong>
+                            </td>
+                            <td colspan="2">
+                                <span t-field="o.date_planned" t-options='{"widget": "date"}'/>
+                            </td>
+                            <td colspan="3" rowspan="4">
+                                <t t-foreach="o.get_product_category_ids()" t-as="category">
+                                    <span class="px-1"/>
+                                    <t t-if="category['ticked']">
+                                        <span style="font-family: DejaVu Sans, sans-serif;">&#x2611;
+                                        </span> <!-- TICKED BOX -->
+                                    </t>
+                                    <t t-else="">
+                                        <span style="font-family: DejaVu Sans, sans-serif;">&#x2610;
+                                        </span> <!-- UNTICKED BOX -->
+                                    </t>
+                                    <span class="px-2" t-esc="category['name']"/>
+                                    <br/>
+                                </t>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <strong>
+                                    Req Date :
+                                </strong>
+                            </td>
+                            <td colspan="2">
+                                <span t-field="o.date_order" t-options='{"widget": "date"}'/>
+                            </td>
+                            <td colspan="2">
+                                <strong>
+                                    Delivery Date :
+                                </strong>
+                            </td>
+                            <td colspan="2">
+                                <span t-field="o.date_planned" t-options='{"widget": "date"}'/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <strong>
+                                    Req Dept :
+                                </strong>
+                            </td>
+                            <td colspan="2">
+                                <span t-field="o.user_id.employee_id.department_id.name"/>
+                            </td>
+                            <td colspan="2">
+                                <strong>
+                                    Vendor name &amp; Address :
+                                </strong>
+                            </td>
+                            <td colspan="2">
+                                <small>
+                                    <t t-set="address">
+                                        <address class="mb-0" t-field="o.partner_id"
+                                                 t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'/>
+                                    </t>
+                                    <div>
+                                        <t t-esc="address"/>
+                                    </div>
+                                </small>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <strong>
+                                    Req Name :
+                                </strong>
+                            </td>
+                            <td colspan="2">
+                                <span t-field="o.user_id.name"/>
+                            </td>
+                            <td colspan="2">
+                                <strong>
+                                    Vendor cantact no/mail ID:
+                                </strong>
+                            </td>
+                            <td colspan="2">
+                                <span t-foreach="o.partner_id.child_ids.filtered(lambda r: r.type == 'contact')"
+                                      t-as="contact">
+                                    <strong style="font-size:12px;" t-field="contact.name"/>
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </t>
+        </template>
+        <template id="purchase_request_report_footer">
+            <t t-foreach="docs" t-as="o">
+                <div class="footer"
+                     style="border-right:1.5px solid #000;border-left:1.5px solid #000;">
+                    <div class="container-fluid">
+                        <span style="width: 34%;">
+                            Total
+                        </span>
+                        <span style="width: 7%;">
+                            Total
+                        </span>
+                        <span style="width: 7%;">
+                            Total
+                        </span>
+                        <span style="width: 7%;">
+                            Total
+                        </span>
+                        <span style="width: 7%;">
+                            Total
+                        </span>
+                        <span style="width: 9%;">
+                            Total
+                        </span>
+                        <span style="width: 9%;">
+                            568419
+                        </span>
+                        <span>
+                            Total
+                        </span>
+                    </div>
+                    <div class="row" style="border-bottom: 1.5px solid #000;border-top: 1.5px solid #000;">
+                        <span style="font-size:15px;">
+                            Amount in Words:
+                            <span t-field="o.lead_time"/>
+                        </span>
+                    </div>
+                    <div class="row" style="border-bottom: 1.5px solid #000;">
+                        <span style="font-size:15px;">
+                            1. Lead time :
+                            <span style="font-size:15px;" t-field="o.lead_time"/>
+                        </span>
+                    </div>
+                    <div class="row" style="border-bottom: 1.5px solid #000;">
+                        <span style="font-size:15px;">
+                            2. Purpose :
+                            <span style="font-size:15px;" t-field="o.req_details"/>
+                        </span>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <template id="report_purchase_request_view">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="web.basic_layout">
+                        <div class="page">
+                            <t t-call="report_module.purchase_request_report_header"/>
+                            <div class="table-container">
+                                <table class="table table-sm"
+                                       style="border:2px solid #000;border-bottom: 0px;border: 1px solid white;">
+                                    <tr>
+                                        <td>
+                                            <strong>
+                                                1. Project :
+                                            </strong>
+                                        </td>
+                                        <td>
+                                            <span class="px-1" t-field="o.agreement_id.name"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>
+                                                2. Requirement Details :
+                                            </strong>
+                                        </td>
+                                        <td>
+                                            <span class="px-1" t-field="o.agreement_id.name"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table class="table table-sm"
+                                       style="border:2px solid #000;border-bottom: 0px;border: 1px solid black;">
+                                    <thead>
+                                        <tr style="color:black;background:#BEBEBE;">
+                                            <th width="3%" style="font-size:15px;">No</th>
+                                            <th width="7%" style="font-size:15px;">Texel Q part No</th>
+                                            <th width="15%" style="font-size:15px;">Supplier part No/Specification</th>
+                                            <th width="15%" style="font-size:15px;">Description</th>
+                                            <th width="7.6%" style="font-size:15px;">Required Quantity</th>
+                                            <th width="7.6%" style="font-size:15px;">Quantity Onhands in No's</th>
+                                            <th width="7.6%" style="font-size:15px;">Order qty in No's</th>
+                                            <th width="9%" style="font-size:15px;">Minimum Order Qty in No's</th>
+                                            <th width="9%" style="font-size:15px;">Rate/Each (RS)</th>
+                                            <th width="9%" style="font-size:15px;">Total value (RS)</th>
+                                            <th width="10%" style="font-size:15px;">Cost Center No</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody style="font-size:15px;">
+                                        <t t-set="req_qty" t-value="0"/>
+                                        <t t-set="order_qty" t-value="0"/>
+                                        <t t-foreach="o.order_line" t-as="j">
+                                            <t t-set="req_qty" t-value="req_qty + j.product_qty"/>
+                                            <t t-set="order_qty" t-value="order_qty + j.product_qty"/>
+                                            <tr>
+                                                <td>
+                                                    <span t-esc="j_index+1"/>
+                                                </td>
+                                                <td>
+                                                    <span t-esc="j.product_id.default_code"/>
+                                                </td>
+                                                <td>
+                                                    <span t-esc="j.product_id.supplier_part"/>
+                                                </td>
+                                                <td>
+                                                    <span t-esc="j.name"/>
+                                                </td>
+                                                <td>
+                                                    <span t-esc="j.product_qty"/>
+                                                </td>
+                                                <td>
+                                                    <span t-esc="j.product_id.qty_available"/>
+                                                </td>
+                                                <td>
+                                                    <span t-esc="j.product_qty"/>
+                                                </td>
+                                                <td>
+                                                    <span>-</span>
+                                                </td>
+                                                <td>
+                                                    <span t-esc="j.price_unit"/>
+                                                </td>
+                                                <td>
+                                                    <span t-esc="j.price_total"/>
+                                                </td>
+                                                <td>
+                                                    <span>-</span>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                        <tr class="y-0" style="height: 40px;">
+                                            <td colspan="4" class="y-0" align="right">
+                                                Total
+                                            </td>
+                                            <td class="y-0">
+                                                <span t-esc="req_qty"/>
+                                            </td>
+                                            <td class="y-0"/>
+                                            <td class="y-0">
+                                                <span t-esc="order_qty"/>
+                                            </td>
+                                            <td class="y-0"/>
+                                            <td class="y-0"/>
+                                            <td class="y-0"/>
+                                            <td class="y-0"/>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="11">
+                                                <strong>Amount in Words :</strong>
+                                                <strong class="px-1">
+                                                    <span t-esc="o.currency_id.amount_to_text(o.amount_total)"/>
+                                                </strong>
+                                                .
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="11">
+                                                <strong>3. Lead Time :</strong>
+                                                <strong class="px-1">-</strong>.
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="11">
+                                                <strong>4. Purpose :</strong>
+                                                <strong class="px-1">-</strong>.
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

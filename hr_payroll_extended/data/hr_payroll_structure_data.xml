@@ -1,0 +1,255 @@
+<odoo>
+    <data noupdate="0">
+        <!--        STAFF PAY-->
+        <record id="emp_hra" model="hr.salary.rule">
+            <field name="name">House Rent Allowance</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="code">HRA</field>
+            <field name="struct_id" ref="hr_payroll.structure_worker_001"/>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">True</field>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = contract.house_rent_allowance</field>
+        </record>
+        <record id="emp_conveyance_allowance" model="hr.salary.rule">
+            <field name="name">Conveyance Allowance</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="code">CA</field>
+            <field name="struct_id" ref="hr_payroll.structure_worker_001"/>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">True</field>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = contract.convenyance_allowance</field>
+        </record>
+        <record id="emp_food_allowance" model="hr.salary.rule">
+            <field name="name">Food Allowance</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="code">FA</field>
+            <field name="struct_id" ref="hr_payroll.structure_worker_001"/>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">True</field>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = payslip.food_allowance</field>
+        </record>
+        <record id="emp_other_allowance" model="hr.salary.rule">
+            <field name="name">Other Allowance</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="code">OA</field>
+            <field name="struct_id" ref="hr_payroll.structure_worker_001"/>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">True</field>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = payslip.other_allowance</field>
+        </record>
+        <record id="emp_overtime_allowance" model="hr.salary.rule">
+            <field name="name">Overtime</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="code">OT</field>
+            <field name="struct_id" ref="hr_payroll.structure_worker_001"/>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">True</field>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = payslip.overtime</field>
+        </record>
+        <record id="emp_attendance_bonus" model="hr.salary.rule">
+            <field name="name">Attendance Bonus</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="code">AB</field>
+            <field name="struct_id" ref="hr_payroll.structure_worker_001"/>
+            <field name="active">False</field>
+            <field name="appears_on_payslip">True</field>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = payslip.attendance_bonus</field>
+        </record>
+        <record id="emp_incentive" model="hr.salary.rule">
+            <field name="name">Incentive</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="code">INCT</field>
+            <field name="struct_id" ref="hr_payroll.structure_worker_001"/>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">True</field>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = payslip.incentive</field>
+        </record>
+        <record id="emp_night_shift_allowance" model="hr.salary.rule">
+            <field name="name">Night Shift Allowance</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="code">NSA</field>
+            <field name="struct_id" ref="hr_payroll.structure_worker_001"/>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">True</field>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = payslip.night_shift_allowance_amount</field>
+        </record>
+        <record id="emp_special_allowance" model="hr.salary.rule">
+            <field name="name">Medical Allowance</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="code">MA</field>
+            <field name="struct_id" ref="hr_payroll.structure_worker_001"/>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">True</field>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = contract.special_allowance</field>
+        </record>
+
+        <record id="emp_leave_encashment" model="hr.salary.rule">
+            <field name="name">Leave Encashment</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="code">LE</field>
+            <field name="struct_id" ref="hr_payroll.structure_worker_001"/>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">True</field>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = payslip.leave_encashment</field>
+        </record>
+        <record id="emp_production_incentive" model="hr.salary.rule">
+            <field name="name">Production Incentive</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="code">PI</field>
+            <field name="struct_id" ref="hr_payroll.structure_worker_001"/>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">True</field>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = payslip.production_incentive</field>
+        </record>
+
+
+        <record id="emp_other_loan" model="hr.salary.rule">
+            <field name="name">Other Loan</field>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="code">OL</field>
+            <field name="struct_id" ref="hr_payroll.structure_worker_001"/>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">True</field>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = payslip.other_loan</field>
+        </record>
+        <record id="emp_food_deduction" model="hr.salary.rule">
+            <field name="name">Food Deduction</field>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="code">FD</field>
+            <field name="struct_id" ref="hr_payroll.structure_worker_001"/>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">True</field>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = payslip.food_deduction</field>
+        </record>
+        <record id="emp_other_deduction" model="hr.salary.rule">
+            <field name="name">Other Deduction</field>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="code">OD</field>
+            <field name="struct_id" ref="hr_payroll.structure_worker_001"/>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">True</field>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = payslip.other_deduction</field>
+        </record>
+        <record id="emp_professional_tax" model="hr.salary.rule">
+            <field name="name">Professional Tax</field>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="code">PTD</field>
+            <field name="struct_id" ref="hr_payroll.structure_worker_001"/>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">True</field>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = payslip.actual_professional_tax</field>
+        </record>
+        <record id="emp_lop" model="hr.salary.rule">
+            <field name="name">LOP</field>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="code">LOP</field>
+            <field name="struct_id" ref="hr_payroll.structure_worker_001"/>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">True</field>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = payslip.allowance_amount_deduction</field>
+        </record>
+        <record id="emp_pf" model="hr.salary.rule">
+            <field name="name">PF</field>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="code">PF</field>
+            <field name="struct_id" ref="hr_payroll.structure_worker_001"/>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">True</field>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = half_round(payslip.employee_pf_amount)</field>
+        </record>
+        <record id="emp_esi" model="hr.salary.rule">
+            <field name="name">ESI</field>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="code">ESI</field>
+            <field name="struct_id" ref="hr_payroll.structure_worker_001"/>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">True</field>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = half_round(payslip.esi)</field>
+        </record>
+
+        <record id="emp_tds" model="hr.salary.rule">
+            <field name="name">TDS</field>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="code">TDS</field>
+            <field name="struct_id" ref="hr_payroll.structure_worker_001"/>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">True</field>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = half_round(payslip.tds)</field>
+        </record>
+
+        <record id="emp_room_rent_deduction" model="hr.salary.rule">
+            <field name="name">Room Rent</field>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="code">RENT</field>
+            <field name="struct_id" ref="hr_payroll.structure_worker_001"/>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">True</field>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = payslip.room_rent_deduction</field>
+        </record>
+
+        <record id="emp_shoe_and_uniform" model="hr.salary.rule">
+            <field name="name">Shoe and Uniform</field>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="code">SAU</field>
+            <field name="struct_id" ref="hr_payroll.structure_worker_001"/>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">True</field>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = payslip.shoe_and_uniform_deduction</field>
+        </record>
+
+        <record id="emp_income_tax" model="hr.salary.rule">
+            <field name="name">Income Tax</field>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="code">INTAX</field>
+            <field name="struct_id" ref="hr_payroll.structure_worker_001"/>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">True</field>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = payslip.income_tax</field>
+        </record>
+    </data>
+</odoo>
+

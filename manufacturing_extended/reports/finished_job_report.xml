@@ -1,0 +1,117 @@
+<odoo>
+    <data>
+        <record id="paperformat_finished_work" model="report.paperformat">
+            <field name="name">Paperformat for finished</field>
+            <field name="default" eval="False"/>
+            <field name="disable_shrinking" eval="True"/>
+            <field name="format">custom</field>
+            <field name="page_height">50</field>
+            <field name="page_width">100</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">2</field>
+            <field name="margin_bottom">2</field>
+            <field name="margin_left">2</field>
+            <field name="margin_right">2</field>
+            <field name="header_spacing">0</field>
+            <field name="dpi">160</field>
+        </record>
+
+        <record id="report_mrp_workcenter_productivity" model="ir.actions.report">
+            <field name="name">Work Order Label</field>
+            <field name="model">mrp.workcenter.productivity</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">manufacturing_extended.report_mrp_workcenter_productivity_template</field>
+            <field name="report_file">manufacturing_extended.report_mrp_workcenter_productivity_template</field>
+            <field name="print_report_name">'Work Order Label'</field>
+            <field name="paperformat_id" ref="manufacturing_extended.paperformat_finished_work"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <!-- Report Template -->
+        <template id="report_mrp_workcenter_productivity_template">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <!-- OK Quantity Page -->
+                    <t t-foreach="doc.productivity_line_ids" t-as="line">
+                        <t t-call="web.basic_layout">
+                            <div class="page" style="border:1px solid #000;">
+                                <div class="row" style="border-bottom:1px solid #000;">
+                                    <h3 style="text-align: center; font-weight: bold;">TEXELQ ENGINEERING INDIA PVT
+                                        LTD
+                                    </h3>
+                                </div>
+                                <div class="row" style="border-bottom:1px solid #000;">
+                                    <div class="col-3 text-center" style="border-right: 1px solid #000;">
+                                        <strong>PART NO.</strong>
+                                    </div>
+                                    <div class="col-3 text-center" style="border-right: 1px solid #000;">
+                                        <t t-esc="line.product_id.default_code"/>
+                                    </div>
+                                    <div class="col-3 text-center" style="border-right: 1px solid #000;">
+                                        <strong>SHIFT</strong>
+                                    </div>
+                                    <div class="col-3 text-center">
+                                        <strong t-field="doc.shift"/>
+                                    </div>
+                                </div>
+                                <div class="row" style="border-bottom:1px solid #000;">
+                                    <div class="col-3 text-center" style="border-right: 1px solid #000;">
+                                        <strong>PART NAME</strong>
+                                    </div>
+                                    <div class="col-9 text-center">
+                                        <t t-esc="line.product_id.name"/>
+                                    </div>
+                                </div>
+                                <div class="row" style="border-bottom:1px solid #000;">
+                                    <div class="col-3 text-center" style="border-right: 1px solid #000;">
+                                        <strong>CUR OP</strong>
+                                    </div>
+                                    <div class="col-3 text-center" style="border-right: 1px solid #000;">
+                                        <t t-esc="line.op_code"/>
+                                    </div>
+                                    <div class="col-3 text-center" style="border-right: 1px solid #000;">
+                                        <strong>NEXT OP</strong>
+                                    </div>
+                                    <div class="col-3 text-center">
+                                        <t t-esc="line.next_op_code"/>
+                                    </div>
+                                </div>
+                                <div class="row" style="border-bottom:1px solid #000;">
+                                    <div class="col-3 text-center" style="border-right: 1px solid #000;">
+                                        <strong>DATE</strong>
+                                    </div>
+                                    <div class="col-3 text-center" style="border-right: 1px solid #000;">
+                                        <t t-esc="doc.create_date.strftime('%d-%m-%Y')"/>
+                                    </div>
+                                    <div class="col-3 text-center" style="border-right: 1px solid #000;">
+                                        <strong>JOB NO</strong>
+                                    </div>
+                                    <div class="col-3 text-center">
+                                        <t t-esc="line.job_id.name"/>
+                                    </div>
+                                </div>
+                                <div class="row" style="border-bottom:1px solid #000;">
+                                    <div class="col-3 text-center" style="border-right: 1px solid #000;">
+                                        <strong t-field="line.qty_type"/>
+                                    </div>
+                                    <div class="col-3 text-center">
+                                        <t t-esc="line.produced_qty" t-options="{'widget': 'float', 'precision': 0}"/>
+                                    </div>
+                                    <div class="col-3 text-center" style="border-right: 1px solid #000;">
+                                        <strong>LOT/SERIAL NO.</strong>
+                                    </div>
+                                    <div class="col-3 text-center">
+                                        <t t-esc="line.lot_id.name"/>
+                                    </div>
+                                </div>
+                                <div style="text-align: center; padding:10px;z-index:-99;">
+                                    <t t-esc="line.lot_id.name" t-options="{'widget': 'barcode', 'barcode_type': 'Code128'}"/>
+                                </div>
+                            </div>
+                        </t>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

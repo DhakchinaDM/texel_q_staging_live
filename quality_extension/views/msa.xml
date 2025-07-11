@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="msa_sequence" model="ir.sequence">
+            <field name="name">Instrument</field>
+            <field name="code">msa.seq</field>
+            <field name="prefix">MSA/</field>
+            <field name="padding">4</field>
+        </record>
+
+
+        <record id="msa_data_view" model="ir.ui.view">
+            <field name="name">clean.ness.form</field>
+            <field name="model">msa.data</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <!--                        <button name="inspector_btn"-->
+                        <!--                                string="Inspection Done"-->
+                        <!--                                invisible="not (inspector and layout_state in ('inspector', 're_inspect'))"-->
+                        <!--                                type="object"-->
+                        <!--                                icon="fa-check"-->
+                        <!--                                class="oe_highlight"/>-->
+                        <button name="approver_btn"
+                                string="Approve Done" invisible="approve"
+                                type="object"
+                                icon="fa-check-square-o"
+                                class="oe_highlight"/>
+                        <button name="recreate_function_msa"
+                                string="Re-Inspection"
+                                invisible="not re_inspection_boolean or year_calculation_selection == 'reschedule'"
+                                type="object"
+                                icon="fa-spinner"
+                                class="oe_highlight"/>
+                        <!--                                                <field name="status" widget="statusbar"-->
+                        <!--                                                        options="{'clickable': '1'}" readonly="1"-->
+                        <!--                                                />-->
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="view_old_records" string="Related Record" type="object"
+                                    class="oe_stat_button"
+                                    icon="fa-refresh">
+                                <field name="related_record"/>Related Record
+                            </button>
+                        </div>
+                        <widget name="web_ribbon" title="Deadline" bg_color="text-bg-warning"
+                                invisible="year_calculation_selection != 'on_Progress'"/>
+                        <widget name="web_ribbon" title="Live" bg_color="text-bg-success"
+                                invisible="year_calculation_selection != 'live'"/>
+                        <widget name="web_ribbon" title="Expired" bg_color="text-bg-danger"
+                                invisible="year_calculation_selection != 'expired'"/>
+                        <widget name="web_ribbon" title="Rescheduled" bg_color="text-bg-info"
+                                invisible="year_calculation_selection != 'reschedule'"/>
+                        <widget name="web_ribbon" title="Request" bg_color="text-bg-light"
+                                invisible="year_calculation_selection != 'none'"/>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" nolabel="1" readonly="1"/>
+                            </h1>
+                        </div>
+                        <div style="color: red;" invisible="not re_inspection_boolean">
+                            <field name="re_inspection_char"/>
+                        </div>
+
+                        <group>
+                            <group>
+                                <field name="part_no" required="1" readonly="approve"/>
+                                <field name="part_char_name" readonly="approve" />
+                                <field name="part_drawing_no" readonly="approve"/>
+                                <field name="part_drawing_date" readonly="approve"/>
+                                <field name="resecheduled_boolean" invisible="1"/>
+                                <field name="type" widget="radio" options="{'horizontal': true}" readonly="approve"/>
+                                <field name="remarks" readonly="approve"/>
+                            </group>
+                            <group>
+                                <field name="re_inspection_boolean" invisible="1"/>
+                                <field name="customer_name" readonly="approve"/>
+                                <field name="start_date" readonly="approve"/>
+                                <field name="priority_order" invisible="1"/>
+                                <field name="re_inspection" invisible="not re_inspection"/>
+                                <field name="year_calculation_selection" invisible="1"/>
+                                <field name="early_done"  invisible="not early_done" readonly="approve"/>
+                                <field name="end_date" readonly="approve"/>
+                                <field name="description" readonly="approve"/>
+                                <field name="range" readonly="approve"/>
+                                <field name="approve" invisible="1"/>
+                                <field name="pdf_file" widget='many2many_binary' required="1" readonly="approve"/>
+
+                            </group>
+                        </group>
+                        <group>
+                            <group invisible="type == '1'" string="Kappa">
+                                <field name="kappa_value" required="1" readonly="approve"/>
+                                <field name="kappa" readonly="approve"/>
+                            </group>
+                            <group></group>
+                        </group>
+                        <group>
+                            <group invisible="type == '2'" string="%R&amp;R">
+                                <field name="r_value" required="1" readonly="approve"/>
+                                <field name="r_and_r" readonly="approve"/>
+                            </group>
+                            <group invisible="type == '2'" string="NDC">
+                                <field name="ndc_value" required="1" readonly="approve"/>
+                                <field name="ndc" readonly="approve"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <record id="msa_data_tree_view" model="ir.ui.view">
+            <field name="name">msa.data.tree</field>
+            <field name="model">msa.data</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="part_no"/>
+                    <field name="part_char_name"/>
+                    <field name="part_drawing_no"/>
+                    <field name="priority_order" optional="hide"/>
+                    <field name="part_drawing_date"/>
+                    <field name="range"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                    <!--                    <field name="layout_state" decoration-success="layout_state == 'done'"-->
+                    <!--                           decoration-warning="layout_state == 'inspector'"-->
+                    <!--                           decoration-info="layout_state == 'approver'"-->
+                    <!--                           decoration-danger="layout_state == 're_inspect'" widget="badge"/>-->
+
+
+                    <field name="year_calculation_selection" string="Status"
+                           decoration-success="year_calculation_selection == 'live'"
+                           decoration-warning="year_calculation_selection == 'on_Progress'"
+                           decoration-info="year_calculation_selection == 'reschedule'"
+                           decoration-danger="year_calculation_selection == 'expired'" widget="badge"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_msa_data_search_view" model="ir.ui.view">
+            <field name="name">msa.data.search</field>
+            <field name="model">msa.data</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <!--                    <separator/>-->
+                    <!--                    <searchpanel>-->
+                    <!--                        <field name="mmr_state" icon="fa-filter"/>-->
+                    <!--                    </searchpanel>-->
+                </search>
+            </field>
+        </record>
+
+        <record id="msa_data_action" model="ir.actions.act_window">
+            <field name="name">MSA Data</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">msa.data</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('priority_order', '!=', '5')]</field>
+            <field name="help" type="html">
+                <p class="o_view_no content_smiling_face">
+                    No Records
+                </p>
+            </field>
+        </record>
+        <record id="msa_data_action_action_history" model="ir.actions.act_window">
+            <field name="name">MSA History</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">msa.data</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('priority_order', '=', '5')]</field>
+            <field name="help" type="html">
+                <p class="o_view_no content_smiling_face">
+                    No Records
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="msa_data_action_main_menu"
+                  name="MSA"
+                  parent="quality_control.menu_quality_control"
+                  sequence="26"/>
+        <menuitem id="msa_action_main_1"
+                  name="MSA Data"
+                  parent="msa_data_action_main_menu"
+                  action="msa_data_action"
+                  sequence="22"/>
+        <menuitem id="msa_action_main_2"
+                  name="MSA History"
+                  parent="msa_data_action_main_menu"
+                  action="msa_data_action_action_history"
+                  sequence="22"/>
+
+
+    </data>
+</odoo>

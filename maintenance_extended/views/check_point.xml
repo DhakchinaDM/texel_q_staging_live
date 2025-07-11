@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_check_point_form" model="ir.ui.view">
+            <field name="name">check.point.form</field>
+            <field name="model">check.point</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group string="Check Point">
+                            <group>
+                                <field name="name"/>
+                                <field name="method_of_check"/>
+                                <field name="mc_type" invisible="1"/>
+                                <field name="mc_type_id"/>
+                                <field name="preventive_maintenance_type" string="Category"/>
+                                <field name="user_id" invisible="1"/>
+                                <field name="company_id" invisible="1"/>
+                                <field name="currency_symbol" invisible="1"/>
+                                <field name="logged_user" invisible="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_subcate_tree" model="ir.ui.view">
+            <field name="name">check.point.tree</field>
+            <field name="model">check.point</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="check_point_action" model="ir.actions.act_window">
+            <field name="name">Check Point</field>
+            <field name="res_model">check.point</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="menu_check_point_details_root"
+                  name="Check Point"
+                  sequence="7"
+                  parent="maintenance.menu_maintenance_configuration"
+                  action="check_point_action"/>
+
+
+        <record id="view_mctype_tree" model="ir.ui.view">
+            <field name="name">mc.type.tree</field>
+            <field name="model">mc.type</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        <record id="view_mctype_form" model="ir.ui.view">
+            <field name="name">mc.type.form</field>
+            <field name="model">mc.type</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group string="Machine Type">
+                            <group>
+                                <field name="name"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="mc_type_action" model="ir.actions.act_window">
+            <field name="name">Machine Type</field>
+            <field name="res_model">mc.type</field>
+            <field name="view_mode">tree,form</field>   
+        </record>
+
+        <menuitem id="menu_mctype_details_root"
+                  name="Machine Type"
+                  sequence="8"
+                  parent="maintenance.menu_maintenance_configuration"
+                  action="mc_type_action"/>
+    </data>
+</odoo>

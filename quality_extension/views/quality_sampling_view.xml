@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record id="quality_sampling_form_view" model="ir.ui.view">
+            <field name="name">quality.sampling.form</field>
+            <field name="model">quality.sampling</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="sampling_type" string='Inspection Model'/>
+                                <field name="model_id" groups="base.group_no_one"/>
+                                <field name="type" invisible="incoming_bool == False"/>
+                                <field name="incoming_bool" invisible="1"/>
+                                <field name="model_exact" string="Model ID" invisible="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="Sampling Plan">
+                                <field name="sampling_ids">
+                                    <tree editable="bottom">
+                                        <field name="min_lot_qty"/>
+                                        <field name="max_lot_qty"/>
+                                        <field name="sample_size"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="quality_sampling_tree_view" model="ir.ui.view">
+            <field name="name">quality.sampling.tree</field>
+            <field name="model">quality.sampling</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="sampling_type"/>
+                </tree>
+            </field>
+        </record>
+        <record id="quality_sampling_action" model="ir.actions.act_window">
+            <field name="name">Quality Sampling</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">quality.sampling</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_no content_smiling_face">
+                    Quality Sampling Information
+                </p>
+            </field>
+        </record>
+        <menuitem id="quality_sampling_main_menu"
+                  name="Quality Sampling"
+                  parent="quality_control.menu_quality_configuration"
+                  action="quality_sampling_action"
+                  sequence="23"/>
+    </data>
+</odoo>

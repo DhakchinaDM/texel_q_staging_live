@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="group_production_quality" model="res.groups">
+            <field name="name">Production Quality</field>
+            <field name="menu_access"
+                   eval="[(6, 0, [ref('quality_extension.process_main_menu'),
+                    ref('quality_extension.problem_master_main_menu'),
+                     ref('quality_extension.menu_in_house_wizard'),
+                      ref('quality_extension.incoming_inspection_part_main_menu'),
+                       ref('quality_extension.setting_approval_main_menu'),
+                        ref('quality_extension.self_inspection_main_menu'),
+                         ref('quality_extension.final_inspection_main_menu'),
+                         ref('quality_extension.line_inspection_main_menu'),
+                          ref('quality_extension.in_house_nc_main_menu')])]"/>
+        </record>
+    </data>
+</odoo>

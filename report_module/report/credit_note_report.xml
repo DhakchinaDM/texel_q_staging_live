@@ -1,0 +1,1608 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="paperformat_credit_note" model="report.paperformat">
+            <field name="name">Paperformat for Credit Note</field>
+            <field name="default" eval="False"/>
+            <field name="disable_shrinking" eval="True"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">5</field>
+            <field name="margin_bottom">25</field>
+            <field name="margin_left">0</field>
+            <field name="margin_right">0</field>
+            <field name="header_spacing">40</field>
+            <field name="dpi">140</field>
+        </record>
+
+        <record id="report_credit_note" model="ir.actions.report">
+            <field name="name">Credit Note Report</field>
+            <field name="model">account.move</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">report_module.report_credit_note_template</field>
+            <field name="report_file">report_module.report_credit_note_template</field>
+            <field name="paperformat_id" ref="report_module.paperformat_credit_note"/>
+            <field name="print_report_name">'Credit Note Report'</field>
+            <field name="binding_model_id" ref="account.model_account_move"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <template id="report_credit_note_template">
+            <t t-call="web.html_container">
+                <t t-call="web.basic_layout">
+                    <t t-foreach="docs" t-as="o">
+                        <div class="page">
+                            <table class="table table-sm"
+                                   style="width: 95%; margin: 0px; margin-left: 25px; margin-right: 15px; border: 0px solid black; font-size: 17px; border-spacing: 1em 0.5em; padding: 0 2em 1em 0; border-radius: 2px;">
+                                <b>
+                                    <h4 style="text-align:right;margin-right:20px;">Original For Receipient</h4>
+                                </b>
+                                <tr>
+                                    <td colspan="2">
+                                        <img width="65%"
+                                             t-attf-src="/web/binary/company_logo"
+                                             alt="Logo"/>
+                                    </td>
+                                    <td colspan="6" align="center">
+                                        <h3 style="text-transform: uppercase;">
+                                            <strong>Credit Note</strong>
+                                        </h3>
+                                    </td>
+                                    <td colspan="4" align="center">
+                                        <h5 style="text-transform: uppercase;">
+                                            <strong>Year : 2023-2024</strong>
+                                        </h5>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="left" rowspan="5" style="font-size: 20px" colspan="4" width="45%">
+                                        <strong>From,</strong>
+                                        <br/>
+                                        <strong t-field="o.user_id.company_id.name"/>
+                                        <br/>
+                                        <t t-if="o.user_id.company_id.street">
+                                            <span t-field="o.user_id.company_id.street"/>
+                                        </t>
+                                        <br/>
+                                        <t t-if="o.user_id.company_id.street2">
+                                            <span t-field="o.user_id.company_id.street2"/>,
+                                        </t>
+                                        <br/>
+                                        <t t-if="o.user_id.company_id.city">
+                                            <span t-field="o.user_id.company_id.city"/>,
+                                        </t>
+                                        <t t-if="o.user_id.company_id.state_id.name">
+                                            <span t-field="o.user_id.company_id.state_id.name"/>
+                                        </t>
+                                        <t t-if="o.user_id.company_id.zip">
+                                            -
+                                            <span t-field="o.user_id.company_id.zip"/>
+                                        </t>
+                                    </td>
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Credit Note No:</strong>
+                                        <span t-field="o.name"/>
+                                    </td>
+
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Date:</strong>
+                                        <span t-field="o.invoice_date" t-options='{"widget": "date"}'/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Buyer Order No:</strong>
+                                        <span align="center">-</span>
+                                    </td>
+
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Date:</strong>
+                                        <span align="center">-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Supplier Ref:</strong>
+                                        <span align="center">-</span>
+                                    </td>
+
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Date:</strong>
+                                        <span align="center">-</span>
+                                        <!--                                        <span t-field="o.invoice_due_date"/>-->
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>GST No:</strong>
+                                        <span t-field="o.user_id.company_id.vat"/>
+                                    </td>
+
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>PAN No:</strong>
+                                        <span align="center">-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Contact No:</strong>
+                                        <span t-field="o.user_id.company_id.phone"/>
+                                    </td>
+
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Email:</strong>
+                                        <span t-field="o.user_id.company_id.email"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="left" colspan="4" rowspan="6" style="font-size: 20px" width="45%">
+                                        <strong>To,</strong>
+                                        <small>
+                                            <t t-set="address">
+                                                <address class="mb-0" t-field="o.partner_id"
+                                                         t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'/>
+                                            </t>
+                                            <div>
+                                                <t t-esc="address"/>
+                                            </div>
+                                        </small>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Buyer GST No:</strong>
+                                        <span t-field="o.partner_id.vat"/>
+                                    </td>
+
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>PAN No:</strong>
+                                        <span t-field="o.partner_id.l10n_in_pan"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Name of Transp:</strong>
+                                        <span align="center">-</span>
+                                    </td>
+
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Mode of Transp:</strong>
+                                        <span align="center">-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Vehicle number:</strong>
+                                        <span align="center">-</span>
+                                    </td>
+
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Driver contact:</strong>
+                                        <span align="center">-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Date of supply:</strong>
+                                        <span align="center">-</span>
+                                    </td>
+
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Time of removal:</strong>
+                                        <span align="center">-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Buyer contact:</strong>
+                                        <span t-field="o.partner_id.mobile"/>
+                                    </td>
+
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Email:</strong>
+                                        <span t-field="o.partner_id.email"/>
+                                    </td>
+                                </tr>
+                                <tr align="center">
+                                    <th width="10%" colspan="1"
+                                        style="font-size:17px;border-right:1px solid #143980;color:black;background-color:#c6cacf; border:1px solid #000;border-color: black;">
+                                        <span>SI.NO</span>
+                                    </th>
+                                    <th width="10%" colspan="1"
+                                        style="font-size:17px;border-right:1px solid #143980;color:black;background-color:#c6cacf; border:1px solid #000;border-color: black;">
+                                        <span>PART NO</span>
+                                    </th>
+                                    <th width="20%" colspan="3"
+                                        style="font-size:17px;border-right:1px solid #143980;color:black;background-color:#c6cacf; border:1px solid #000;border-color: black;">
+                                        <span>DESCRIPTION</span>
+                                    </th>
+                                    <th width="15%" colspan="2"
+                                        style="font-size:17px;border-right:1px solid #143980;color:black;background-color:#c6cacf; border:1px solid #000;border-color: black;">
+                                        <span>HSN CODE</span>
+                                    </th>
+                                    <th width="10%" colspan="1"
+                                        style="font-size:17px;border-right:1px solid #143980;color:black;background-color:#c6cacf; border:1px solid #000;border-color: black;">
+                                        <span>UOM</span>
+                                    </th>
+                                    <th width="10%" colspan="1"
+                                        style="font-size:17px;border-right:1px solid #143980;color:black;background-color:#c6cacf; border:1px solid #000;border-color: black;">
+                                        <span>QTY</span>
+                                    </th>
+                                    <th width="15%" colspan="1"
+                                        style="font-size:17px;border-right:1px solid #143980;color:black;background-color:#c6cacf; border:1px solid #000;border-color: black;">
+                                        <span>RATE/EA(Rs)</span>
+                                    </th>
+                                    <th width="15%" colspan="2"
+                                        style="font-size:17px;border-right:1px solid #143980;color:black;background-color:#c6cacf; border:1px solid #000;border-color: black;">
+                                        <span>TOTAL AMOUNT(Rs)</span>
+                                    </th>
+                                </tr>
+                                <t t-set="qty" t-value="0"/>
+                                <t t-set="unit_price" t-value="0"/>
+                                <t t-set="total_value" t-value="0"/>
+                                <t t-foreach="o.invoice_line_ids" t-as="line">
+                                    <t t-set="qty" t-value="qty + line.quantity"/>
+                                    <t t-set="unit_price" t-value="unit_price + line.product_id.list_price"/>
+                                    <t t-set="total_value" t-value="total_value + line.product_id.list_price"/>
+                                    <tr>
+                                        <td align="center" colspan="1">
+                                            <span t-esc="line_index+1"/>
+                                        </td>
+                                        <td colspan="1">
+                                            <span t-esc="line.product_id.default_code"/>
+                                        </td>
+                                        <td colspan="3">
+                                            <span t-esc="line.product_id.name"/>
+                                        </td>
+                                        <td colspan="2" align="center">
+                                            <span>-</span>
+                                        </td>
+                                        <td align="center" colspan="1">
+                                            <!--                                            <span t-esc="line.product_id.categ_id.name"/>-->
+                                            <span>NO'S</span>
+                                        </td>
+                                        <td align="right" colspan="1">
+                                            <span t-esc="line.quantity"/>
+                                        </td>
+                                        <td align="right" colspan="1">
+                                            <span t-esc="line.price_unit"/>
+                                        </td>
+                                        <td align="right" colspan="2">
+                                            <span t-esc="line.price_subtotal"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <tr>
+                                    <td colspan="7" align="right">
+                                        <strong>Total Net Amount</strong>
+                                    </td>
+                                    <td colspan="1" align="center">
+                                        <strong>Nos</strong>
+                                    </td>
+                                    <td align="right" colspan="1">
+                                        <span t-esc="qty"/>
+                                    </td>
+                                    <td align="center" colspan="1">
+                                        <span align="center">-</span>
+                                        <!--                                        <span t-esc="unit_price"/>-->
+                                    </td>
+                                    <td align="center" colspan="2">
+                                        <span align="center">-</span>
+                                        <!--                                        <span t-esc="total_value"/>-->
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="7" align="right">
+                                        <strong>CGST</strong>
+                                    </td>
+                                    <td colspan="1" align="center">
+                                        <strong>14%</strong>
+                                    </td>
+
+                                    <td align="center" colspan="4">
+                                        <span align="center">-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="7" align="right">
+                                        <strong>SGST</strong>
+                                    </td>
+                                    <td colspan="1" align="center">
+                                        <strong>14%</strong>
+                                    </td>
+
+                                    <td align="center" colspan="4">
+                                        <span align="center">-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="7" align="right">
+                                        <strong>IGST</strong>
+                                    </td>
+                                    <td colspan="1" align="center">
+                                        <strong>12%</strong>
+                                    </td>
+
+                                    <td align="center" colspan="4">
+                                        <span align="center">-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="7" align="right">
+                                        <strong>TCS</strong>
+                                    </td>
+                                    <td colspan="1" align="center">
+                                        <strong>0%</strong>
+                                    </td>
+
+                                    <td align="center" colspan="4">
+                                        <span align="center">-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="7" align="center">
+                                        <strong>Total Amount</strong>
+                                    </td>
+                                    <td align="center" colspan="5">
+                                        <span align="center">-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="left" colspan="12">
+                                        <strong>Amount in Words :</strong>
+                                        <span t-esc="o.company_id.currency_id.amount_to_text(int(total_value))"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" align="center">
+                                        <strong>HSN/SAC</strong>
+                                    </td>
+                                    <td colspan="2" align="center">
+                                        <strong>Taxable Value</strong>
+                                    </td>
+                                    <td colspan="2" align="center">
+                                        <strong>CGST</strong>
+                                    </td>
+                                    <td colspan="2" align="center">
+                                        <strong>SGST</strong>
+                                    </td>
+                                    <td colspan="1" align="center">
+                                        <strong>IGST</strong>
+                                    </td>
+                                    <td colspan="1" align="center">
+                                        <strong>TCS</strong>
+                                    </td>
+                                    <td colspan="2" align="center">
+                                        <strong>Tax Total</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" align="center">
+                                        <span>-</span>
+                                    </td>
+                                    <td colspan="2" align="center">
+                                        <span>-</span>
+                                    </td>
+                                    <td colspan="2" align="center">
+                                        <span>-</span>
+                                    </td>
+                                    <td colspan="2" align="center">
+                                        <span>-</span>
+                                    </td>
+                                    <td colspan="1" align="center">
+                                        <span>-</span>
+                                    </td>
+                                    <td colspan="1" align="center">
+                                        <span>-</span>
+                                    </td>
+                                    <td colspan="2" align="center">
+                                        <span>-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6" align="left">
+                                        <strong>Declaration:</strong>
+                                        <span>Certified that the particulars given above are true and correct and the
+                                            amount indicated represents the price actually charged and that there is no
+                                            flow of additional consideration directly or indirectly from the buyer.
+                                        </span>
+                                    </td>
+                                    <td colspan="6" align="right">
+                                        <strong>For TexelQ Engineering India Pvt Ltd.,</strong>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <strong>Authorised Signatory</strong>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="page" style="page-break-before: always;background-color: #f0f2b3;">
+                            <div style="width: 45%;float: top;"/>
+                            <table class="table table-sm"
+                                   style="width: 95%; margin: 0px; margin-left: 25px; margin-right: 15px; border: 0px solid black; font-size: 17px; border-spacing: 1em 0.5em; padding: 0 2em 1em 0; border-radius: 2px;">
+                                <b>
+                                    <h4 style="text-align:right;margin-right:20px;">Duplicate For Transporter</h4>
+                                </b>
+                                <tr>
+                                    <td colspan="2">
+                                        <img width="65%"
+                                             t-attf-src="/web/binary/company_logo"
+                                             alt="Logo"/>
+                                    </td>
+                                    <td colspan="6" align="center">
+                                        <h3 style="text-transform: uppercase;">
+                                            <strong>Credit Note</strong>
+                                        </h3>
+                                    </td>
+                                    <td colspan="4" align="center">
+                                        <h5 style="text-transform: uppercase;">
+                                            <strong>Year : 2023-2024</strong>
+                                        </h5>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="left" rowspan="5" style="font-size: 20px" colspan="4" width="45%">
+                                        <strong>From,</strong>
+                                        <br/>
+                                        <strong t-field="o.user_id.company_id.name"/>
+                                        <br/>
+                                        <t t-if="o.user_id.company_id.street">
+                                            <span t-field="o.user_id.company_id.street"/>
+                                        </t>
+                                        <br/>
+                                        <t t-if="o.user_id.company_id.street2">
+                                            <span t-field="o.user_id.company_id.street2"/>,
+                                        </t>
+                                        <br/>
+                                        <t t-if="o.user_id.company_id.city">
+                                            <span t-field="o.user_id.company_id.city"/>,
+                                        </t>
+                                        <t t-if="o.user_id.company_id.state_id.name">
+                                            <span t-field="o.user_id.company_id.state_id.name"/>
+                                        </t>
+                                        <t t-if="o.user_id.company_id.zip">
+                                            -
+                                            <span t-field="o.user_id.company_id.zip"/>
+                                        </t>
+                                    </td>
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Credit Note No:</strong>
+                                        <span t-field="o.name"/>
+                                    </td>
+
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Date:</strong>
+                                        <span t-field="o.invoice_date" t-options='{"widget": "date"}'/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Buyer Order No:</strong>
+                                        <span align="center">-</span>
+                                    </td>
+
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Date:</strong>
+                                        <span align="center">-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Supplier Ref:</strong>
+                                        <span align="center">-</span>
+                                    </td>
+
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Date:</strong>
+                                        <span align="center">-</span>
+                                        <!--                                        <span t-field="o.invoice_due_date"/>-->
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>GST No:</strong>
+                                        <span t-field="o.user_id.company_id.vat"/>
+                                    </td>
+
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>PAN No:</strong>
+                                        <span align="center">-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Contact No:</strong>
+                                        <span t-field="o.user_id.company_id.phone"/>
+                                    </td>
+
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Email:</strong>
+                                        <span t-field="o.user_id.company_id.email"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="left" colspan="4" rowspan="6" style="font-size: 20px" width="45%">
+                                        <strong>To,</strong>
+                                        <small>
+                                            <t t-set="address">
+                                                <address class="mb-0" t-field="o.partner_id"
+                                                         t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'/>
+                                            </t>
+                                            <div>
+                                                <t t-esc="address"/>
+                                            </div>
+                                        </small>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Buyer GST No:</strong>
+                                        <span t-field="o.partner_id.vat"/>
+                                    </td>
+
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>PAN No:</strong>
+                                        <span t-field="o.partner_id.l10n_in_pan"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Name of Transp:</strong>
+                                        <span align="center">-</span>
+                                    </td>
+
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Mode of Transp:</strong>
+                                        <span align="center">-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Vehicle number:</strong>
+                                        <span align="center">-</span>
+                                    </td>
+
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Driver contact:</strong>
+                                        <span align="center">-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Date of supply:</strong>
+                                        <span align="center">-</span>
+                                    </td>
+
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Time of removal:</strong>
+                                        <span align="center">-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Buyer contact:</strong>
+                                        <span t-field="o.partner_id.mobile"/>
+                                    </td>
+
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Email:</strong>
+                                        <span t-field="o.partner_id.email"/>
+                                    </td>
+                                </tr>
+                                <tr align="center">
+                                    <th width="10%" colspan="1"
+                                        style="font-size:17px">
+                                        <span>SI.NO</span>
+                                    </th>
+                                    <th width="10%" colspan="1"
+                                        style="font-size:17px;">
+                                        <span>PART NO</span>
+                                    </th>
+                                    <th width="20%" colspan="3"
+                                        style="font-size:17px;">
+                                        <span>DESCRIPTION</span>
+                                    </th>
+                                    <th width="15%" colspan="2"
+                                        style="font-size:17px;">
+                                        <span>HSN CODE</span>
+                                    </th>
+                                    <th width="10%" colspan="1"
+                                        style="font-size:17px;">
+                                        <span>UOM</span>
+                                    </th>
+                                    <th width="10%" colspan="1"
+                                        style="font-size:17px;">
+                                        <span>QTY</span>
+                                    </th>
+                                    <th width="15%" colspan="1"
+                                        style="font-size:17px;">
+                                        <span>RATE/EA(Rs)</span>
+                                    </th>
+                                    <th width="15%" colspan="2"
+                                        style="font-size:17px;">
+                                        <span>TOTAL AMOUNT(Rs)</span>
+                                    </th>
+                                </tr>
+                                <t t-set="qty" t-value="0"/>
+                                <t t-set="unit_price" t-value="0"/>
+                                <t t-set="total_value" t-value="0"/>
+                                <t t-foreach="o.invoice_line_ids" t-as="line">
+                                    <t t-set="qty" t-value="qty + line.quantity"/>
+                                    <t t-set="unit_price" t-value="unit_price + line.product_id.list_price"/>
+                                    <t t-set="total_value" t-value="total_value + line.product_id.list_price"/>
+                                    <tr>
+                                        <td align="center" colspan="1">
+                                            <span t-esc="line_index+1"/>
+                                        </td>
+                                        <td colspan="1">
+                                            <span t-esc="line.product_id.default_code"/>
+                                        </td>
+                                        <td colspan="3">
+                                            <span t-esc="line.product_id.name"/>
+                                        </td>
+                                        <td colspan="2" align="center">
+                                            <span>-</span>
+                                        </td>
+                                        <td align="center" colspan="1">
+                                            <!--                                            <span t-esc="line.product_id.categ_id.name"/>-->
+                                            <span>NO'S</span>
+                                        </td>
+                                        <td align="right" colspan="1">
+                                            <span t-esc="line.quantity"/>
+                                        </td>
+                                        <td align="right" colspan="1">
+                                            <span t-esc="line.price_unit"/>
+                                        </td>
+                                        <td align="right" colspan="2">
+                                            <span t-esc="line.price_subtotal"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <tr>
+                                    <td colspan="7" align="right">
+                                        <strong>Total Net Amount</strong>
+                                    </td>
+                                    <td colspan="1" align="center">
+                                        <strong>Nos</strong>
+                                    </td>
+                                    <td align="right" colspan="1">
+                                        <span t-esc="qty"/>
+                                    </td>
+                                    <td align="center" colspan="1">
+                                        <span align="center">-</span>
+                                        <!--                                        <span t-esc="unit_price"/>-->
+                                    </td>
+                                    <td align="center" colspan="2">
+                                        <span align="center">-</span>
+                                        <!--                                        <span t-esc="total_value"/>-->
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="7" align="right">
+                                        <strong>CGST</strong>
+                                    </td>
+                                    <td colspan="1" align="center">
+                                        <strong>14%</strong>
+                                    </td>
+
+                                    <td align="center" colspan="4">
+                                        <span align="center">-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="7" align="right">
+                                        <strong>SGST</strong>
+                                    </td>
+                                    <td colspan="1" align="center">
+                                        <strong>14%</strong>
+                                    </td>
+
+                                    <td align="center" colspan="4">
+                                        <span align="center">-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="7" align="right">
+                                        <strong>IGST</strong>
+                                    </td>
+                                    <td colspan="1" align="center">
+                                        <strong>12%</strong>
+                                    </td>
+
+                                    <td align="center" colspan="4">
+                                        <span align="center">-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="7" align="right">
+                                        <strong>TCS</strong>
+                                    </td>
+                                    <td colspan="1" align="center">
+                                        <strong>0%</strong>
+                                    </td>
+
+                                    <td align="center" colspan="4">
+                                        <span align="center">-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="7" align="center">
+                                        <strong>Total Amount</strong>
+                                    </td>
+                                    <td align="center" colspan="5">
+                                        <span align="center">-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="left" colspan="12">
+                                        <strong>Amount in Words :</strong>
+                                        <span t-esc="o.company_id.currency_id.amount_to_text(int(total_value))"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" align="center">
+                                        <strong>HSN/SAC</strong>
+                                    </td>
+                                    <td colspan="2" align="center">
+                                        <strong>Taxable Value</strong>
+                                    </td>
+                                    <td colspan="2" align="center">
+                                        <strong>CGST</strong>
+                                    </td>
+                                    <td colspan="2" align="center">
+                                        <strong>SGST</strong>
+                                    </td>
+                                    <td colspan="1" align="center">
+                                        <strong>IGST</strong>
+                                    </td>
+                                    <td colspan="1" align="center">
+                                        <strong>TCS</strong>
+                                    </td>
+                                    <td colspan="2" align="center">
+                                        <strong>Tax Total</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" align="center">
+                                        <span>-</span>
+                                    </td>
+                                    <td colspan="2" align="center">
+                                        <span>-</span>
+                                    </td>
+                                    <td colspan="2" align="center">
+                                        <span>-</span>
+                                    </td>
+                                    <td colspan="2" align="center">
+                                        <span>-</span>
+                                    </td>
+                                    <td colspan="1" align="center">
+                                        <span>-</span>
+                                    </td>
+                                    <td colspan="1" align="center">
+                                        <span>-</span>
+                                    </td>
+                                    <td colspan="2" align="center">
+                                        <span>-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6" align="left">
+                                        <strong>Declaration:</strong>
+                                        <span>Certified that the particulars given above are true and correct and the
+                                            amount indicated represents the price actually charged and that there is no
+                                            flow of additional consideration directly or indirectly from the buyer.
+                                        </span>
+                                    </td>
+                                    <td colspan="6" align="right">
+                                        <strong>For TexelQ Engineering India Pvt Ltd.,</strong>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <strong>Authorised Signatory</strong>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="page" style="page-break-before: always;background-color: #f2b3cb;">
+                            <div style="width: 45%;float: top;"/>
+                            <table class="table table-sm"
+                                   style="width: 95%; margin: 0px; margin-left: 25px; margin-right: 15px; border: 0px solid black; font-size: 17px; border-spacing: 1em 0.5em; padding: 0 2em 1em 0; border-radius: 2px;">
+                                <b>
+                                    <h4 style="text-align:right;margin-right:20px;">Triplicate for Assessee</h4>
+                                </b>
+                                <tr>
+                                    <td colspan="2">
+                                        <img width="65%"
+                                             t-attf-src="/web/binary/company_logo"
+                                             alt="Logo"/>
+                                    </td>
+                                    <td colspan="6" align="center">
+                                        <h3 style="text-transform: uppercase;">
+                                            <strong>Credit Note</strong>
+                                        </h3>
+                                    </td>
+                                    <td colspan="4" align="center">
+                                        <h5 style="text-transform: uppercase;">
+                                            <strong>Year : 2023-2024</strong>
+                                        </h5>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="left" rowspan="5" style="font-size: 20px" colspan="4" width="45%">
+                                        <strong>From,</strong>
+                                        <br/>
+                                        <strong t-field="o.user_id.company_id.name"/>
+                                        <br/>
+                                        <t t-if="o.user_id.company_id.street">
+                                            <span t-field="o.user_id.company_id.street"/>
+                                        </t>
+                                        <br/>
+                                        <t t-if="o.user_id.company_id.street2">
+                                            <span t-field="o.user_id.company_id.street2"/>,
+                                        </t>
+                                        <br/>
+                                        <t t-if="o.user_id.company_id.city">
+                                            <span t-field="o.user_id.company_id.city"/>,
+                                        </t>
+                                        <t t-if="o.user_id.company_id.state_id.name">
+                                            <span t-field="o.user_id.company_id.state_id.name"/>
+                                        </t>
+                                        <t t-if="o.user_id.company_id.zip">
+                                            -
+                                            <span t-field="o.user_id.company_id.zip"/>
+                                        </t>
+                                    </td>
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Credit Note No:</strong>
+                                        <span t-field="o.name"/>
+                                    </td>
+
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Date:</strong>
+                                        <span t-field="o.invoice_date" t-options='{"widget": "date"}'/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Buyer Order No:</strong>
+                                        <span align="center">-</span>
+                                    </td>
+
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Date:</strong>
+                                        <span align="center">-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Supplier Ref:</strong>
+                                        <span align="center">-</span>
+                                    </td>
+
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Date:</strong>
+                                        <span align="center">-</span>
+                                        <!--                                        <span t-field="o.invoice_due_date"/>-->
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>GST No:</strong>
+                                        <span t-field="o.user_id.company_id.vat"/>
+                                    </td>
+
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>PAN No:</strong>
+                                        <span align="center">-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Contact No:</strong>
+                                        <span t-field="o.user_id.company_id.phone"/>
+                                    </td>
+
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Email:</strong>
+                                        <span t-field="o.user_id.company_id.email"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="left" colspan="4" rowspan="6" style="font-size: 20px" width="45%">
+                                        <strong>To,</strong>
+                                        <small>
+                                            <t t-set="address">
+                                                <address class="mb-0" t-field="o.partner_id"
+                                                         t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'/>
+                                            </t>
+                                            <div>
+                                                <t t-esc="address"/>
+                                            </div>
+                                        </small>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Buyer GST No:</strong>
+                                        <span t-field="o.partner_id.vat"/>
+                                    </td>
+
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>PAN No:</strong>
+                                        <span t-field="o.partner_id.l10n_in_pan"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Name of Transp:</strong>
+                                        <span align="center">-</span>
+                                    </td>
+
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Mode of Transp:</strong>
+                                        <span align="center">-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Vehicle number:</strong>
+                                        <span align="center">-</span>
+                                    </td>
+
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Driver contact:</strong>
+                                        <span align="center">-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Date of supply:</strong>
+                                        <span align="center">-</span>
+                                    </td>
+
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Time of removal:</strong>
+                                        <span align="center">-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Buyer contact:</strong>
+                                        <span t-field="o.partner_id.mobile"/>
+                                    </td>
+
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Email:</strong>
+                                        <span t-field="o.partner_id.email"/>
+                                    </td>
+                                </tr>
+                                <tr align="center">
+                                    <th width="10%" colspan="1"
+                                        style="font-size:17px;">
+                                        <span>SI.NO</span>
+                                    </th>
+                                    <th width="10%" colspan="1"
+                                        style="font-size:17px;">
+                                        <span>PART NO</span>
+                                    </th>
+                                    <th width="20%" colspan="3"
+                                        style="font-size:17px;">
+                                        <span>DESCRIPTION</span>
+                                    </th>
+                                    <th width="15%" colspan="2"
+                                        style="font-size:17px;">
+                                        <span>HSN CODE</span>
+                                    </th>
+                                    <th width="10%" colspan="1"
+                                        style="font-size:17px;">
+                                        <span>UOM</span>
+                                    </th>
+                                    <th width="10%" colspan="1"
+                                        style="font-size:17px;">
+                                        <span>QTY</span>
+                                    </th>
+                                    <th width="15%" colspan="1"
+                                        style="font-size:17px;">
+                                        <span>RATE/EA(Rs)</span>
+                                    </th>
+                                    <th width="15%" colspan="2"
+                                        style="font-size:17px;">
+                                        <span>TOTAL AMOUNT(Rs)</span>
+                                    </th>
+                                </tr>
+                                <t t-set="qty" t-value="0"/>
+                                <t t-set="unit_price" t-value="0"/>
+                                <t t-set="total_value" t-value="0"/>
+                                <t t-foreach="o.invoice_line_ids" t-as="line">
+                                    <t t-set="qty" t-value="qty + line.quantity"/>
+                                    <t t-set="unit_price" t-value="unit_price + line.product_id.list_price"/>
+                                    <t t-set="total_value" t-value="total_value + line.product_id.list_price"/>
+                                    <tr>
+                                        <td align="center" colspan="1">
+                                            <span t-esc="line_index+1"/>
+                                        </td>
+                                        <td colspan="1">
+                                            <span t-esc="line.product_id.default_code"/>
+                                        </td>
+                                        <td colspan="3">
+                                            <span t-esc="line.product_id.name"/>
+                                        </td>
+                                        <td colspan="2" align="center">
+                                            <span>-</span>
+                                        </td>
+                                        <td align="center" colspan="1">
+                                            <!--                                            <span t-esc="line.product_id.categ_id.name"/>-->
+                                            <span>NO'S</span>
+                                        </td>
+                                        <td align="right" colspan="1">
+                                            <span t-esc="line.quantity"/>
+                                        </td>
+                                        <td align="right" colspan="1">
+                                            <span t-esc="line.price_unit"/>
+                                        </td>
+                                        <td align="right" colspan="2">
+                                            <span t-esc="line.price_subtotal"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <tr>
+                                    <td colspan="7" align="right">
+                                        <strong>Total Net Amount</strong>
+                                    </td>
+                                    <td colspan="1" align="center">
+                                        <strong>Nos</strong>
+                                    </td>
+                                    <td align="right" colspan="1">
+                                        <span t-esc="qty"/>
+                                    </td>
+                                    <td align="center" colspan="1">
+                                        <span align="center">-</span>
+                                        <!--                                        <span t-esc="unit_price"/>-->
+                                    </td>
+                                    <td align="center" colspan="2">
+                                        <span align="center">-</span>
+                                        <!--                                        <span t-esc="total_value"/>-->
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="7" align="right">
+                                        <strong>CGST</strong>
+                                    </td>
+                                    <td colspan="1" align="center">
+                                        <strong>14%</strong>
+                                    </td>
+
+                                    <td align="center" colspan="4">
+                                        <span align="center">-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="7" align="right">
+                                        <strong>SGST</strong>
+                                    </td>
+                                    <td colspan="1" align="center">
+                                        <strong>14%</strong>
+                                    </td>
+
+                                    <td align="center" colspan="4">
+                                        <span align="center">-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="7" align="right">
+                                        <strong>IGST</strong>
+                                    </td>
+                                    <td colspan="1" align="center">
+                                        <strong>12%</strong>
+                                    </td>
+
+                                    <td align="center" colspan="4">
+                                        <span align="center">-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="7" align="right">
+                                        <strong>TCS</strong>
+                                    </td>
+                                    <td colspan="1" align="center">
+                                        <strong>0%</strong>
+                                    </td>
+
+                                    <td align="center" colspan="4">
+                                        <span align="center">-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="7" align="center">
+                                        <strong>Total Amount</strong>
+                                    </td>
+                                    <td align="center" colspan="5">
+                                        <span align="center">-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="left" colspan="12">
+                                        <strong>Amount in Words :</strong>
+                                        <span t-esc="o.company_id.currency_id.amount_to_text(int(total_value))"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" align="center">
+                                        <strong>HSN/SAC</strong>
+                                    </td>
+                                    <td colspan="2" align="center">
+                                        <strong>Taxable Value</strong>
+                                    </td>
+                                    <td colspan="2" align="center">
+                                        <strong>CGST</strong>
+                                    </td>
+                                    <td colspan="2" align="center">
+                                        <strong>SGST</strong>
+                                    </td>
+                                    <td colspan="1" align="center">
+                                        <strong>IGST</strong>
+                                    </td>
+                                    <td colspan="1" align="center">
+                                        <strong>TCS</strong>
+                                    </td>
+                                    <td colspan="2" align="center">
+                                        <strong>Tax Total</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" align="center">
+                                        <span>-</span>
+                                    </td>
+                                    <td colspan="2" align="center">
+                                        <span>-</span>
+                                    </td>
+                                    <td colspan="2" align="center">
+                                        <span>-</span>
+                                    </td>
+                                    <td colspan="2" align="center">
+                                        <span>-</span>
+                                    </td>
+                                    <td colspan="1" align="center">
+                                        <span>-</span>
+                                    </td>
+                                    <td colspan="1" align="center">
+                                        <span>-</span>
+                                    </td>
+                                    <td colspan="2" align="center">
+                                        <span>-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6" align="left">
+                                        <strong>Declaration:</strong>
+                                        <span>Certified that the particulars given above are true and correct and the
+                                            amount indicated represents the price actually charged and that there is no
+                                            flow of additional consideration directly or indirectly from the buyer.
+                                        </span>
+                                    </td>
+                                    <td colspan="6" align="right">
+                                        <strong>For TexelQ Engineering India Pvt Ltd.,</strong>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <strong>Authorised Signatory</strong>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="page" style="page-break-before: always;background-color: #ffaa80;">
+                            <div style="width: 45%;float: top;"/>
+                            <table class="table table-sm"
+                                   style="width: 95%; margin: 0px; margin-left: 25px; margin-right: 15px; border: 0px solid black; font-size: 17px; border-spacing: 1em 0.5em; padding: 0 2em 1em 0; border-radius: 2px;">
+                                <b>
+                                    <h4 style="text-align:right;margin-right:20px;">Quadruplicate</h4>
+                                </b>
+                                <tr>
+                                    <td colspan="2">
+                                        <img width="65%"
+                                             t-attf-src="/web/binary/company_logo"
+                                             alt="Logo"/>
+                                    </td>
+                                    <td colspan="6" align="center">
+                                        <h3 style="text-transform: uppercase;">
+                                            <strong>Credit Note</strong>
+                                        </h3>
+                                    </td>
+                                    <td colspan="4" align="center">
+                                        <h5 style="text-transform: uppercase;">
+                                            <strong>Year : 2023-2024</strong>
+                                        </h5>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="left" rowspan="5" style="font-size: 20px" colspan="4" width="45%">
+                                        <strong>From,</strong>
+                                        <br/>
+                                        <strong t-field="o.user_id.company_id.name"/>
+                                        <br/>
+                                        <t t-if="o.user_id.company_id.street">
+                                            <span t-field="o.user_id.company_id.street"/>
+                                        </t>
+                                        <br/>
+                                        <t t-if="o.user_id.company_id.street2">
+                                            <span t-field="o.user_id.company_id.street2"/>,
+                                        </t>
+                                        <br/>
+                                        <t t-if="o.user_id.company_id.city">
+                                            <span t-field="o.user_id.company_id.city"/>,
+                                        </t>
+                                        <t t-if="o.user_id.company_id.state_id.name">
+                                            <span t-field="o.user_id.company_id.state_id.name"/>
+                                        </t>
+                                        <t t-if="o.user_id.company_id.zip">
+                                            -
+                                            <span t-field="o.user_id.company_id.zip"/>
+                                        </t>
+                                    </td>
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Credit Note No:</strong>
+                                        <span t-field="o.name"/>
+                                    </td>
+
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Date:</strong>
+                                        <span t-field="o.invoice_date" t-options='{"widget": "date"}'/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Buyer Order No:</strong>
+                                        <span align="center">-</span>
+                                    </td>
+
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Date:</strong>
+                                        <span align="center">-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Supplier Ref:</strong>
+                                        <span align="center">-</span>
+                                    </td>
+
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Date:</strong>
+                                        <span align="center">-</span>
+                                        <!--                                        <span t-field="o.invoice_due_date"/>-->
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>GST No:</strong>
+                                        <span t-field="o.user_id.company_id.vat"/>
+                                    </td>
+
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>PAN No:</strong>
+                                        <span align="center">-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Contact No:</strong>
+                                        <span t-field="o.user_id.company_id.phone"/>
+                                    </td>
+
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Email:</strong>
+                                        <span t-field="o.user_id.company_id.email"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="left" colspan="4" rowspan="6" style="font-size: 20px" width="45%">
+                                        <strong>To,</strong>
+                                        <small>
+                                            <t t-set="address">
+                                                <address class="mb-0" t-field="o.partner_id"
+                                                         t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'/>
+                                            </t>
+                                            <div>
+                                                <t t-esc="address"/>
+                                            </div>
+                                        </small>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Buyer GST No:</strong>
+                                        <span t-field="o.partner_id.vat"/>
+                                    </td>
+
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>PAN No:</strong>
+                                        <span t-field="o.partner_id.l10n_in_pan"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Name of Transp:</strong>
+                                        <span align="center">-</span>
+                                    </td>
+
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Mode of Transp:</strong>
+                                        <span align="center">-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Vehicle number:</strong>
+                                        <span align="center">-</span>
+                                    </td>
+
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Driver contact:</strong>
+                                        <span align="center">-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Date of supply:</strong>
+                                        <span align="center">-</span>
+                                    </td>
+
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Time of removal:</strong>
+                                        <span align="center">-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Buyer contact:</strong>
+                                        <span t-field="o.partner_id.mobile"/>
+                                    </td>
+
+                                    <td colspan="4" style="font-size: 17px">
+                                        <strong>Email:</strong>
+                                        <span t-field="o.partner_id.email"/>
+                                    </td>
+                                </tr>
+                                <tr align="center">
+                                    <th width="10%" colspan="1"
+                                        style="font-size:17px;">
+                                        <span>SI.NO</span>
+                                    </th>
+                                    <th width="10%" colspan="1"
+                                        style="font-size:17px;">
+                                        <span>PART NO</span>
+                                    </th>
+                                    <th width="20%" colspan="3"
+                                        style="font-size:17px;">
+                                        <span>DESCRIPTION</span>
+                                    </th>
+                                    <th width="15%" colspan="2"
+                                        style="font-size:17px;">
+                                        <span>HSN CODE</span>
+                                    </th>
+                                    <th width="10%" colspan="1"
+                                        style="font-size:17px;">
+                                        <span>UOM</span>
+                                    </th>
+                                    <th width="10%" colspan="1"
+                                        style="font-size:17px;">
+                                        <span>QTY</span>
+                                    </th>
+                                    <th width="15%" colspan="1"
+                                        style="font-size:17px;">
+                                        <span>RATE/EA(Rs)</span>
+                                    </th>
+                                    <th width="15%" colspan="2"
+                                        style="font-size:17px; ">
+                                        <span>TOTAL AMOUNT(Rs)</span>
+                                    </th>
+                                </tr>
+                                <t t-set="qty" t-value="0"/>
+                                <t t-set="unit_price" t-value="0"/>
+                                <t t-set="total_value" t-value="0"/>
+                                <t t-foreach="o.invoice_line_ids" t-as="line">
+                                    <t t-set="qty" t-value="qty + line.quantity"/>
+                                    <t t-set="unit_price" t-value="unit_price + line.product_id.list_price"/>
+                                    <t t-set="total_value" t-value="total_value + line.product_id.list_price"/>
+                                    <tr>
+                                        <td align="center" colspan="1">
+                                            <span t-esc="line_index+1"/>
+                                        </td>
+                                        <td colspan="1">
+                                            <span t-esc="line.product_id.default_code"/>
+                                        </td>
+                                        <td colspan="3">
+                                            <span t-esc="line.product_id.name"/>
+                                        </td>
+                                        <td colspan="2" align="center">
+                                            <span>-</span>
+                                        </td>
+                                        <td align="center" colspan="1">
+                                            <!--                                            <span t-esc="line.product_id.categ_id.name"/>-->
+                                            <span>NO'S</span>
+                                        </td>
+                                        <td align="right" colspan="1">
+                                            <span t-esc="line.quantity"/>
+                                        </td>
+                                        <td align="right" colspan="1">
+                                            <span t-esc="line.price_unit"/>
+                                        </td>
+                                        <td align="right" colspan="2">
+                                            <span t-esc="line.price_subtotal"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <tr>
+                                    <td colspan="7" align="right">
+                                        <strong>Total Net Amount</strong>
+                                    </td>
+                                    <td colspan="1" align="center">
+                                        <strong>Nos</strong>
+                                    </td>
+                                    <td align="right" colspan="1">
+                                        <span t-esc="qty"/>
+                                    </td>
+                                    <td align="center" colspan="1">
+                                        <span align="center">-</span>
+                                        <!--                                        <span t-esc="unit_price"/>-->
+                                    </td>
+                                    <td align="center" colspan="2">
+                                        <span align="center">-</span>
+                                        <!--                                        <span t-esc="total_value"/>-->
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="7" align="right">
+                                        <strong>CGST</strong>
+                                    </td>
+                                    <td colspan="1" align="center">
+                                        <strong>14%</strong>
+                                    </td>
+
+                                    <td align="center" colspan="4">
+                                        <span align="center">-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="7" align="right">
+                                        <strong>SGST</strong>
+                                    </td>
+                                    <td colspan="1" align="center">
+                                        <strong>14%</strong>
+                                    </td>
+
+                                    <td align="center" colspan="4">
+                                        <span align="center">-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="7" align="right">
+                                        <strong>IGST</strong>
+                                    </td>
+                                    <td colspan="1" align="center">
+                                        <strong>12%</strong>
+                                    </td>
+
+                                    <td align="center" colspan="4">
+                                        <span align="center">-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="7" align="right">
+                                        <strong>TCS</strong>
+                                    </td>
+                                    <td colspan="1" align="center">
+                                        <strong>0%</strong>
+                                    </td>
+
+                                    <td align="center" colspan="4">
+                                        <span align="center">-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="7" align="center">
+                                        <strong>Total Amount</strong>
+                                    </td>
+                                    <td align="center" colspan="5">
+                                        <span align="center">-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="left" colspan="12">
+                                        <strong>Amount in Words :</strong>
+                                        <span t-esc="o.company_id.currency_id.amount_to_text(int(total_value))"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" align="center">
+                                        <strong>HSN/SAC</strong>
+                                    </td>
+                                    <td colspan="2" align="center">
+                                        <strong>Taxable Value</strong>
+                                    </td>
+                                    <td colspan="2" align="center">
+                                        <strong>CGST</strong>
+                                    </td>
+                                    <td colspan="2" align="center">
+                                        <strong>SGST</strong>
+                                    </td>
+                                    <td colspan="1" align="center">
+                                        <strong>IGST</strong>
+                                    </td>
+                                    <td colspan="1" align="center">
+                                        <strong>TCS</strong>
+                                    </td>
+                                    <td colspan="2" align="center">
+                                        <strong>Tax Total</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" align="center">
+                                        <span>-</span>
+                                    </td>
+                                    <td colspan="2" align="center">
+                                        <span>-</span>
+                                    </td>
+                                    <td colspan="2" align="center">
+                                        <span>-</span>
+                                    </td>
+                                    <td colspan="2" align="center">
+                                        <span>-</span>
+                                    </td>
+                                    <td colspan="1" align="center">
+                                        <span>-</span>
+                                    </td>
+                                    <td colspan="1" align="center">
+                                        <span>-</span>
+                                    </td>
+                                    <td colspan="2" align="center">
+                                        <span>-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6" align="left">
+                                        <strong>Declaration:</strong>
+                                        <span>Certified that the particulars given above are true and correct and the
+                                            amount indicated represents the price actually charged and that there is no
+                                            flow of additional consideration directly or indirectly from the buyer.
+                                        </span>
+                                    </td>
+                                    <td colspan="6" align="right">
+                                        <strong>For TexelQ Engineering India Pvt Ltd.,</strong>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <strong>Authorised Signatory</strong>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

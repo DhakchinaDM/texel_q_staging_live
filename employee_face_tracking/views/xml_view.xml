@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+                <record id="action_odoo_face_employee" model="ir.actions.client">
+                    <field name="name">Face Tracking</field>
+                    <field name="tag">employee_face_tracking.OdooServices</field>
+                </record>
+
+
+        <record model="ir.actions.server" id="open_face_url">
+            <field name="name">Open Kiosk Url</field>
+            <field name="model_id" ref="employee_face_tracking.model_res_company"/>
+            <field name="binding_model_id" ref="employee_face_tracking.model_res_company"/>
+            <field name="state">code</field>
+            <field name="code">
+                action = model._action_open_face_mode()
+            </field>
+            <field name="groups_id" eval="[(4, ref('hr_attendance.group_hr_attendance_manager'))]"/>
+        </record>
+
+        <menuitem name="Face Tracking"
+                  id="main_employee"
+                  action="action_odoo_face_employee"
+                  parent="hr_attendance.menu_hr_attendance_root" sequence="4"
+        />
+
+
+
+    </data>
+</odoo>

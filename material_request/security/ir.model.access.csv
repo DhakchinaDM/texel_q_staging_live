@@ -1,0 +1,12 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+
+access_material_request_indent,material.request.indent,model_material_request_indent,,1,1,1,1
+access_material_request_product_lines,material.request.product.lines,model_material_request_product_lines,,1,1,1,1
+access_material_requesting_request_product_lines,material.requesting.request.product.lines,model_material_requesting_request_product_lines,,1,1,1,1
+access_material_request_approve_remarks,material.request.approve.remarks,model_material_request_approve_remarks,,1,1,1,1
+access_material_request_cancel_remarks,material.request.cancel.remarks,model_material_request_cancel_remarks,,1,1,1,1
+access_material_request_reject_remarks,material.request.reject.remarks,model_material_request_reject_remarks,,1,1,1,1
+access_hr_employee_create,hr.employee.create,model_hr_employee_create,,1,1,1,1
+access_hr_employee_create_line,hr.employee.create.line,model_hr_employee_create_line,,1,1,1,1
+access_direct_po_remark_wizard,direct.po.remark.wizard,model_direct_po_remark_wizard,,1,1,1,1
+access_store_verified_remark,store.verified.remark,model_store_verified_remark,,1,1,1,1

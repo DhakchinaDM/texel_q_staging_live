@@ -1,0 +1,475 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="paper_format_incoming_inspection_report" model="report.paperformat">
+            <field name="name">Incoming Inspection</field>
+            <field name="default" eval="False"/>
+            <field name="disable_shrinking" eval="True"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">30</field>
+            <field name="margin_bottom">30</field>
+            <field name="margin_left">5</field>
+            <field name="margin_right">5</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">22</field>
+            <field name="dpi">150</field>
+        </record>
+        <record id="report_incoming_inspection_report" model="ir.actions.report">
+            <field name="name">Incoming Inspection</field>
+            <field name="model">incoming.inspection</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">quality_extension.incoming_inspection_order_report</field>
+            <field name="report_file">quality_extension.incoming_inspection_order_report</field>
+            <field name="print_report_name">'Incoming'</field>
+            <field name="binding_model_id" ref="quality_extension.model_incoming_inspection"/>
+            <field name="paperformat_id" ref="quality_extension.paper_format_incoming_inspection_report"/>
+            <field name="binding_type">report</field>
+        </record>
+        <template id="incoming_inspection_order_report">
+            <t t-call="web.html_container">
+                <t t-call="web.basic_layout">
+                    <t t-foreach="docs" t-as="o">
+                        <div class="page">
+                            <div class="header" style="border: 1px solid black;">
+                                <div class="row">
+                                    <div class="col-3" style="border-right:1px solid black;">
+                                        <div>
+                                            <img src='/web/binary/company_logo' class="img-fluid img-thumbnail"
+                                                 style="width:100%;margin-top:1px;"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-6" style="border-right:1px solid black;">
+                                        <div style="text-align:center;color:black;margin:25px; padding:25px;">
+                                            <h4>
+                                                <t t-if="o.inspection_incoming_type == 'incoming_part'">
+                                                    INCOMING INSPECTION REPORT - PARTS
+                                                </t>
+                                                <t t-else="">
+                                                    INCOMING INSPECTION REPORT - RAW
+                                                </t>
+                                            </h4>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div style="text-align:center;font-size:23px;margin:25px; padding:25px;
+                                                            color:black;">
+                                            <t t-if="o.inspection_incoming_type == 'incoming_part'">
+                                                <strong>QA/DI/R/02</strong>
+                                            </t>
+                                            <t t-else="">
+                                                <strong>QA/DI/R/01</strong>
+                                            </t>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row"
+                                 style="border-left:1px solid black;border-right:1px solid black;border-bottom:1px solid black;border-top:1px solid black;">
+                                <!--                                <div class="col-4" style="border-right:1px solid black;">-->
+                                <!--                                    <strong style="margin-left: 5px;">-->
+                                <!--                                        Material Grade :-->
+                                <!--                                    </strong>-->
+                                <!--                                    <span t-field="o.material_grade"/>-->
+                                <!--                                </div>-->
+                                <div class="col-4" style="border-right:1px solid black;">
+                                    <strong style="margin-left: 5px;">
+                                        Part No :
+                                    </strong>
+                                    <span t-field="o.product_id.default_code"/>
+                                </div>
+                                <div class="col-4" style="border-right:1px solid black;">
+                                    <strong style="margin-left: 5px;">
+                                        PO No/Date :
+                                    </strong>
+                                    <span t-field="o.purchase_id.name"/>
+                                    <span style="word-spacing:12px" t-field="o.po_date"/>
+                                </div>
+                                <div class="col-4">
+                                    <strong style="margin-left: 5px;">
+                                        Lot Qty :
+                                    </strong>
+                                    <span t-field="o.lot_qty"/>
+                                </div>
+                            </div>
+
+                            <div class="row"
+                                 style="border-left:1px solid black;border-right:1px solid black;border-bottom:1px solid black;">
+                                <div class="col-4" style="border-right:1px solid black;">
+                                    <strong style="margin-left: 5px;">
+                                        Part Name :
+                                    </strong>
+                                    <span t-field="o.product_id.name"/>
+                                </div>
+                                <div class="col-4" style="border-right:1px solid black;">
+                                    <strong style="margin-left: 5px;">
+                                        Drawing Rev No/Date :
+                                    </strong>
+                                    <span t-field="o.draw_rev_no"/>
+                                    <span t-field="o.draw_rev_date"/>
+                                </div>
+                                <div class="col-4">
+                                    <strong style="margin-left: 5px;">
+                                        DC/Invoice No :
+                                    </strong>
+                                    <span t-field="o.dc_invoice_no"/>
+                                </div>
+                            </div>
+                            <div class="row"
+                                 style="border-left:1px solid black;border-right:1px solid black;border-bottom:1px solid black;">
+                                <div class="col-4" style="border-right:1px solid black;">
+                                    <strong style="margin-left: 5px;">
+                                        Supplier :
+                                    </strong>
+                                    <span t-field="o.partner_id"/>
+                                </div>
+                                <div class="col-4" style="border-right:1px solid black;">
+                                    <strong style="margin-left: 5px;">
+                                        Batch No :
+                                    </strong>
+                                    <span t-field="o.batch_no"/>
+                                </div>
+                                <div class="col-4">
+                                    <strong style="margin-left: 5px;">
+                                        Sample Size :
+                                    </strong>
+                                    <span t-field="o.sample_size"/>
+                                </div>
+                            </div>
+                            <div class="row"
+                                 style="border-left:1px solid black;border-right:1px solid black;">
+
+                                <div class="col-4" style="border-right:1px solid black;">
+<!--                                    <strong style="margin-left: 5px;">-->
+<!--                                        Inspection Name :-->
+<!--                                    </strong>-->
+<!--                                    <span t-field="o.inspector_id"/>-->
+                                </div>
+                                <div class="col-4" style="border-right:1px solid black;">
+                                    <strong style="margin-left: 5px;">
+                                        Inspection Name :
+                                    </strong>
+                                    <span t-field="o.inspector_id"/>
+                                </div>
+                                <div class="col-4">
+                                    <strong style="margin-left: 5px;">
+                                        Inspection Date :
+                                    </strong>
+                                    <span t-field="o.inspection_date"/>
+                                </div>
+                            </div>
+                            <table class="table table-sm"
+                                   style="border:1px solid black;margin-bottom: 0px;">
+                                <thead>
+                                    <tr>
+                                        <th rowspan="2" style="vertical-align: middle;">#</th>
+                                        <th rowspan="2" style="vertical-align: middle;">Parameter</th>
+                                        <th rowspan="2" style="vertical-align: middle;">Specification(mm)</th>
+                                        <th rowspan="2" style="vertical-align: middle;">Min</th>
+                                        <th rowspan="2" style="vertical-align: middle;">Max</th>
+                                        <th rowspan="2" style="vertical-align: middle;">Method of Checking</th>
+                                        <th colspan="5">Observations</th>
+                                        <th rowspan="2" style="vertical-align: middle;">Status</th>
+                                        <th rowspan="2" style="vertical-align: middle;">Remarks</th>
+                                    </tr>
+                                    <tr>
+                                        <th>1</th>
+                                        <th>2</th>
+                                        <th>3</th>
+                                        <th>4</th>
+                                        <th>5</th>
+                                    </tr>
+                                </thead>
+                                <tbody style="border-top: 1px solid black;">
+                                    <t t-foreach="o.parameters_ids" t-as="check">
+                                        <tr>
+                                            <td style="color:black;border-left:1px;text-align:center;vertical-align: middle;">
+                                                <span t-esc="check_index+1"/>
+                                            </td>
+                                            <t t-if="check.parameter_id.name">
+                                                <td style="color:black;border-left:1px;text-align:left;vertical-align: middle;">
+                                                    <span t-esc="check.parameter_id.name"/>
+                                                </td>
+                                            </t>
+                                            <t t-else="">
+                                                <td align="center"
+                                                    style="color:black;border-left:1px;vertical-align: middle;">
+                                                    -
+                                                </td>
+                                            </t>
+                                            <t t-if="check.specification">
+                                                <td style="color:black;border-left:1px;text-align:left;vertical-align: middle;">
+                                                    <span t-esc="check.specification"/>
+                                                </td>
+                                            </t>
+                                            <t t-else="">
+                                                <td align="center"
+                                                    style="color:black;border-left:1px;vertical-align: middle;">
+                                                    -
+                                                </td>
+                                            </t>
+                                            <t t-if="check.min_level">
+                                                <td style="color:black;border-left:1px;text-align:left;vertical-align: middle;">
+                                                    <span t-esc="'%.2f'%check.min_level"/>
+                                                </td>
+                                            </t>
+                                            <t t-else="">
+                                                <td align="center"
+                                                    style="color:black;border-left:1px;vertical-align: middle;">
+                                                    -
+                                                </td>
+                                            </t>
+                                            <t t-if="check.max_level">
+                                                <td style="color:black;border-left:1px;text-align:left;vertical-align: middle;">
+                                                    <span t-esc="'%.2f'%check.max_level"/>
+                                                </td>
+                                            </t>
+                                            <t t-else="">
+                                                <td align="center"
+                                                    style="color:black;border-left:1px;vertical-align: middle;">
+                                                    -
+                                                </td>
+                                            </t>
+                                            <t t-set="val"
+                                               t-value="', '.join([ck.name for ck in check.check_method_id])"/>
+                                            <t t-if="val">
+                                                <td style="color:black;border-left:1px;text-align:left;vertical-align: middle;">
+                                                    <span t-esc="val"/>
+                                                </td>
+                                            </t>
+                                            <t t-else="">
+                                                <td align="center"
+                                                    style="color:black;border-left:1px;vertical-align: middle;">
+                                                    -
+                                                </td>
+                                            </t>
+                                            <t t-if="check.observation_1">
+                                                <td style="color:black;border-left:1px;text-align:left;vertical-align: middle;">
+                                                    <span t-esc="check.observation_1"/>
+                                                </td>
+                                            </t>
+                                            <t t-else="">
+                                                <td align="center"
+                                                    style="color:black;border-left:1px;vertical-align: middle;">
+                                                    -
+                                                </td>
+                                            </t>
+                                            <t t-if="check.observation_2">
+                                                <td style="color:black;border-left:1px;text-align:left;vertical-align: middle;">
+                                                    <span t-esc="check.observation_2"/>
+                                                </td>
+                                            </t>
+                                            <t t-else="">
+                                                <td align="center"
+                                                    style="color:black;border-left:1px;vertical-align: middle;">
+                                                    -
+                                                </td>
+                                            </t>
+                                            <t t-if="check.observation_3">
+                                                <td style="color:black;border-left:1px;text-align:left;vertical-align: middle;">
+                                                    <span t-esc="check.observation_3"/>
+                                                </td>
+                                            </t>
+                                            <t t-else="">
+                                                <td align="center"
+                                                    style="color:black;border-left:1px;vertical-align: middle;">
+                                                    -
+                                                </td>
+                                            </t>
+                                            <t t-if="check.observation_4">
+                                                <td style="color:black;border-left:1px;text-align:left;vertical-align: middle;">
+                                                    <span t-esc="check.observation_4"/>
+                                                </td>
+                                            </t>
+                                            <t t-else="">
+                                                <td align="center"
+                                                    style="color:black;border-left:1px;vertical-align: middle;">
+                                                    -
+                                                </td>
+                                            </t>
+                                            <t t-if="check.observation_5">
+                                                <td style="color:black;border-left:1px;text-align:left;vertical-align: middle;">
+                                                    <span t-esc="check.observation_5"/>
+                                                </td>
+                                            </t>
+                                            <t t-else="">
+                                                <td align="center"
+                                                    style="color:black;border-left:1px;vertical-align: middle;">
+                                                    -
+                                                </td>
+                                            </t>
+                                            <t t-if="check.obs_status">
+                                                <td style="color:black;border-left:1px;text-align:left;vertical-align: middle;">
+                                                    <span t-esc="dict(check._fields['obs_status'].selection).get(check.obs_status)"/>
+                                                </td>
+                                            </t>
+                                            <t t-else="">
+                                                <td align="center"
+                                                    style="color:black;border-left:1px;vertical-align: middle;">
+                                                    -
+                                                </td>
+                                            </t>
+                                            <t t-if="check.remarks">
+                                                <td style="color:black;border-left:1px;text-align:left;vertical-align: middle;">
+                                                    <span t-esc="check.remarks"/>
+                                                </td>
+                                            </t>
+                                            <t t-else="">
+                                                <td align="center"
+                                                    style="color:black;border-left:1px;vertical-align: middle;">
+                                                    -
+                                                </td>
+                                            </t>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                            <div class="row"
+                                 style="border-left:1px solid black;border-right:1px solid black;border-bottom:1px solid black;">
+                                <div class="col-3"
+                                     style="border-right:1px solid black;padding-left: 5px;page-break-after: always;">
+                                    <!--                                    <strong>-->
+                                    <!--                                        MATERIAL TEST CERTIFICATE :-->
+                                    <!--                                    </strong>-->
+                                    <!--                                    <t t-if="o.material_test_need">-->
+                                    <!--                                        <i class="fa fa-check-square" style="font-size:25px;"/>-->
+                                    <!--                                    </t>-->
+                                    <!--                                    <t t-else="">-->
+                                    <!--                                        <i class="fa fa-square-o" style="font-size:25px;"/>-->
+                                    <!--                                    </t>-->
+                                </div>
+                                <div class="col-3"
+                                     style="border-right:1px solid black;padding-left: 5px;page-break-after: always;">
+                                    <strong>SUPPLIER TEST REPORT :
+                                    </strong>
+                                    <t t-if="o.supplier_test_need">
+                                        <i class="fa fa-check-square" style="font-size:25px;"/>
+                                    </t>
+                                    <t t-else="">
+                                        -
+                                    </t>
+                                </div>
+                                <div class="col-3"
+                                     style="border-right:1px solid black;padding-left: 5px;page-break-after: always;">
+                                    <!--                                    <strong>-->
+                                    <!--                                        <label>IF NEEDED THIRD PARTY MATERIAL TEST CERTIFICATE :-->
+                                    <!--                                            <t t-if="o.certificate_if_needed">-->
+                                    <!--                                                <strong>YES</strong>-->
+                                    <!--                                            </t>-->
+                                    <!--                                            <t t-else="">-->
+                                    <!--                                                <strong>NO</strong>-->
+                                    <!--                                            </t>-->
+                                    <!--                                        </label>-->
+                                    <!--                                    </strong>-->
+
+                                </div>
+                                <div class="col-3" style="border-right:1px solid black;padding-left: 5px;">
+                                    <!--                                    <strong>-->
+                                    <!--                                        <label>LAST THIRD PARTY INSPECTION DATE :-->
+                                    <!--                                            <t t-if="not o.certificate_if_needed">-->
+                                    <!--                                                <span t-field="o.material_test_date"/>-->
+                                    <!--                                            </t>-->
+                                    <!--                                            <t t-else="">-->
+                                    <!--                                                <span>-</span>-->
+                                    <!--                                            </t>-->
+                                    <!--                                        </label>-->
+                                    <!--                                    </strong>-->
+
+                                </div>
+                            </div>
+                            <!--                            page-break-inside: avoid;-->
+                            <div class="row"
+                                 style="border:1px solid black;page-break-inside: avoid;">
+                                <div class="col-2" style="border-right:1px solid black;padding-left: 5px;">
+                                    <strong>
+                                        ACCEPTED
+                                    </strong>
+                                </div>
+                                <div class="col-2" style="border-right:1px solid black;text-align: center;">
+                                    <t t-if="o.engineer_approve_type != 'conditional_approve'">
+                                        <t t-if="o.inspector_approve_type == 'approve' or o.engineer_approve_type == 'approve'">
+                                            <i class="fa fa-check-square" style="font-size:25px;"/>
+                                        </t>
+                                        <t t-else="">
+                                            <i class="fa fa-square-o" style="font-size:25px;"/>
+                                        </t>
+                                    </t>
+                                </div>
+                                <div class="col-2" style="border-right:1px solid black;padding-left: 5px;">
+                                    <strong>
+                                        CONDITIONALLY ACCEPTED
+                                    </strong>
+                                </div>
+                                <div class="col-2" style="border-right:1px solid black;text-align: center;">
+                                    <t t-if="o.engineer_approve_type != 'approve'">
+                                        <t t-if="o.inspector_approve_type == 'conditional_approve' or o.engineer_approve_type == 'conditional_approve'">
+                                            <i class="fa fa-check-square" style="font-size:25px;"/>
+                                        </t>
+                                        <t t-else="">
+                                            <i class="fa fa-square-o" style="font-size:25px;"/>
+                                        </t>
+                                    </t>
+                                    <t t-else="">
+                                        <i class="fa fa-square-o" style="font-size:25px;"/>
+                                    </t>
+                                </div>
+                                <div class="col-2" style="border-right:1px solid black;padding-left: 5px;">
+                                    <strong>
+                                        <label>REJECTED</label>
+                                    </strong>
+                                </div>
+                                <div class="col-2" style="text-align: center;">
+                                    <t t-if="o.allow_reject_bool == True">
+                                        <i class="fa fa-check-square" style="font-size:25px;"/>
+                                    </t>
+                                    <t t-else="">
+                                        <i class="fa fa-square-o" style="font-size:25px;"/>
+                                    </t>
+                                </div>
+                            </div>
+                            <!--                            <div class="row"-->
+                            <!--                                 style="border-left:1px solid black;border-right:1px solid black;border-bottom:1px solid black;">-->
+                            <!--                                <div class="col-3" style="border-right:1px solid black;padding-left: 5px;">-->
+                            <!--                                    <strong>INSPECTED BY :</strong>-->
+                            <!--                                </div>-->
+                            <!--                                <div class="col-3" style="padding-left: 5px;">-->
+                            <!--                                    <span t-field="o.inspector_id"/>-->
+                            <!--                                </div>-->
+                            <!--                                <div class="col-3" style="padding-left: 5px;border-right:1px solid black;">-->
+                            <!--                                    <strong>APPROVED BY :</strong>-->
+                            <!--                                </div>-->
+                            <!--                                <div class="col-3" style="padding-left: 5px;">-->
+                            <!--                                    <span t-field="res_company.env.user.name"/>-->
+                            <!--                                </div>-->
+                            <!--                            </div>-->
+                            <div class="row"
+                                 style="border-bottom:1px solid black;border-left:1px solid black;border-right:1px solid black;">
+                                <div class="col-6" style="border-right:1px solid black;">
+                                    <strong style="margin-left:5px;">INSPECTED BY :</strong>
+                                    <span t-field="o.inspector_id"/>
+                                </div>
+                                <div class="col-6">
+                                    <strong style="margin-left:5px;">APPROVED BY :</strong>
+                                    <span t-field="res_company.env.user.name"/>
+                                </div>
+                            </div>
+                            <div class="row"
+                                 style="border-bottom:1px solid black;border-left:1px solid black;border-right:1px solid black;">
+                                <div>
+                                    <strong style="margin-left:5px;">
+                                        <span t-field="o.name"/>
+                                    </strong>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

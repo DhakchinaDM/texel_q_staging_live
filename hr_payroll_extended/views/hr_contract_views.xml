@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Contract View -->
+    <record id="hr_contract_form_inherit" model="ir.ui.view">
+        <field name="name">hr.contract.view.form.inherit</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+        <field name="arch" type="xml">
+            <field name="work_entry_source" position="after">
+                <field name="struct_id"/>
+                <field name="schedule_pay"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="currency_id" invisible="1"/>
+            </field>
+            <page name="other" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </page>
+            <xpath expr="//field[@name='structure_type_id']" position="after">
+                <field name="shift_type"/>
+                <label for="night_shift_allowance" string="Night Shift Allowance"
+                       invisible="shift_type != 'night_shift'"/>
+                <div class="row" invisible="shift_type != 'night_shift'">
+                    <field name="night_shift_allowance" class="oe_inline"/>
+                    <span class="oe_inline">Per Day</span>
+                </div>
+            </xpath>
+            <xpath expr="//group[@name='salary']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='department_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='contract_type_id']" position="after">
+                <field name="type_id" required="1"/>
+            </xpath>
+            <xpath expr="//page[@name='information']" position="after">
+                <page name="other" position="move"/>
+            </xpath>
+            <!--            <xpath expr="//notebook" position="inside">-->
+            <!--                <page string="Others" name="others">-->
+            <!--                    <group>-->
+            <!--                        -->
+            <!--                    </group>-->
+            <!--                </page>-->
+            <!--            </xpath>-->
+
+            <!--            NEW START ++++++++++++++++++++++++++++++++++++-->
+
+            <xpath expr="//field[@name='name']" position="after">
+                <widget name="web_ribbon" title="Failed" bg_color="text-bg-danger"
+                        invisible="not amount_settlement_diff"/>
+                <widget name="web_ribbon" title="Success" bg_color="text-bg-success"
+                        invisible="amount_settlement_diff"/>
+            </xpath>
+            <xpath expr="//field[@name='state']" position="before">
+                <button name="employee_contract_validate"
+                        type="object" string="Validate" class="oe_highlight"/>
+            </xpath>
+            <xpath expr="//field[@name='job_id']" position="before">
+                <field name="notice_days" required="1"/>
+                <field name="journal_id" required="0"/>
+                <field name="analytic_account_id" required="0" invisible="1"/>
+                <field name="type_id" invisible="1"/>
+                <field name="currency_id" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='resource_calendar_id']" position="after">
+                <field name="schedule_pay"/>
+            </xpath>
+            <xpath expr="//field[@name='date_start']" position="replace">
+                <field name="start_date_doj" force_save="1"/>
+            </xpath>
+            <xpath expr="//page[@name='information']" position="after">
+                <page name="other" position="move"/>
+            </xpath>
+            <xpath expr="//group[@name='salary_info']" position="before">
+                <group string="Monthly Advantages in Cash" name='allowances'>
+                    <group name="ctc_salary">
+                        <label for="manual_ctc"/>
+                        <div class="o_row no-gutters d-flex" name="manual_ctc">
+                            <field name="manual_ctc" class="oe_inline" nolabel="1" force_save="1"/>
+                            <span>/ month</span>
+                        </div>
+                        <field name="salary_hike_enabled" invisible="1"/>
+                        <label for="ctc"/>
+
+                        <div class="o_row no-gutters d-flex" name="ctc">
+                            <field name="ctc" class="oe_inline" nolabel="1" readonly="1" force_save="1"/>
+                            <button name="employee_salary_update" string="Update New Salary"
+                                    type="object" class="oe_inline btn-primary"/>
+                            <button name="clear_contract_amount_setup" string="Reset"
+                                    type="object" class="oe_inline btn-primary"/>
+                        </div>
+                        <field name="salary_hike_effective_date" readonly="1" force_save="1"/>
+                        <field name="basic_percentage"/>
+                        <field name="basic_allowance" force_save="1" invisible="1"/>
+                        <field name="amount_settlement_diff" class="opt_required" readonly="1" force_save="1"
+                               decoration-danger="amount_settlement_diff != 0"
+                               decoration-success="amount_settlement_diff != 1"/>
+                        <label for="wage"/>
+                        <div class="o_row mw-50" name="wage">
+                            <field name="wage" class="oe_inline o_hr_narrow_field" nolabel="1"/>
+                            <div class="mb-3" name="wage_period_label">/ month</div>
+                        </div>
+                        <field name="wage_type"/>
+                        <field name="schedule_pay"/>
+                        <field name="contract_amount_settlement" readonly="1" force_save="1" invisible="1"/>
+                        <field name="contract_deduction_settlement" readonly="1" force_save="1" invisible="1"/>
+                    </group>
+
+                    <!--                    Allowances Start-->
+                    <group name="allowances_salary" string="Allowances">
+                        <label for="da_percentage" invisible="1"/>
+                        <div class="o_row" name="dearness_allowance" invisible="1">
+                            <field name="da_percentage" force_save="1"/>
+                            <strong>% Per</strong>
+                            <field name="dearness_allowance" force_save="1"/>
+                            <strong>/ month</strong>
+                        </div>
+                        <label for="hra_percentage"/>
+                        <div class="o_row" name="house_rent_allowance">
+                            <field name="hra_percentage" force_save="1"/>
+                            <strong>% Per</strong>
+                            <field name="house_rent_allowance" force_save="1"/>
+                            <strong>/ month</strong>
+                        </div>
+                        <label for="conveyance_percentage"/>
+                        <div class="o_row" name="convenyance_allowance">
+                            <field name="conveyance_percentage" force_save="1"/>
+                            <strong>% Per</strong>
+                            <field name="convenyance_allowance" force_save="1"/>
+                            <strong>/ month</strong>
+                        </div>
+                        <label for="special_percentage"/>
+                        <div class="o_row" name="special_allowance">
+                            <field name="special_percentage" force_save="1"/>
+                            <strong>% Per</strong>
+                            <field name="special_allowance" force_save="1"/>
+                            <strong>/ month</strong>
+                        </div>
+                        <field name="leave_incentives" invisible="1"/>
+                        <field name="travel_incentives" invisible="1"/>
+                        <field name="health_insurance" invisible="1"/>
+                        <field name="notice_period_pay" invisible="1"/>
+                        <field name="amount_settlement_diff" invisible="1"/>
+                        <field name="compute_contract_validate" invisible="1"/>
+                    </group>
+                </group>
+                <!--                    Allowances End-->
+
+            </xpath>
+            <xpath expr="//group[@name='salary_info']" position="after">
+                <group>
+                    <group string="Deductions with PF - [Employee] ">
+                        <field name="pf_type" widget='radio' options="{'horizontal': true}"/>
+                        <field name="pf_deduction" invisible="1"/>
+                        <field name="pf_deduction_second" invisible="1"/>
+                        <field name="pf_second_regular_percent" invisible="1"/>
+                        <field name="pf_second_regular_amt" invisible="1"/>
+                        <field name="pf_second_regular_pension_percent" invisible="1"/>
+                        <field name="pf_second_regular_pension_amt" invisible="1"/>
+                        <field name="pf_admin_percent" invisible="1"/>
+                        <field name="pf_admin_amt" invisible="1"/>
+                        <label for="pf_basic_percentage" force_save="1"/>
+                        <div class="o_row no-gutters d-flex">
+                            <field name="pf_basic_percentage" readonly="pf_type != 'dynamic'" force_save="1"
+                                   placeholder="PF Employee"
+                                   class="oe_inline" nolabel="1"/>
+                            <field name="pf_basic_percentage_second" readonly="pf_type != 'dynamic'" force_save="1"
+                                   placeholder="PF Employer"
+                                   class="oe_inline" nolabel="1" invisible="1"/>
+                        </div>
+                        <label for="employee_pf_amount"/>
+                        <div class="o_row no-gutters d-flex">
+                            <field name="employee_pf_amount" force_save="1" readonly="1" placeholder="PF Employee"
+                                   class="oe_inline" nolabel="1"/>
+                            <field name="employer_pf_amount" force_save="1" placeholder="PF Employer" class="oe_inline"
+                                   nolabel="1"
+                                   readonly="1" invisible="1"/>
+                        </div>
+                        <field name="compute_contract_validate" invisible="1"/>
+                    </group>
+                    <group name="deduction_salary" string="Deductions">
+                        <field name="tds"/>
+                        <field name="professional_tax"/>
+                        <field name="compute_contract_validate" invisible="1"/>
+                    </group>
+                    <group string="ESI - [Employee] ">
+                        <label for="esi_basic_percentage"/>
+                        <div class="o_row no-gutters d-flex">
+                            <field name="esi_basic_percentage" placeholder="Esi Employee" class="oe_inline"
+                                   nolabel="1" force_save="1"/>
+                            <field name="esi_basic_percentage_second" placeholder="Esi Employer" class="oe_inline"
+                                   nolabel="1" force_save="1" invisible="1"/>
+                        </div>
+                        <label for="esi"/>
+                        <div class="o_row no-gutters d-flex">
+                            <field name="esi" class="oe_inline" nolabel="1" readonly="1" force_save="1"/>
+                            <field name="esi_second" class="oe_inline" nolabel="1" readonly="1" force_save="1"
+                                   invisible="1" string="ESI Second"/>
+                        </div>
+                    </group>
+                    <group>
+                        <field name="weekly_incentive" readonly="0" invisible="1"/>
+                        <field name="monthly_incentive" readonly="0" invisible="1"/>
+                        <field name="special_incentive" readonly="0" invisible="1"/>
+                    </group>
+                </group>
+                <div class="row">
+                    <div class="col-3">
+                        <b>
+                            <u>
+                                <strong>Contract Remarks :</strong>
+                            </u>
+                        </b>
+                    </div>
+                    <div>
+                        <p>
+                            ESI field will be enabled if An employee CTC below Rs.21000,
+                            <br/>
+                            PF Fixed Amount will set as Rs.1800 ,
+                            if an employee receives CTC Rs.15000 and above.
+                        </p>
+                    </div>
+                </div>
+            </xpath>
+            <!--            NEW END ++++++++++++++++++++++++++++++++++++-->
+        </field>
+    </record>
+
+    <record id="hr_contract_advantage_template_view_form" model="ir.ui.view">
+        <field name="name">hr.contract.advantage.template.form</field>
+        <field name="model">hr.contract.advantage.template</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Advantage Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="default_value"/>
+                            <field name="lower_bound"/>
+                            <field name="upper_bound"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="hr_contract_advantage_template_view_tree" model="ir.ui.view">
+        <field name="name">hr.contract.advantage.template.tree</field>
+        <field name="model">hr.contract.advantage.template</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="lower_bound"/>
+                <field name="upper_bound"/>
+                <field name="default_value"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="hr_contract_advantage_template_action" model="ir.actions.act_window">
+        <field name="name">Contract Advantage Templates</field>
+        <field name="res_model">hr.contract.advantage.template</field>
+    </record>
+
+    <menuitem id="hr_contract_advantage_template_menu_action"
+              action="hr_contract_advantage_template_action"
+              active="False"
+              parent="hr_work_entry_contract_enterprise.menu_hr_payroll_configuration"
+              sequence="50"/>
+
+</odoo>

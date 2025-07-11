@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="paperformat_jo_dc_report_new" model="report.paperformat">
+            <field name="name">JOB ORDER CUM DELIVERY CHALLAN</field>
+            <field name="default" eval="False"/>
+            <field name="disable_shrinking" eval="True"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">10</field>
+            <field name="margin_bottom">40</field>
+            <field name="margin_left">5</field>
+            <field name="margin_right">5</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">50</field>
+            <field name="dpi">140</field>
+        </record>
+
+        <record id="report_jobdc_report" model="ir.actions.report">
+            <field name="name">JOB ORDER CUM DELIVERY CHALLAN</field>
+            <field name="model">stock.picking</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">delivery_challan.delivery_job_challan_report_header</field>
+            <field name="report_file">delivery_challan.delivery_job_challan_report_header</field>
+            <field name="paperformat_id" ref="delivery_challan.paperformat_jo_dc_report_new"/>
+            <field name="print_report_name">'JOB ORDER CUM DELIVERY CHALLAN'</field>
+            <field name="binding_type">report</field>
+        </record>
+
+        <template id="delivery_job_challan_report_header">
+            <t t-call="web.html_container">
+                <t t-call="web.basic_layout">
+                    <t t-foreach="docs" t-as="o">
+                        <t t-set="copy_labels" t-value="['Original Copy', 'Duplicate Copy', 'Triplicate Copy']"/>
+                        <t t-foreach="copy_labels" t-as="label" t-enumerate="index">
+                            <div class="page" style="page-break-after: always;">
+                                <div class="row" style="border: 1px solid black;height: 40mm;">
+                                    <div class="col-4 d-flex align-items-center justify-content-center p-4"
+                                         style="border-right: 1px solid black;">
+                                        <img src="/web/image/res.company/1/logo" style="width: 300px; height: 100px;"/>
+                                    </div>
+                                    <div class="col-6 text-center" style="border-right: 1px solid black;">
+                                        <h3 style="text-align:center; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">
+                                            <strong t-esc="res_company.name"/>
+                                        </h3>
+                                        <t t-if="res_company.street">
+                                            <span t-field="res_company.street"/>,
+                                        </t>
+                                        <t t-if="res_company.street2">
+                                            <span t-field="res_company.street2"/>,
+                                        </t>
+                                        <t t-if="res_company.city">
+                                            <span t-field="res_company.city"/>,
+                                        </t>
+                                        <br/>
+                                        <t t-if="res_company.state_id.name">
+                                            <span t-field="res_company.state_id.name"/>,
+                                        </t>
+                                        <t t-if="res_company.zip">
+                                            -
+                                            <span t-field="res_company.zip"/>
+                                        </t>
+                                    </div>
+                                    <div class="col-2">
+                                        <strong>
+                                            <t t-esc="label"/>
+                                        </strong>
+                                    </div>
+                                </div>
+
+                                <div style="border: 1px solid #000;">
+                                    <!--                                    <section class="body" style="min-height: 220mm;">-->
+
+                                    <div class="row m-3">
+                                        <div class="col-12">
+                                            <h2 style="text-align:center; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;font-size: 20px;">
+                                                <strong>JOB ORDER CUM DELIVERY CHALLAN
+                                                </strong>
+                                            </h2>
+                                        </div>
+                                    </div>
+                                    <div class="row" style="border: 1px solid black;">
+                                        <div class="col-6 p-2" style="border-right: 1px solid black;">
+                                            <strong style="font-size:17px;">JW DC No. :</strong>
+                                            <span style="color:black;font-size:17px;"
+                                                  t-esc="o.name"/>
+                                            <br/>
+                                            <strong style="font-size:17px;">DC Date :</strong>
+                                            <span style="color:black;font-size:17px;"
+                                                  t-esc="o.scheduled_date" t-options='{"widget": "date"}'/>
+                                            <br/>
+                                            <strong style="font-size:17px;">Place of Supply :</strong>
+                                            <span style="color:black;font-size:17px;"
+                                                  t-esc="o.place_of_supply"/>
+                                        </div>
+                                        <div class="col-6 p-2">
+                                            <strong style="font-size:17px;">Transport :</strong>
+                                            <span style="color:black;font-size:17px;"
+                                                  t-esc="o.vehicle"/>
+                                            <br/>
+                                            <strong style="font-size:17px;">Vehicle No. :</strong>
+                                            <span style="color:black;font-size:17px;"
+                                                  t-esc="o.vehicle_no"/>
+                                            <br/>
+                                            <strong style="font-size:17px;">Contact Person Email :</strong>
+                                            <span style="color:black;font-size:17px;">kevin.j@texelq.com</span>
+                                            <br/>
+                                            <strong style="font-size:17px;">Contact Person Phone No. :</strong>
+                                            <span style="color:black;font-size:17px;">+91 7092600094</span>
+                                        </div>
+                                    </div>
+                                    <div class="row" style="border: 1px solid black;">
+                                        <div class="col-6 p-2" style="border-right: 1px solid black;">
+                                            <strong style="font-size:17px;">Billed To:</strong>
+                                            <br/>
+                                            <span>
+                                                <t t-set="address">
+                                                    <address class="mb-0" t-field="o.partner_id"
+                                                             t-options='{"widget": "contact", "fields": ["name","address","phone","vat"], "no_marker": True}'/>
+                                                </t>
+                                                <span t-esc="address"/>
+                                            </span>
+                                        </div>
+                                        <div class="col-6 p-2">
+                                            <strong style="font-size:17px;">Shipped To:</strong>
+                                            <br/>
+                                            <span>
+                                                <t t-set="address">
+                                                    <address class="mb-0" t-field="o.partner_id"
+                                                             t-options='{"widget": "contact", "fields": ["name","address","phone","vat"], "no_marker": True}'/>
+                                                </t>
+                                                <span t-esc="address"/>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <table class="table table-sm">
+                                        <thead>
+                                            <th class="text-center"
+                                                style="border: 1px solid black; font-size: 17px;">
+                                                S.No.
+                                            </th>
+                                            <th class="text-center"
+                                                style="border: 1px solid black; font-size: 17px;">Part No
+                                            </th>
+                                            <th class="text-center"
+                                                style="border: 1px solid black; font-size: 17px;">
+                                                Description of Goods
+                                            </th>
+                                            <th class="text-center"
+                                                style="border: 1px solid black; font-size: 17px;">
+                                                Purpose
+                                            </th>
+                                            <th class="text-center"
+                                                style="border: 1px solid black; font-size: 17px;">HSN
+                                                Code
+                                            </th>
+                                            <th class="text-center"
+                                                style="border: 1px solid black; font-size: 17px;">UoM
+                                            </th>
+                                            <th class="text-center"
+                                                style="border: 1px solid black; font-size: 17px;">Qty
+                                            </th>
+                                            <th class="text-center"
+                                                style="border: 1px solid black; font-size: 17px;">Rate
+                                            </th>
+                                            <th class="text-center"
+                                                style="border: 1px solid black; font-size: 17px;">Tax
+                                            </th>
+                                            <th class="text-center"
+                                                style="border: 1px solid black; font-size: 17px;">Tax
+                                                Value
+                                            </th>
+                                            <th class="text-center"
+                                                style="border: 1px solid black; font-size: 17px;">Total
+                                                Value
+                                            </th>
+                                        </thead>
+                                        <tbody>
+                                            <t t-foreach="o.move_ids_without_package" t-as="line"
+                                               t-enumerate="sno">
+                                                <tr>
+                                                    <td align="center" style="color:black;border:1px solid black">
+                                                        <span t-esc="line_index + 1"/>
+                                                    </td>
+                                                    <t t-if="o.picking_dc_type == 'standard'">
+                                                        <td align="center"
+                                                            style="color:black;border:1px solid black">
+                                                            <span t-esc="line.product_id.default_code"/>
+                                                        </td>
+                                                    </t>
+                                                    <t t-elif="o.picking_dc_type == 'non-standard'">
+                                                        <td align="center"
+                                                            style="color:black;border:1px solid black">
+                                                            <span t-esc="line.supplier_part_no"/>
+                                                        </td>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <td align="center"
+                                                            style="color:black;border:1px solid black">
+                                                            -
+                                                        </td>
+                                                    </t>
+                                                    <td align="center" style="color:black;border:1px solid black">
+                                                        <span style="margin-right: 10px;"
+                                                              t-esc="line.supplier_part_no"/>
+                                                        <span t-esc="line.description_picking"/>
+                                                    </td>
+                                                    <td align="center" style="color:black;border:1px solid black">
+                                                        <span t-esc="line.job_work_id.name or '-'"/>
+                                                    </td>
+                                                    <td align="center" style="color:black;border:1px solid black">
+                                                        <span t-esc="line.hsn_code or '-'"/>
+                                                    </td>
+                                                    <td align="center" style="color:black;border:1px solid black">
+                                                        <span t-esc="line.product_uom.name or '-'"/>
+                                                    </td>
+                                                    <td align="center" style="color:black;border:1px solid black">
+                                                        <span t-esc="line.product_uom_qty or '-'"/>
+                                                    </td>
+                                                    <td align="center" style="color:black;border:1px solid black">
+                                                        <span t-esc="line.price_unit or '-'"/>
+                                                    </td>
+                                                    <td align="center" style="color:black;border:1px solid black">
+                                                        <span t-esc="line.taxes.name or '-'"/>
+                                                    </td>
+                                                    <td align="center" style="color:black;border:1px solid black">
+                                                        <span t-esc="line.taxe_value or '-'"/>
+                                                    </td>
+                                                    <td align="center" style="color:black;border:1px solid black">
+                                                        <span t-esc="line.total_amount or '-'"/>
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                            <tr>
+                                                <td colspan="5" align="right"
+                                                    style="font-size:17px;border:1px solid #000;">
+                                                    <strong align="right">Grand Total
+                                                    </strong>
+                                                </td>
+                                                <td align="center" style="font-size:17px;border:1px solid #000;">
+                                                    <strong>Nos</strong>
+                                                </td>
+                                                <td align="center" style="font-size:17px;border:1px solid #000;">
+                                                    <t t-set="total_qty" t-value="0"/>
+                                                    <t t-foreach="o.move_ids_without_package" t-as="line">
+                                                        <t t-set="total_qty"
+                                                           t-value="total_qty + line.product_uom_qty"/>
+                                                    </t>
+                                                    <strong t-esc="total_qty"/>
+                                                </td>
+                                                <td align="center" style="font-size:17px;border:1px solid #000;">
+                                                    <t t-set="total_rate" t-value="0"/>
+                                                    <t t-foreach="o.move_ids_without_package" t-as="line">
+                                                        <t t-set="total_rate"
+                                                           t-value="total_rate + line.price_unit"/>
+                                                    </t>
+                                                    <strong t-esc="total_rate"/>
+                                                </td>
+                                                <td align="center" style="font-size:17px;border:1px solid #000;">
+                                                    <strong/>
+                                                </td>
+                                                <td align="center" style="font-size:17px;border:1px solid #000;">
+                                                    <t t-set="taxe_total" t-value="0.0"/>
+                                                    <t t-foreach="o.move_ids_without_package" t-as="line">
+                                                        <t t-set="taxe_total"
+                                                           t-value="taxe_total + float(line.taxe_value or 0.0)"/>
+                                                    </t>
+                                                    <strong t-esc="'{:.2f}'.format(taxe_total)"/>
+                                                </td>
+                                                <td align="center" style="font-size:17px;border:1px solid #000;">
+                                                    <t t-set="total_value" t-value="0"/>
+                                                    <t t-foreach="o.move_ids_without_package" t-as="line">
+                                                        <t t-set="total_value"
+                                                           t-value="total_value + (float(line.product_uom_qty or 0.0) * float(line.price_unit or 0.0))"/>
+                                                    </t>
+                                                    <strong t-esc="total_value"/>
+                                                </td>
+                                            </tr>
+
+                                            <tr align="start" style="border:1px solid #000;">
+                                                <td colspan="11">
+                                                    <strong t-esc="o.company_id.currency_id.amount_to_text(int(total_value))"/>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="row" style="border:1px solid #000;">
+                                        <div class="col-12 p-2">
+                                            <strong>Notes:</strong>
+                                            <br/>
+                                            <t t-esc="o.remarks"/>
+                                            <br/>
+
+                                            <strong>Declaration:</strong>
+                                            <br/>
+                                            <t t-esc="o.note"/>
+                                        </div>
+                                    </div>
+                                    <!--                                    </section>-->
+
+                                </div>
+<!--                                <div class="footer" style="height: 130mm;border:1px solid #000;">-->
+                                    <div class="row" style="border: 1px solid black;page-break-after: always;">
+                                        <div class="col-6 p-2" style="border-right: 1px solid black;">
+                                            <strong>For Receiver's</strong>
+                                            <br/>
+                                            <br/>
+                                            <br/>
+                                            <br/>
+                                            <br/>
+                                            <br/>
+                                            <strong>Authorised Signatory</strong>
+                                        </div>
+                                        <div class="col-6 p-2">
+                                            <strong>For TexelQ Engineering India Pvt. Ltd</strong>
+                                            <br/>
+                                            <br/>
+                                            <br/>
+                                            <br/>
+                                            <br/>
+                                            <br/>
+                                            <strong>Authorised Signatory</strong>
+                                        </div>
+                                    </div>
+                                    <div class="row" style="border: 1px solid black;">
+                                        <div class="col-12 p-2" align="center">
+                                            <h7 style="color: black; text-align:center; font-weight: bold; letter-spacing: 1px; ">
+                                                ******This is computer generated document and requires no
+                                                signature******
+                                            </h7>
+                                        </div>
+                                    </div>
+
+                                    <div class="text-end page_number">
+                                        <div class="text-muted">
+                                            Page:
+                                            <span class="page"/>
+                                            of
+                                            <span class="topage"/>
+                                        </div>
+                                    </div>
+                                </div>
+
+                        </t>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

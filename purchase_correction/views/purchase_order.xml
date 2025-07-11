@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="purchase_order_view_form_new" model="ir.ui.view">
+        <field name="name">purchase.order.view.form.new</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase_approval.purchase_order_approval_form_inherit"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='attachment']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+<!--            <xpath expr="//div[hasclass('clearfix')]" position="after">-->
+<!--                &lt;!&ndash;            <xpath expr="//field[@name='tax_totals']" position="after">&ndash;&gt;-->
+<!--                <group>-->
+<!--                    <field name="attachment" help="Upload your PDF file." widget="pdf_viewer"/>-->
+<!--                </group>-->
+<!--            </xpath>-->
+            <xpath expr="//field[@name='shipping_method']" position="after">
+                <field name="purchase_attachment" help="Upload your PDF file." invisible="1"/>
+                <field name="purchase_attachment_ids" widget='many2many_binary_preview' help="Upload your PDF file."/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="purchase_order_line_approval_form_inherit_new" model="ir.ui.view">
+        <field name="name">purchase.order.line</field>
+        <field name="model">purchase.order.line</field>
+        <field name="inherit_id" ref="apps_tender_management.sh_bidline_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='price_unit']"
+                   position="after">
+                <field name="comments"/>
+            </xpath>
+        </field>
+    </record>
+
+
+    <record id="purchase_order_approval_form_inherit_new" model="ir.ui.view">
+        <field name="name">purchase.order.form</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']/tree//field[@name='price_unit']"
+                   position="after">
+                <field name="comments" optional="hide"/>
+            </xpath>
+            <xpath expr="//field[@name='date_order']"
+                   position="after">
+                <field name="alert_mail_date" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='date_order']"
+                   position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='date_planned']"
+                   position="attributes">
+                <attribute name="string">Delivery due date</attribute>
+            </xpath>
+            <xpath expr="//field[@name='order_line']" position="attributes">
+                <attribute name="readonly">state != 'draft'</attribute>
+            </xpath>
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="current_date" invisible="1"/>
+                <field name="five_days" invisible="1" force_save="1"/>
+                <field name="red" invisible="1"/>
+                <field name="orange" invisible="1"/>
+                <field name="green" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="purchase_order_view_tree" model="ir.ui.view">
+        <field name="name">purchase.order.view.tree</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_view_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree//field[@name='date_planned']" position="replace">
+                <field name="red" invisible="1" optional="hide"/>
+                <field name="orange" invisible="1" optional="hide"/>
+                <field name="green" invisible="1" optional="hide"/>
+                <field name="date_planned" widget="badge"
+                       decoration-danger="red == True"
+                       decoration-warning="orange == True"
+                       decoration-success="green == True"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

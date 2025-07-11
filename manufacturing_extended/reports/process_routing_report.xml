@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="paper_format_process_routing" model="report.paperformat">
+            <field name="name">Process Routing Report</field>
+            <field name="default" eval="True"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">32</field>
+            <field name="margin_bottom">20</field>
+            <field name="margin_left">4</field>
+            <field name="margin_right">4</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">28</field>
+            <field name="dpi">120</field>
+        </record>
+
+        <record id="report_process_routing_pdf" model="ir.actions.report">
+            <field name="name">Process Routing Report</field>
+            <field name="model">process.routing.wizard</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">manufacturing_extended.process_routing_template_pdf</field>
+            <field name="report_file">manufacturing_extended.process_routing_template_pdf</field>
+            <field name="print_report_name">'Process Routing Report'</field>
+            <field name="binding_model_id" ref="manufacturing_extended.model_process_routing_wizard"/>
+            <field name="paperformat_id" ref="manufacturing_extended.paper_format_process_routing"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <template id="process_routing_template_pdf">
+            <t t-call="web.html_container">
+                <t t-call="web.basic_layout">
+                    <div class="header">
+                        <div class="row">
+                            <div class="col-6" style="text-align: left;">
+                                <strong>
+                                    <span t-esc="res_company.name"/>
+                                </strong>
+                                <br/>
+                                <span t-esc="res_company.street"/>
+                                <br/>
+                                <span t-if="res_company.street2" t-esc="res_company.street2"/>
+                                <br/>
+                                <span t-esc="res_company.city"/>
+                                <span t-if="res_company.state_id.name" t-esc="', ' + res_company.state_id.name"/>
+                                <span t-if="res_company.country_id.name" t-esc="', ' + res_company.country_id.name"/>
+                                <br/>
+                                <span t-esc="res_company.phone"/>
+                            </div>
+                            <div class="col-6" style="text-align: right;">
+                                <img src="/web/binary/company_logo" class="img-fluid img-thumbnail"
+                                     style="max-width: 150px;"/>
+                            </div>
+                        </div>
+                        <div>
+                            <hr style="border-top: 2px solid black;"/>
+                        </div>
+                    </div>
+                    <div style="margin-bottom:20px">
+                        <h3 style="text-align: center; color: black;">
+                            <strong>Process Routing</strong>
+                        </h3>
+                    </div>
+                    <div style="page-break-inside: avoid;">
+                        <t t-foreach="data" t-as="l">
+                            <div class="row"
+                                 style="margin-top:12px;border-left:1px solid black;border-right:1px solid black;border-top:1px solid black;">
+                                <h5 align="center">
+                                    <t t-if="l['part_no']">
+                                        <span t-esc="l['part_no']"/>
+                                    </t>
+                                    <t t-else="">
+                                    </t>
+                                </h5>
+                            </div>
+                            <table class="table table-sm" style="border:1px solid black;">
+                                <thead>
+                                    <th>OP No</th>
+                                    <th>Operation</th>
+                                    <th>Description</th>
+                                    <th>Workcenters</th>
+                                    <th>Supplier</th>
+                                    <th>Type</th>
+                                    <th>Weight(lbs)</th>
+                                    <th>Std Qty</th>
+                                    <th>Std Container</th>
+                                    <th>BOM</th>
+                                    <th>Location</th>
+                                </thead>
+                                <tbody style="border-top: 1px solid black;">
+                                    <t t-foreach="l['part_operations']" t-as="q">
+                                        <tr>
+                                            <t t-if="q['operation_code']">
+                                                <td align="left"
+                                                    style="color:black;border-left:1px">
+                                                    <span t-esc="q['operation_code']"/>
+                                                </td>
+                                            </t>
+                                            <t t-else="">
+                                                <td align="center"
+                                                    style="color:black;border-left:1px">
+                                                    -
+                                                </td>
+                                            </t>
+
+                                            <t t-if="q['operation_id']">
+                                                <td align="left"
+                                                    style="color:black;border-left:1px">
+                                                    <span t-esc="q['operation_id']"/>
+                                                </td>
+                                            </t>
+                                            <t t-else="">
+                                                <td align="center"
+                                                    style="color:black;border-left:1px">
+                                                    -
+                                                </td>
+                                            </t>
+                                            <t t-if="q['description']">
+                                                <td align="left"
+                                                    style="color:black;border-left:1px">
+                                                    <span t-esc="q['description']"/>
+                                                </td>
+                                            </t>
+                                            <t t-else="">
+                                                <td align="center"
+                                                    style="color:black;border-left:1px">
+                                                    -
+                                                </td>
+                                            </t>
+
+                                            <t t-if="q['workcenters_text']">
+                                                <td align="left" style="color:black;border-left:1px">
+                                                    <t t-foreach="q['workcenters_text'].split('\n')" t-as="line">
+                                                        <span t-esc="line"/>
+                                                        <br/>
+                                                    </t>
+                                                </td>
+                                            </t>
+                                            <t t-else="">
+                                                <td align="center" style="color:black;border-left:1px">
+                                                    -
+                                                </td>
+                                            </t>
+
+                                            <t t-if="q['partner_id']">
+                                                <td align="left"
+                                                    style="color:black;border-left:1px">
+                                                    <span t-esc="q['partner_id']"/>
+                                                </td>
+                                            </t>
+                                            <t t-else="">
+                                                <td align="center"
+                                                    style="color:black;border-left:1px">
+                                                    -
+                                                </td>
+                                            </t>
+                                            <t t-if="q['type']">
+                                                <td align="left"
+                                                    style="color:black;border-left:1px">
+                                                    <span t-esc="q['type']"/>
+                                                </td>
+                                            </t>
+                                            <t t-else="">
+                                                <td align="center"
+                                                    style="color:black;border-left:1px">
+                                                    -
+                                                </td>
+                                            </t>
+                                            <t t-if="q['piece_weight']">
+                                                <td align="left"
+                                                    style="color:black;border-left:1px">
+                                                    <span t-esc="q['piece_weight']"/>
+                                                </td>
+                                            </t>
+                                            <t t-else="">
+                                                <td align="center"
+                                                    style="color:black;border-left:1px">
+                                                    -
+                                                </td>
+                                            </t>
+                                            <t t-if="q['standard_qty']">
+                                                <td align="left"
+                                                    style="color:black;border-left:1px">
+                                                    <span t-esc="q['standard_qty']"/>
+                                                </td>
+                                            </t>
+                                            <t t-else="">
+                                                <td align="center"
+                                                    style="color:black;border-left:1px">
+                                                    -
+                                                </td>
+                                            </t>
+                                            <t t-if="q['container_type']">
+                                                <td align="left"
+                                                    style="color:black;border-left:1px">
+                                                    <span t-esc="q['container_type']"/>
+                                                </td>
+                                            </t>
+                                            <t t-else="">
+                                                <td align="center"
+                                                    style="color:black;border-left:1px">
+                                                    -
+                                                </td>
+                                            </t>
+                                            <t t-if="q['bom']">
+                                                <td align="left"
+                                                    style="color:black;border-left:1px">
+                                                    <span t-esc="q['bom']"/>
+                                                </td>
+                                            </t>
+                                            <t t-else="">
+                                                <td align="center"
+                                                    style="color:black;border-left:1px">
+                                                    -
+                                                </td>
+                                            </t>
+                                            <t t-if="q['location']">
+                                                <td align="left"
+                                                    style="color:black;border-left:1px">
+                                                    <span t-esc="q['location']"/>
+                                                </td>
+                                            </t>
+                                            <t t-else="">
+                                                <td align="center"
+                                                    style="color:black;border-left:1px">
+                                                    -
+                                                </td>
+                                            </t>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </t>
+                    </div>
+                </t>
+            </t>
+        </template>
+
+    </data>
+</odoo>

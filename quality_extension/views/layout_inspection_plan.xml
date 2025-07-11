@@ -1,0 +1,123 @@
+<odoo>
+    <data>
+        <record id="seq_layout_inspection_plan" model="ir.sequence">
+            <field name="name">Layout Inspection Plan</field>
+            <field name="code">layout.inspection.plan</field>
+            <field name="prefix">LIP/</field>
+            <field name="padding">3</field>
+            <field name="number_increment">1</field>
+            <field name="company_id" eval="False"/>
+            <field name="implementation">standard</field>
+        </record>
+        <record id="layout_inspection_plan_form_view" model="ir.ui.view">
+            <field name="name">Layout Inspection Plan Form View</field>
+            <field name="model">layout.inspection.plan</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <h1>
+                            <field name='name' readonly="1" force_save="1"/>
+                        </h1>
+                        <group>
+                            <group string="Layout Inspection Plan">
+                                <field name='doc_no'/>
+                                <field name='rev_no'/>
+                                <field name='date' required="1"/>
+                            </group>
+                            <group string="Layout Inspection Plan">
+                                <field name='prepared_by' string="Prepared By"/>
+                                <field name='approved_by' string="Approved By"/>
+                                <label for="name" string="Year"/>
+                                <div class="row">
+                                    <field name="select_year" class="oe_inline"/>
+                                    <field name="end_year" class="oe_inline"/>
+                                </div>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="Plan Lines">
+                                <field name="line_ids">
+                                    <tree editable="bottom">
+                                        <field name="part_no" optional="hide"
+                                               options="{'no_open': True}"/>
+                                        <field name="part_name"/>
+                                        <field name="partner_id" optional="hide"
+                                               options="{'no_open': True}"/>
+                                        <field name="may"/>
+                                        <field name="june"/>
+                                        <field name="july"/>
+                                        <field name="august"/>
+                                        <field name="september"/>
+                                        <field name="october"/>
+                                        <field name="november"/>
+                                        <field name="december"/>
+                                        <field name="january"/>
+                                        <field name="february"/>
+                                        <field name="march"/>
+                                        <field name="april"/>
+                                        <field name="remarks"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <record id="layout_inspection_plan_tree_view" model="ir.ui.view">
+            <field name="name">Layout Inspection Plan Tree View</field>
+            <field name="model">layout.inspection.plan</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name='name'/>
+                    <field name='doc_no'/>
+                    <field name='rev_no'/>
+                    <field name='date'/>
+                    <field name='select_year' string="From"/>
+                    <field name='end_year' string="To"/>
+                </tree>
+            </field>
+        </record>
+        <record id="action_layout_inspection_plan" model="ir.actions.act_window">
+            <field name="name">Layout Inspection Plan</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">layout.inspection.plan</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_no content_smiling_face">
+                    Create a Layout Inspection Plan
+                </p>
+            </field>
+        </record>
+        <record id="view_layout_inspection_plan_search_view" model="ir.ui.view">
+            <field name="name">layout.inspection.search</field>
+            <field name="model">layout.inspection.plan</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="doc_no"/>
+                    <field name="rev_no"/>
+                    <field name="date"/>
+                    <field name="select_year"/>
+                    <separator/>
+                    <searchpanel>
+                        <field name="select_year" icon="fa-filter"/>
+                    </searchpanel>
+                </search>
+            </field>
+        </record>
+
+<!--        <menuitem id="menu_layout_inspection_plan"-->
+<!--                  name="Layout Inspection Plan"-->
+<!--                  parent="quality_control.menu_quality_control"-->
+<!--                  action="action_layout_inspection_plan"-->
+<!--                  sequence="7"/>-->
+    </data>
+</odoo>

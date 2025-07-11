@@ -1,0 +1,124 @@
+<odoo>
+    <record id="view_hr_payroll_month" model="ir.ui.view">
+        <field name="name">hr.payroll.month.form</field>
+        <field name="model">hr.payroll.month</field>
+        <field name="arch" type="xml">
+            <form string="Month Master">
+                <group>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                </group>
+            </form>
+        </field>
+    </record>
+    <record id="view_hr_month_tree" model="ir.ui.view">
+        <field name="name">hr.payroll.month.tree</field>
+        <field name="model">hr.payroll.month</field>
+        <field name="arch" type="xml">
+            <tree string="Month Master">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    <record id="action_view_hr_month_form" model="ir.actions.act_window">
+        <field name="name">Month</field>
+        <field name="res_model">hr.payroll.month</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="view_hr_payroll_year_list" model="ir.ui.view">
+        <field name="name">payroll.year.list.form</field>
+        <field name="model">payroll.year.list</field>
+        <field name="arch" type="xml">
+            <form string="Year Master">
+                <group>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                </group>
+            </form>
+        </field>
+    </record>
+    <record id="view_hr_year_list_tree" model="ir.ui.view">
+        <field name="name">payroll.year.list.tree</field>
+        <field name="model">payroll.year.list</field>
+        <field name="arch" type="xml">
+            <tree string="Year Master">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    <record id="action_view_hr_year_list" model="ir.actions.act_window">
+        <field name="name">Year</field>
+        <field name="res_model">payroll.year.list</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="view_hr_payroll_year" model="ir.ui.view">
+        <field name="name">hr.payroll.year.form</field>
+        <field name="model">hr.payroll.year</field>
+        <field name="arch" type="xml">
+            <form string="Year Master">
+                <header>
+<!--                    <button string="Find Sundays" name="find_all_sundays" type="object"-->
+<!--                            class="oe_highlight" invisible="1"/>-->
+                </header>
+                <group>
+                    <group>
+                        <field name="name" force_save="1"/>
+                        <field name="year_list_id"/>
+                        <field name="date_convert" force_save="1"  readonly="1" invisible="1"/>
+                    </group>
+                    <group>
+                        <field name="month" readonly="1" force_save="1" invisible="1"/>
+                        <field name="month_number" readonly="1" force_save="1" invisible="1"/>
+                    </group>
+                </group>
+                <notebook>
+                    <page string="Month Days">
+                        <separator string=" Month Days"/>
+                        <field name="day_and_month" nolabel="1">
+                            <tree string=" Days" editable="bottom">
+                                <field name="year_list_id"/>
+                                <field name="select_month"/>
+                                <field name="week_off" readonly="1"/>
+                                <field name="holiday_public" force_save="1" readonly="1"/>
+                                <field name="public_holiday_count" force_save="1" readonly="1"/>
+                                <field name="staff_saturday" column_invisible="1" force_save="1" readonly="1"/>
+                                <field name="only_saturday" force_save="1" readonly="1" optional="hide"/>
+                                <field name="only_sunday" force_save="1" readonly="1" optional="hide"/>
+                                <field name="sunday" force_save="1" readonly="1"/>
+                                <field name="number_of_days" readonly="1"/>
+                                <field name="total_number_of_days" readonly="1"/>
+                                <field name="year_monthnumber_of_days" force_save="1" readonly="1" optional="hide"/>
+                                <field name="boolen_leave" optional="hide"/>
+                                <button name="action_approve" string="Approve" class='oe_inline'
+                                        icon="fa-thumbs-up type=" type="object"
+                                        invisible="boolen_leave == True"/>
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
+            </form>
+        </field>
+    </record>
+    <record id="view_hr_month_tree" model="ir.ui.view">
+        <field name="name">hr.payroll.year.tree</field>
+        <field name="model">hr.payroll.year</field>
+        <field name="arch" type="xml">
+            <tree string="Year Master">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_view_hr_year_form" model="ir.actions.act_window">
+        <field name="name">Year</field>
+        <field name="res_model">hr.payroll.year</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem action="action_view_hr_year_form" id="menu_action_hr_menu_year" name=" Payroll Year Config"
+              parent="hr_work_entry_contract_enterprise.menu_hr_payroll_configuration" sequence="6"/>
+</odoo>

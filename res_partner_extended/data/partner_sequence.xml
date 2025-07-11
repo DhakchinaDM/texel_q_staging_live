@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!-- PARTNER SUPPLIER SEQUENCE-->
+         <record id="seq_supplier" model="ir.sequence">
+            <field name="name">Supplier Sequence</field>
+            <field name="code">res.partner</field>
+            <field name="prefix">TQ/EP/</field>
+            <field name="padding">4</field>
+            <field name="number_increment">1</field>
+            <field name="company_id" eval="False"/>
+            <field name="implementation">standard</field>
+        </record>
+
+    </data>
+</odoo>

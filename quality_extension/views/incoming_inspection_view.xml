@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record id="seq_incoming_inspection" model="ir.sequence">
+            <field name="name">Incoming Inspection Sequence</field>
+            <field name="code">incoming.inspection</field>
+            <field name="prefix">Q/IN/RAW/</field>
+            <field name="padding">3</field>
+            <field name="number_increment">1</field>
+            <field name="company_id" eval="False"/>
+            <field name="implementation">standard</field>
+        </record>
+        <record id="seq_incoming_inspection_parts" model="ir.sequence">
+            <field name="name">Incoming Inspection Sequence</field>
+            <field name="code">incoming.inspection.parts</field>
+            <field name="prefix">Q/IN/PARTS/</field>
+            <field name="padding">3</field>
+            <field name="number_increment">1</field>
+            <field name="company_id" eval="False"/>
+            <field name="implementation">standard</field>
+        </record>
+        <record id="incoming_inspection_form_view" model="ir.ui.view">
+            <field name="name">Incoming Inspection Form View</field>
+            <field name="model">incoming.inspection</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form create="0" delete="0">
+                    <header>
+                        <button name="inspector_approve"
+                                string="Approved"
+                                type="object"
+                                state="approve"
+                                class="oe_highlight"
+                                invisible="state != 'draft'"/>
+                        <button name="open_conditional_approve"
+                                string="Conditionally Approved"
+                                type="object"
+                                state="approve"
+                                class="oe_highlight"
+                                invisible="state != 'draft'"/>
+                        <button name="engineer_approve"
+                                string="Approved"
+                                type="object"
+                                class="oe_highlight"
+                                invisible="state not in ['inspector_approved', 'inspector_c_approved']"/>
+                        <button name="engineer_c_approve"
+                                string="Conditionally Approved"
+                                type="object"
+                                class="oe_highlight"
+                                invisible="state not in ['inspector_approved', 'inspector_c_approved']"/>
+<!--                        <button name="allow_reject"-->
+<!--                                string="Reject"-->
+<!--                                type="object"-->
+<!--                                class="oe_highlight"-->
+<!--                                invisible="state not in ['draft', 'inspector_approved', 'inspector_c_approved']"/>-->
+                        <button name="create_dn_dc"
+                                string="Create DC/DN"
+                                type="object"
+                                groups="quality_extension.group_delete_access"
+                                class="oe_highlight"
+                                invisible="dc_ref_id != False or vendor_credit_note != False or state not in ['reject'] "/>
+                        <button name="draft_submit"
+                                string="Set To Draft"
+                                type="object"
+                                class="oe_highlight"
+                                invisible="state not in ('cancel')"/>
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="draft,approve,reject"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button type="object" name="view_good_receipt_note" class="oe_stat_button"
+                                    string="GRN"
+                                    icon="fa-truck"
+                                    invisible="picking_id == False">
+                            </button>
+                            <button type="object" name="view_vendor_credit_note" class="oe_stat_button"
+                                    string="Credit Note"
+                                    icon="fa-money"
+                                    invisible="vendor_credit_note == False">
+                            </button>
+                            <button type="object" name="view_dc" class="oe_stat_button"
+                                    string="Dc"
+                                    icon="fa-money"
+                                    invisible="dc_ref_id == False">
+                            </button>
+
+                        </div>
+
+                        <div role="alert" class="alert alert-info"
+                             invisible="state != 'reject'">
+                            <p>
+                                <field name="alert_message"/>
+                            </p>
+                        </div>
+
+                        <div class="alert alert-success mb-4" role="alert"
+                             invisible="allow_reject_bool != True or state != 'draft'">
+                            Inspection moved to 100% due to sampling rejection.
+                        </div>
+                        <h1>
+                            <field name='name'/>
+                        </h1>
+                        <group>
+                            <group name="inspection_details_parts" string="Incoming Inspection Details">
+                                <field name='product_id' invisible="1" readonly="1" force_save="1"/>
+                                <field name='allow_reject_bool' invisible="1" readonly="1" force_save="1"/>
+                                <field name='vendor_credit_note' invisible="1" readonly="1" force_save="1"/>
+                                <field name='dc_ref_id' invisible="1" readonly="1" force_save="1"/>
+                                <field name='stock_move_id' invisible="1" readonly="1" force_save="1"/>
+                                <field name='part_no' readonly="1" force_save="1"/>
+                                <field name='part_name' readonly="1" force_save="1"/>
+                                <field name='partner_id' readonly="1" force_save="1"
+                                       options="{'no_open': True}"/>
+                                <field name='material_grade' readonly="1" force_save="1"/>
+                                <field name='draw_rev_no' readonly="1" force_save="1"/>
+                                <field name='draw_rev_date' readonly="1" force_save="1"/>
+                                <field name='type' readonly="1" force_save="1"/>
+                                <field name='part_type' readonly="state == 'done'"/>
+                                <field name='inspection_type' readonly="state == 'done'"/>
+                                <field name='inspection_incoming_type' invisible="1" readonly="state == 'done'"/>
+                                <field name="allow_record_approve" widget="boolean_toggle" groups="base.group_system"/>
+                                <field name="state" widget="badge" readonly="1"/>
+                            </group>
+                            <group name="inspection_details" string="Incoming Inspection Details">
+                                <field name='purchase_id' readonly="1" force_save="1"
+                                       options="{'no_open': True}"/>
+                                <field name='po_date' readonly="1" force_save="1"/>
+                                <field name='grn_date' readonly="1" force_save="1" invisible="1"/>
+                                <field name="lot_id" readonly="1" options="{'no_create': True, 'no_open': True}"/>
+                                <field name='lot_qty' readonly="1" force_save="1"/>
+                                <!--                                <field name="inc_min_qty"/>-->
+                                <!--                                <field name="inc_max_qty"/>-->
+                                <!--                                <field name="inc_sample_size"/>-->
+                                <field name='inspection_date' readonly="state == 'done'"/>
+                                <field name='batch_no' readonly="state == 'done'"/>
+                                <field name='inspector_id' readonly="state == 'done'"
+                                       options="{'no_open': True}"/>
+                                <field name='dc_invoice_no'/>
+                                <field name='sample_size' readonly="1" force_save="1"/>
+                                <field name='accepted_qty' readonly="1" force_save="1" invisible="state != 'reject'"/>
+                                <field name='rejected_qty' readonly="1" force_save="1" invisible="state != 'reject'"/>
+                                <field name='picking_id' invisible="1" readonly="1" force_save="1"/>
+                                <field name="observation_attachment" readonly="state == 'done'" filename="file_name_1"/>
+                                <field name="file_name_1" invisible="1"/>
+                            </group>
+                            <group name="supplier_test_report" string="Supplier Test Report">
+                                <field name="supplier_test_need"/>
+                                <field name="supplier_test_report" required="supplier_test_need == True" invisible="supplier_test_need != True" readonly="state == 'done'" filename="file_name_2"/>
+                                <field name="file_name_2" invisible="1"/>
+                            </group>
+                            <group name="material_test_attachment" string="Material Test Attachment">
+                                <field name="material_test_need"/>
+                                <field name="material_test_attachment" required="material_test_need == True" invisible="material_test_need != True" readonly="state == 'done'" filename="file_name_4"/>
+                                <field name="file_name_4" invisible="1"/>
+                            </group>
+                            <group name="material_test_report" string="Material Test Certificate">
+                                <field name="certificate_if_needed"/>
+                                <field name="material_test_report"
+                                       readonly="state == 'done'" invisible="certificate_if_needed == False"
+                                       filename="file_name_3"/>
+                                <field name="file_name_3" invisible="1"/>
+                                <field name="material_test_date" readonly="state == 'done'"/>
+                            </group>
+                            <group name="other_documents" string="Other Documents">
+                                <field name="other_document_need"/>
+                                <field name="other_document_report" required="other_document_need == True"
+                                       readonly="state == 'done'" invisible="other_document_need == False"
+                                       filename="file_name_5"/>
+                                <field name="file_name_5" invisible="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="parameter_details" string="Parameters Details">
+                                <div style="margin-bottom:20px">
+                                    <button name="fetch_parameters"
+                                            string="Refresh Parameters"
+                                            type="object"
+                                            class="oe_highlight"
+                                            invisible="state == 'done'"/>
+                                </div>
+                                <field name="parameters_ids" readonly="state == 'done'">
+                                    <tree editable="bottom">
+                                        <field name="baloon_no"/>
+                                        <field name="parameter_id" options="{'no_create': True,'no_open': True}"/>
+                                        <field name="specification"/>
+                                        <field name="invalid_level_check" column_invisible="1"/>
+                                        <field name="min_level" decoration-danger="invalid_level_check == True"
+                                               optional="hide"/>
+                                        <field name="max_level" decoration-danger="invalid_level_check == True"
+                                               optional="hide"/>
+                                        <field name="check_method_id" widget="many2many_tags"
+                                               options="{'no_create': True}"/>
+                                        <field name="observation_1" decoration-danger="obser_1_check == True"
+                                               optional="show"/>
+                                        <field name="observation_2" decoration-danger="obser_2_check == True"
+                                               optional="show"/>
+                                        <field name="observation_3" decoration-danger="obser_3_check == True"
+                                               optional="show"/>
+                                        <field name="observation_4" decoration-danger="obser_4_check == True"
+                                               optional="show"/>
+                                        <field name="observation_5" decoration-danger="obser_5_check == True"
+                                               optional="show"/>
+                                        <field name="remarks"/>
+                                        <field name="obs_status"/>
+                                        <field name="obser_1_check" column_invisible="1"/>
+                                        <field name="obser_2_check" column_invisible="1"/>
+                                        <field name="obser_3_check" column_invisible="1"/>
+                                        <field name="obser_4_check" column_invisible="1"/>
+                                        <field name="obser_5_check" column_invisible="1"/>
+                                        <field name="observation_no_need" column_invisible="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page name="others" string="Others"
+                                  invisible="inspector_approve_by == False and engineer_approve_by == False">
+                                <group>
+                                    <group name="inspector" string="Inspector"
+                                           invisible="inspector_approve_by == False">
+                                        <field name="inspector_approve_by" readonly="1" force_save="1"
+                                               options="{'no_open': True}"/>
+                                        <field name="inspector_approve_on" readonly="1" force_save="1"/>
+                                        <field name="inspector_approve_type" readonly="1" force_save="1"/>
+                                    </group>
+                                    <group name="engineer" string="Engineer"
+                                           invisible="engineer_approve_by == False">
+                                        <field name="engineer_approve_by" readonly="1" force_save="1"
+                                               options="{'no_open': True}"/>
+                                        <field name="engineer_approve_on" readonly="1" force_save="1"/>
+                                        <field name="engineer_approve_type" readonly="1" force_save="1"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Remarks"
+                            >
+                                <group string="Remarks">
+                                    <field name="conditional_approve_remark" readonly="1" force_save="1"
+                                           invisible="conditional_approve_remark == False"/>
+                                    <field name="rejected_qty" string="Rejected Qty" readonly="1" force_save="1"/>
+                                    <field name="reject_remarks" readonly="1" force_save="1"/>
+                                    <field name="reject_date" readonly="1" force_save="1"/>
+                                    <field name="rejected_by" readonly="1" force_save="1"/>
+                                    <field name="alert_message" invisible="1" force_save="1"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <record id="incoming_inspection_tree_view" model="ir.ui.view">
+            <field name="name">Incoming Inspection Tree View</field>
+            <field name="model">incoming.inspection</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree create="0" delete="0">
+                    <field name='create_date' string="GRN Date"/>
+                    <field name='name' string="IQC Name"/>
+                    <field name='material_grade' optional="hide"/>
+                    <field name='inspector_id' optional="hide"/>
+                    <field name='inspection_date' optional="hide"/>
+                    <field name='type' optional="hide"/>
+                    <field name='partner_id'/>
+                    <field name='part_no'/>
+                    <field name='part_name'/>
+                    <field name='lot_qty'/>
+<!--                    <field name="status_dcn" widget="badge" decoration-success="status_dcn == 'debit_note' or status_dcn == 'dc'" readonly="1"/>-->
+                    <field name='purchase_id'/>
+                    <field name='state'/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_incoming_ins_search_view" model="ir.ui.view">
+            <field name="name">incoming.inspection.search</field>
+            <field name="model">incoming.inspection</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="material_grade"/>
+                    <field name="inspector_id"/>
+                    <field name="inspection_date"/>
+                    <field name="type"/>
+                    <field name="part_no"/>
+                    <field name="part_name"/>
+                    <field name="purchase_id"/>
+                    <field name="state"/>
+                    <filter string="Draft" name="state_draft" domain="[('state', '=', 'draft')]"
+                            context="{'default_state': 'draft'}"/>
+                    <separator/>
+                    <searchpanel>
+                        <field name="state" icon="fa-filter"/>
+                    </searchpanel>
+                </search>
+            </field>
+        </record>
+
+        <record id="incoming_inspection_raw_action" model="ir.actions.act_window">
+            <field name="name">Incoming Inspection Raw</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">incoming.inspection</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{ "search_default_inspection_incoming_type": 1,"search_default_state_draft": 1,
+                "default_inspection_incoming_type":
+                'incoming_raw'}
+            </field>
+            <field name="domain">[('inspection_incoming_type', '=', 'incoming_raw')]</field>
+            <field name="help" type="html">
+                <p class="o_view_no content_smiling_face">
+                    Incoming Inspection Raw Information
+                </p>
+            </field>
+        </record>
+        <record id="incoming_inspection_part_action" model="ir.actions.act_window">
+            <field name="name">Incoming Inspection Parts</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">incoming.inspection</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{ "search_default_inspection_incoming_type": 1, "default_inspection_incoming_type":
+                'incoming_part'}
+            </field>
+            <field name="domain">[('inspection_incoming_type', '=', 'incoming_part')]</field>
+            <field name="help" type="html">
+                <p class="o_view_no content_smiling_face">
+                    Incoming Inspection Parts Information
+                </p>
+            </field>
+        </record>
+
+        <record id="incoming_inspection_purchase_raw_action" model="ir.actions.act_window">
+            <field name="name">Incoming Inspection Raw</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">incoming.inspection</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{ "search_default_inspection_incoming_type": 1,"search_default_state_reject": 1,
+            "default_inspection_incoming_type":
+            'incoming_raw'}
+            </field>
+            <field name="domain">[('inspection_incoming_type', '=', 'incoming_raw'), ('state', '=', 'reject')]</field>
+            <field name="help" type="html">
+            <p class="o_view_no content_smiling_face">
+                Incoming Inspection Raw Information
+            </p>
+            </field>
+        </record>
+        
+        <menuitem id="incoming_inspection_raw_main_menu"
+                  name="Incoming Inspection Raw"
+                  parent="quality_control.menu_quality_control"
+                  action="incoming_inspection_raw_action"
+                  sequence="1"/>
+
+        <menuitem id="incoming_inspection_raw_purchase_menu"
+              name="IQC Raw Rejected"
+              sequence="150"
+              groups="purchase.group_purchase_manager"
+              action="incoming_inspection_purchase_raw_action"
+              parent="purchase.menu_purchase_root"/>
+
+        <menuitem id="incoming_inspection_part_main_menu"
+                  name="Incoming Inspection Parts"
+                  parent="quality_control.menu_quality_control"
+                  action="incoming_inspection_part_action"
+                  sequence="2"/>
+    </data>
+</odoo>

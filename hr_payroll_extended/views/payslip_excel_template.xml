@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="payslip_excel_template_view_form" model="ir.ui.view">
+        <field name="name">payslip.excel.view.form</field>
+        <field name="model">payslip.excel.template</field>
+        <field name="arch" type="xml">
+            <form string="Excel Payslip">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" force_save="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <field name="ref"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="payslip_excel_template_view_tree" model="ir.ui.view">
+        <field name="name">payslip.excel.template.view.tree</field>
+        <field name="model">payslip.excel.template</field>
+        <field name="arch" type="xml">
+            <tree string="Excel Payslip Template">
+                <field name="ref"/>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    <record id="action_payslip_excel_template" model="ir.actions.act_window">
+        <field name="name">Payslip Excel Template</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">payslip.excel.template</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Execute Excel sheet Template
+            </p>
+        </field>
+    </record>
+    <menuitem id="payslip_excel_template_root" name="Payslip Excel Template"
+              parent="hr_work_entry_contract_enterprise.menu_hr_payroll_configuration"
+              action="action_payslip_excel_template" sequence="2"/>
+</odoo>

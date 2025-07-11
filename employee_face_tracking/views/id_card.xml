@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="paperformat_hr_employee_print_id_card" model="report.paperformat">
+        <field name="name">Id Card</field>
+        <field name="default" eval="False"/>
+        <field name="disable_shrinking" eval="True"/>
+        <field name="format">custom</field>
+        <field name="page_height">87</field>
+        <field name="page_width">55</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">10</field>
+        <field name="margin_bottom">0</field>
+        <field name="margin_left">0</field>
+        <field name="margin_right">0</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">10</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <record id="hr_employee_print_id_card" model="ir.actions.report">
+        <field name="name">Id Card</field>
+        <field name="model">hr.employee</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_name">employee_face_tracking.print_employee_card</field>
+        <field name="report_file">employee_face_tracking.print_employee_card</field>
+        <field name="print_report_name">'Id Card - %s' % (object.name).replace('/', '')</field>
+        <field name="paperformat_id" ref="employee_face_tracking.paperformat_hr_employee_print_id_card"/>
+        <field name="binding_model_id" ref="hr.model_hr_employee"/>
+        <field name="binding_type">report</field>
+    </record>
+
+
+    <template id="print_employee_card">
+        <t t-call="web.basic_layout">
+            <t t-foreach="docs" t-as="employee">
+                <div class="header">
+                    <!--                            <span t-field="doc.company_id.report_header_new"-->
+                    <!--                                  t-options="{'widget': 'image', 'width': '100%'}"/>-->
+                    <img t-att-src="'/employee_face_tracking/static/src/image/TexelQ.png'" alt="Static Image"
+                         style="margin-left:-15px;height:310px;width:200px"/>
+
+                </div>
+                <div class="page" align="center" style="avoid-break:inside:avoid;">
+                    <div>
+                        <img t-att-src="image_data_uri(employee.company_id.logo)"
+                             style="max-height:45pt;max-width:100%" alt="Company Logo"/>
+                    </div>
+                    <div class="employee-details" align="center">
+                        <img t-att-src="image_data_uri(employee.avatar_1920)" style="height:90px;width:60px"
+                             alt="Employee Image"/>
+                    </div>
+                    <div align="center">
+                        <span t-out="employee.name.upper()" style="font-size: 12px;"/>
+                    </div>
+                    <div align="center">
+                        <strong t-out="employee.job_id.name"/>
+                    </div>
+                    <div align="center" style="font-size: 10px;">
+                        <span>EMP CODE:</span>
+                        <span t-out="employee.emp_code"/>
+                    </div>
+                    <div align="center">
+                        <span t-field="employee.barcode" style="margin-left: -17px;"
+                              t-options="{'widget': 'barcode', 'width': 200, 'height': 40}"
+                        />
+                    </div>
+                    <br/>
+                    <br/>
+                </div>
+                <div class="page" align="left" style="avoid-break:inside:avoid;font-size: 12px;">
+                    <div style="">
+                        <strong>
+                            <span style="font-size:10px">Personal Details</span>
+                        </strong>
+                    </div>
+                    <div class="row">
+                        <div class="col-3">
+
+                            <span style="font-size:8px">
+                                <strong>
+                                    Address:
+                                </strong>
+                            </span>
+                        </div>
+                        <div class="col-9">
+                            <span t-out="employee.private_street" style="font-size:6.5px"/>
+                            <span t-out="employee.private_street2" style="font-size:6.5px"/>
+                            <br/>
+                            <span t-out="employee.private_city" style="font-size:6.5px"/>
+                            <span style="font-size:6.5px">-</span>
+                            <span t-out="employee.private_zip" style="font-size:6.5px"/>
+                            <br/>
+                            <br/>
+                            <br/>
+                        </div>
+
+                    </div>
+
+                    <div>
+
+                        <span style="font-size:8px">
+                            <strong>Emergency Contact:</strong>
+                        </span>
+                        <span t-out="employee.emergency_phone" style="font-size:6.5px"/>
+                    </div>
+                    <div>
+                        <strong>
+                            <span style="font-size:8px">BLOOD GROUP:</span>
+                        </strong>
+                        <span t-out="employee.blood_type" style="font-size:6.5px"/>
+                    </div>
+                    <div>
+                        <strong>
+                             <span style="font-size:8px">DOB:</span>
+                        </strong>
+                        <span t-out="employee.birthday" style="font-size:6.5px"/>
+                    </div>
+
+                    <div>
+                        <strong>
+                            <span>CONTACT NO:</span>
+                        </strong>
+                        <span t-out="employee.work_phone" style="font-size:6.5px"/>
+                    </div>
+
+                </div>
+            </t>
+        </t>
+    </template>
+
+
+</odoo>

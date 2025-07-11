@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="analyze_rfq_Sequence" model="ir.sequence">
+            <field name="name">Analyze Rfq</field>
+            <field name="code">analyze.rfq</field>
+            <field name="prefix">ARFQ/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="analyze_rfq_form_view" model="ir.ui.view">
+            <field name="name">analyze.rfq.form.view</field>
+            <field name="model">analyze.rfq</field>
+            <field name="arch" type="xml">
+                <form string="Analyze RFQ" create="0">
+                    <sheet>
+                        <div>
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="partner_id"/>
+                                <field name="tender_order"/>
+                                <field name="agreement_id"/>
+                                <field name="user_id"/>
+                                <field name="origin"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="Specifications">
+                                <field name="order_line">
+                                    <tree editable="bottom">
+                                        <field name="part_name"/>
+                                        <field name="supplier_part"/>
+                                        <field name="product_qty"/>
+                                        <field name="product_uom"/>
+                                        <field name="price_unit"/>
+                                        <field name="date_planned"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="analyze_rfq_tree_view" model="ir.ui.view">
+            <field name="name">analyze.rfq.tree</field>
+            <field name="model">analyze.rfq</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <field name="tender_order"/>
+                    <field name="agreement_id"/>
+                    <field name="user_id"/>
+                    <field name="origin"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="analyze_rfq_lines_tree_view" model="ir.ui.view">
+            <field name="name">analyze.rfq.tree</field>
+            <field name="model">analyze.rfq.lines</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom" decoration-success="status == 'confirm'" decoration-danger="status == 'cancel'">
+                    <field name="part_name" readonly="1" force_save="1"/>
+                    <field name="partner_id"/>
+                    <field name="supplier_part"/>
+                    <field name="product_qty"/>
+                    <field name="product_uom"/>
+                    <field name="price_unit"/>
+                    <field name="price_subtotal"/>
+                    <field name="date_planned"/>
+                    <field name="status"/>
+                    <button string="Confirm" name="action_confirm" icon="fa-check-circle-o" type="object"/>
+                    <button string="Cancel" name="action_cancel" icon="fa-times-circle-o" type="object"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="analyze_rfq_action" model="ir.actions.act_window">
+            <field name="name">Analyze RFQ</field>
+            <field name="res_model">analyze.rfq</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="analyze_rfq_tree_view"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No request for Analyze RFQ found. Let's create one!
+                </p>
+            </field>
+        </record>
+
+        <menuitem name="Analyze RFQ"
+                  id="purchase_analyze_rfq_menu"
+                  parent="purchase_request.purchase_request_main_menu"
+                  sequence="0"
+                  active="False"
+                  action="analyze_rfq_action"/>
+    </data>
+</odoo>

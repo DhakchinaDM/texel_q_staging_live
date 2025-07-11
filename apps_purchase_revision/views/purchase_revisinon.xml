@@ -1,0 +1,54 @@
+<odoo>
+    <data>
+        <record id="purchase_order_revision_form_inherited" model="ir.ui.view">
+            <field name="name">purchase.order.form</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form/header/button[@name='button_cancel']" position="after">
+                    <button name="action_revision" icon="fa-repeat" invisible="state != 'purchase'" type="object"
+                            string="Amendment" class="btn btn-success"/>
+                </xpath>
+                <xpath expr="//form/sheet/notebook/page[@name='purchase_delivery_invoice']" position="before">
+                    <page string="Amendment" invisible="old_revision_ids == [] or revised != False">
+                        <field name="old_revision_ids">
+                            <tree>
+                                <field name='name'/>
+                                <field name='create_date' string="Revised Date"/>
+                                <field name='create_uid' string="Revised by"/>
+                                <field name='state' invisible='1'/>
+                            </tree>
+                        </field>
+                        <group>
+                            <field name="current_revision_id" invisible='1'/>
+                            <field name="active" invisible='1'/>
+                            <field name="revised" invisible='1'/>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_picking_form_inherit" model="ir.ui.view">
+            <field name="name">stock.picking.form</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//header" position="inside">
+                    <button name="purchase_revision" string="Purchase Amendment" type="object"
+                            icon="fa-repeat"
+                            class="oe_highlight" invisible="state != 'assigned' or revision &gt; 0 or picking_type_id == 2"/>
+                </xpath>
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button name="action_revision" string="Purchase Amendment" type="object"
+                            class="oe_stat_button" invisible="revision == 0"
+                            icon="fa-file-archive-o">
+                        <field name="revision" string="Purchase Amendment" widget="statinfo"/>
+                    </button>
+                </xpath>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

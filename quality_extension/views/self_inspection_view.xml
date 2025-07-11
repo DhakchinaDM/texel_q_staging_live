@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="seq_self_inspection" model="ir.sequence">
+            <field name="name">Self Inspection</field>
+            <field name="code">self.inspection</field>
+            <field name="prefix">SIR/</field>
+            <field name="padding">3</field>
+            <field name="number_increment">1</field>
+            <field name="company_id" eval="False"/>
+            <field name="implementation">standard</field>
+        </record>
+        <record id="self_inspection_form_view" model="ir.ui.view">
+            <field name="name">self.inspection.form.view</field>
+            <field name="model">self.inspection</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                    <form>
+                    <header>
+                        <button name="self_accept" string="Accept" class="oe_highlight" type="object"/>
+                        <button name="self_conditionally_accept" string="Conditionally Accept" class="oe_highlight"
+                                type="object"/>
+                        <button name="self_reject" string="Reject" class="oe_highlight" type="object"/>
+                        <field name="self_state" widget="statusbar"
+                               statusbar_visible="draft,accept,conditional_accept"/>
+                    </header>
+                    <sheet>
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                        <group>
+                            <group string="Self Inspection Details">
+                                <field name="product_id" required="1"/>
+                                <field name="part_name"/>
+                                <field name="operation_no"/>
+                            </group>
+                            <group string="Self Inspection Details">
+                                <field name="operator_name"/>
+                                <field name="date"/>
+                                <field name="shift"/>
+                                <field name="machine_no"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="Self Inspection Details">
+                                <field name="inspect_ids">
+                                    <tree editable="bottom">
+                                        <field name="parameter"/>
+                                        <field name="inspection_method"/>
+                                        <field name="control_specification"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <record id="self_inspection_tree_view" model="ir.ui.view">
+            <field name="name">self.inspection.tree.view</field>
+            <field name="model">self.inspection</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="product_id"/>
+                    <field name="part_name"/>
+                    <field name="operator_name"/>
+                    <field name="shift"/>
+                    <field name="machine_no"/>
+                    <field name="date"/>
+                    <field name="self_state" widget="badge"
+                           decoration-muted="self_state in 'draft'"
+                           decoration-success="self_state in 'accept'"
+                           decoration-info="self_state in 'conditional_accept'"
+                           decoration-danger="self_state in 'reject'"/>
+                </tree>
+            </field>
+        </record>
+        <record id="action_self_inspection" model="ir.actions.act_window">
+            <field name="name">Self Inspection</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">self.inspection</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_no content_smiling_face">
+                    Self Inspection Information
+                </p>
+            </field>
+        </record>
+        <menuitem id="self_inspection_main_menu"
+                  name="Self Inspection"
+                  parent="quality_control.menu_quality_control"
+                  action="action_self_inspection"
+                  sequence="5"/>
+    </data>
+</odoo>

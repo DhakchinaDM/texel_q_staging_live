@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="cron_calibration_request" model="ir.cron">
+            <field name="name">Calibration Notification for Due Instruments</field>
+            <field name="model_id" ref="model_mmr_list"/>
+            <field name="state">code</field>
+            <field name="code">model._create_calibration_requests()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+            <field name="priority">3</field>
+        </record>
+        <record id="cron_calibration_request_test" model="ir.cron">
+            <field name="name">Calibration Notification for Due Instruments Test</field>
+            <field name="model_id" ref="model_mmr_list"/>
+            <field name="state">code</field>
+            <field name="code">model._create_calibration_requests_test()</field>
+            <field name="interval_number">20</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+            <field eval="False" name="active"/>
+            <field name="priority">3</field>
+        </record>
+        <record id="cron_spc_plan" model="ir.cron">
+            <field name="name">Spc plan notification</field>
+            <field name="model_id" ref="model_spc_plan_line"/>
+            <field name="state">code</field>
+            <field name="code">model.function_create_spc_plan()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="nextcall"
+                   eval="(DateTime.now().replace(hour=2, minute=30,second=0) + timedelta(days=1)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field eval="False" name="doall"/>
+            <field eval="True" name="active"/>
+            <field name="priority">3</field>
+        </record>
+        <record id="msa_plan" model="ir.cron">
+            <field name="name">MSA plan notification</field>
+            <field name="model_id" ref="model_msa_data"/>
+            <field name="state">code</field>
+            <field name="code">model.function_create_msa()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="nextcall"
+                   eval="(DateTime.now().replace(hour=2, minute=30,second=0) + timedelta(days=1)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field eval="False" name="doall"/>
+            <field eval="True" name="active"/>
+            <field name="priority">3</field>
+        </record>
+<!--        <record id="cron_clean_plan" model="ir.cron">-->
+<!--            <field name="name">Cleanness plannotification</field>-->
+<!--            <field name="model_id" ref="model_clean_ness"/>-->
+<!--            <field name="state">code</field>-->
+<!--            <field name="code">model.function_create_clean()</field>-->
+<!--            <field name="interval_number">1</field>-->
+<!--            <field name="interval_type">days</field>-->
+<!--            <field name="numbercall">-1</field>-->
+<!--            <field name="nextcall"-->
+<!--                   eval="(DateTime.now().replace(hour=2, minute=30,second=0) + timedelta(days=1)).strftime('%Y-%m-%d %H:%M:%S')"/>-->
+<!--            <field eval="False" name="doall"/>-->
+<!--            <field eval="True" name="active"/>-->
+<!--            <field name="priority">3</field>-->
+<!--        </record>-->
+        <record id="layout_plan" model="ir.cron">
+            <field name="name">Layout plan notification</field>
+            <field name="model_id" ref="model_layout_request"/>
+            <field name="state">code</field>
+            <field name="code">model.function_create_layout()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="nextcall"
+                   eval="(DateTime.now().replace(hour=2, minute=30,second=0) + timedelta(days=1)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field eval="True" name="active"/>
+
+            <field eval="False" name="doall"/>
+            <field name="priority">3</field>
+        </record>
+    </data>
+</odoo>

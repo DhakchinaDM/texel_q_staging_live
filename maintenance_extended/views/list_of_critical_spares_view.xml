@@ -1,0 +1,78 @@
+<odoo>
+    <record id="view_spare_details_form" model="ir.ui.view">
+        <field name="name">spare.details.form</field>
+        <field name="model">spare.details</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="machine_id"/>
+                            <field name="default_code" string="Part No"/>
+                            <field name="product_id" string="Spare ID"/>
+                            <field name="product_name" string="Spare Name"/>
+                            <field name="supplier_part_no" string="Supplier Part"/>
+                            <field name="make_name"/>
+                        </group>
+                        <group>
+                            <field name="specification"/>
+                            <field name="minimum_stock" string="Minimum Stock Level"/>
+                            <field name="on_hand" string="Available Qty"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_spare_details_tree" model="ir.ui.view">
+        <field name="name">spare.details.tree</field>
+        <field name="model">spare.details</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="machine_id" string="Machine ID" force_save="1"/>
+                <field name="default_code" string="Part No"/>
+                <field name="product_id" string="Spare ID"
+                       options='{"no_open": False, "no_create": False,"no_edit": False}'
+                       widget="many2one_clickable"/>
+                <field name="product_name"/>
+                <field name="supplier_part_no" string="Supplier Part"/>
+                <field name="on_hand" string="Available Qty" widget="badge"
+                       decoration-danger="minimum_stock &gt; on_hand"
+                       decoration-warning="not on_hand"
+                       decoration-success="minimum_stock &lt;= on_hand"/>
+                <field name="minimum_stock"/>
+                <field name="uom_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="machine_spare_details_action" model="ir.actions.act_window">
+        <field name="name">Spare Details</field>
+        <field name="res_model">spare.details</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('machine_id', '!=', False)]</field>
+        <field name="context">{'search_default_machine_id_filter': 1}</field>
+    </record>
+
+    <record id="machine_spare_details_search_view" model="ir.ui.view">
+        <field name="name">spare.details.search</field>
+        <field name="model">spare.details</field>
+        <field name="type">search</field>
+        <field name="arch" type="xml">
+            <search string="Spare Details Search">
+                <field name="machine_id"/>
+                <field name="product_id"/>
+                <field name="default_code" string="Part No"/>
+                <filter string="Machine ID" name="machine_id_filter" domain="[('machine_id', '!=', False)]"
+                        context="{'group_by':'machine_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <menuitem id="menu_critical_spares"
+              name="Critical Spares"
+              sequence="3"
+              parent="maintenance.menu_equipment_form"
+              action="machine_spare_details_action"/>
+</odoo>

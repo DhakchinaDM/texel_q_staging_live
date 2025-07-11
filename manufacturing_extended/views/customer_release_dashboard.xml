@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="action_customer_release_dashboard" model="ir.actions.client">
+        <field name="name">Customer Release Dashboard</field>
+        <field name="tag">cr_dashboard</field>
+    </record>
+    <menuitem id="menu_customer_release_dashboard" name="Customer Releases Dashboard"
+              parent="mrp.menu_mrp_reporting"
+              sequence="3"
+              action="action_customer_release_dashboard"/>
+</odoo>

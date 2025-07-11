@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record id="production_session_action" model="ir.actions.act_window">
+            <field name="name">Production Session</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">production.session</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_no content_smiling_face">
+                    Create a New Standard Container
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="production_session_main_menu"
+                  name="Production Session"
+                  parent="mrp.menu_mrp_configuration"
+                  action="production_session_action"
+                  sequence="21"/>
+    </data>
+</odoo>

@@ -1,0 +1,477 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="paper_format_employee_payslip_report_new" model="report.paperformat">
+        <field name="name">Employee Payslip Report</field>
+        <field name="default" eval="True"/>
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">10</field>
+        <field name="margin_bottom">20</field>
+        <field name="margin_left">4</field>
+        <field name="margin_right">4</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">35</field>
+        <field name="dpi">100</field>
+    </record>
+
+
+    <record id="action_employee_payslip_report_new" model="ir.actions.report">
+        <field name="name">Employee Payslip</field>
+        <field name="model">hr.payslip</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">hr_payroll_extended.report_employee_payslip_data</field>
+        <field name="report_file">hr_payroll_extended.report_employee_payslip_data</field>
+        <field name="paperformat_id" ref="hr_payroll_extended.paper_format_employee_payslip_report_new"/>
+        <field name="binding_model_id" ref="hr_payroll.model_hr_payslip"/>
+        <field name="print_report_name">'%s - Payslip' % (object.name)</field>
+    </record>
+
+    <template id="report_employee_payslip_data">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.basic_layout">
+                    <div class="row">
+                        <div class="col-3" align="left">
+                            <img src='/web/binary/company_logo' class="img-fluid img-thumbnail"
+                                 style="width:60%;"/>
+                        </div>
+                        <div class="col-7" align="center">
+                            <strong>
+                                <span style="font-weight:bold;font-size:22px;">TEXELQ ENGINEERING INDIA PRIVATE
+                                    LIMITED
+                                </span>
+                                <!--                                    <span t-esc="res_company.name.upper()"/>-->
+                            </strong>
+                            <br/>
+                            <span style="font-size:16;color:black" t-esc="res_company.street"/>
+                            <span style="font-size:16px;color:black" t-esc="res_company.street2"/>,
+                            <br/>
+                            <span style="font-size:16px;color:black" t-esc="res_company.city"/>-
+                            <span style="font-size:16px;color:black" t-esc="res_company.zip"/>
+                        </div>
+                    </div>
+                    <br/>
+                    <br/>
+                    <div>
+                        <h4 align="center">
+                            <span style="color:black">Salary Slip for</span>
+                            <span style="color:black" t-esc="o.select_month"/>
+                            <span style="color:black">-</span>
+                            <span style="color:black" t-esc="o.select_year.name"/>
+                        </h4>
+                    </div>
+                    <br/>
+
+                    <table class="table" style="border: 2px #d3d3d3; color: black;">
+                        <tr>
+                            <td class="padding_all tbottom ttop text-left" width="50%">
+                                <div class="row">
+                                    <div class="col-5" align="left">
+                                        <strong>Name</strong>
+                                    </div>
+                                    <div class="col-7" align="left">
+                                        <strong class="px-2">:</strong>
+                                        <t t-if="o.employee_id.name">
+                                            <span t-esc="o.employee_id.name"/>
+                                        </t>
+                                        <t t-else="">
+                                            <span>-</span>
+                                        </t>
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top:4px">
+                                    <div class="col-5" align="left">
+                                        <strong>Designation</strong>
+                                    </div>
+                                    <div class="col-7" align="left">
+                                        <strong class="px-2">:</strong>
+                                        <t t-if="o.employee_id.job_title">
+                                            <span t-esc="o.employee_id.job_title"/>
+                                        </t>
+                                        <t t-else="">
+                                            <span>-</span>
+                                        </t>
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top:4px">
+                                    <div class="col-5" align="left">
+                                        <strong>Department</strong>
+                                    </div>
+                                    <div class="col-7" align="left">
+                                        <strong class="px-2">:</strong>
+                                        <t t-if="o.employee_id.department_id.name">
+                                            <span t-esc="o.employee_id.department_id.name"/>
+                                        </t>
+                                        <t t-else="">
+                                            <span>-</span>
+                                        </t>
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top:4px">
+                                    <div class="col-5" align="left">
+                                        <strong>Location</strong>
+                                    </div>
+                                    <div class="col-7" align="left">
+                                        <strong class="px-2">:</strong>
+                                        <t t-if="res_company.city">
+                                            <span t-esc="res_company.city"/>
+                                        </t>
+                                        <t t-else="">
+                                            <span>-</span>
+                                        </t>
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top:4px">
+                                    <div class="col-5" align="left">
+                                        <strong>Effective Work Days</strong>
+                                    </div>
+                                    <div class="col-7" align="left">
+                                        <strong class="px-2">:</strong>
+                                        <t t-if="o.employee_present_days">
+                                            <span t-esc="o.employee_present_days + o.extra_worked_days"/>
+                                        </t>
+                                        <t t-else="">
+                                            <span>-</span>
+                                        </t>
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top:4px">
+                                    <div class="col-5" align="left">
+                                        <strong>LOP</strong>
+                                    </div>
+                                    <div class="col-7" align="left">
+                                        <strong class="px-2">:</strong>
+                                        <t t-if="o.employee_loptotal_days">
+                                            <span t-esc="o.employee_loptotal_days"/>
+                                        </t>
+                                        <t t-else="">
+                                            <span>0</span>
+                                        </t>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="padding_all tbottom ttop text-left" width="50%">
+                                <div class="row">
+                                    <div class="col-5" align="left">
+                                        <strong>Employee No</strong>
+                                    </div>
+                                    <div class="col-7" align="left">
+                                        <strong class="px-2">:</strong>
+                                        <t t-if="o.employee_id.emp_code">
+                                            <span t-esc="o.employee_id.emp_code"/>
+                                        </t>
+                                        <t t-else="">
+                                            <span>-</span>
+                                        </t>
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top:4px">
+                                    <div class="col-5" align="left">
+                                        <strong>Bank Name</strong>
+                                    </div>
+                                    <div class="col-7" align="left">
+                                        <strong class="px-2">:</strong>
+                                        <t t-if="o.employee_id.bank_account_id.bank_id.name">
+                                            <span t-esc="o.employee_id.bank_account_id.bank_id.name"/>
+                                        </t>
+                                        <t t-else="">
+                                            <span>-</span>
+                                        </t>
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top:4px">
+                                    <div class="col-5" align="left">
+                                        <strong>Bank Account No</strong>
+                                    </div>
+                                    <div class="col-7" align="left">
+                                        <strong class="px-2">:</strong>
+                                        <t t-if="o.employee_id.bank_account_id.acc_number">
+                                            <span t-esc="o.employee_id.bank_account_id.acc_number"/>
+                                        </t>
+                                        <t t-else="">
+                                            <span>-</span>
+                                        </t>
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top:4px">
+                                    <div class="col-5" align="left">
+                                        <strong>PAN No</strong>
+                                    </div>
+                                    <div class="col-7" align="left">
+                                        <strong class="px-2">:</strong>
+                                        <t t-if="o.employee_id.pan_number">
+                                            <span t-esc="o.employee_id.pan_number"/>
+                                        </t>
+                                        <t t-else="">
+                                            <span>-</span>
+                                        </t>
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top:4px">
+                                    <div class="col-5" align="left">
+                                        <strong>UAN No</strong>
+                                    </div>
+                                    <div class="col-7" align="left">
+                                        <strong class="px-2">:</strong>
+                                        <t t-if="o.employee_id.uan_number">
+                                            <span t-esc="o.employee_id.uan_number"/>
+                                        </t>
+                                        <t t-else="">
+                                            <span>-</span>
+                                        </t>
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top:4px">
+                                    <div class="col-5" align="left">
+                                        <strong>PF No</strong>
+                                    </div>
+                                    <div class="col-7" align="left">
+                                        <strong class="px-2">:</strong>
+                                        <t t-if="o.employee_id.provident_fund_number">
+                                            <span t-esc="o.employee_id.provident_fund_number"/>
+                                        </t>
+                                        <t t-else="">
+                                            <span>-</span>
+                                        </t>
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top:4px">
+                                    <div class="col-5" align="left">
+                                        <strong>ESI No</strong>
+                                    </div>
+                                    <div class="col-7" align="left">
+                                        <strong class="px-2">:</strong>
+                                        <t t-if="o.employee_id.esi_number">
+                                            <span t-esc="o.employee_id.esi_number"/>
+                                        </t>
+                                        <t t-else="">
+                                            <span>-</span>
+                                        </t>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <table class="table" style="border: 2px #d3d3d3; color: black;">
+                        <tr>
+                            <td class="padding_all tbottom ttop text-left" width="50%">
+                                <div>
+                                    <h5 align="left">
+                                        <span>Leaves Available</span>
+                                        <div style="border: 0; border-top: 1px solid #d3d3d3; margin: 10px 0;"/>
+                                    </h5>
+                                </div>
+                                <div class="row">
+                                    <div class="col-5" align="left">
+                                        <strong>Earned Leave (EL)</strong>
+                                    </div>
+                                    <div class="col-7" align="left">
+                                        <strong class="px-2">:</strong>
+                                        <span t-esc="o.el"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-5" align="left">
+                                        <strong>Casual Leave (CL)</strong>
+                                    </div>
+                                    <div class="col-7" align="left">
+                                        <strong class="px-2">:</strong>
+                                        <span t-esc="o.cl"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-5" align="left">
+                                        <strong>Sick Leave (SL)</strong>
+                                    </div>
+                                    <div class="col-7" align="left">
+                                        <strong class="px-2">:</strong>
+                                        <span t-esc="o.sl"/>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="padding_all tbottom ttop text-left" width="50%">
+                                <div>
+                                    <h5 align="left">
+                                        <span>Leaves Taken</span>
+                                        <div style="border: 0; border-top: 1px solid #d3d3d3; margin: 10px 0;"/>
+                                    </h5>
+                                </div>
+                                <div class="row">
+                                    <div class="col-5" align="left">
+                                        <strong>Earned Leave (EL)</strong>
+                                    </div>
+                                    <div class="col-7" align="left">
+                                        <strong class="px-2">:</strong>
+                                        <span t-esc="o.earned_leave"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-5" align="left">
+                                        <strong>Casual Leave (CL)</strong>
+                                    </div>
+                                    <div class="col-7" align="left">
+                                        <strong class="px-2">:</strong>
+                                        <span t-esc="o.casual_leave"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-5" align="left">
+                                        <strong>Sick Leave (SL)</strong>
+                                    </div>
+                                    <div class="col-7" align="left">
+                                        <strong class="px-2">:</strong>
+                                        <span t-esc="o.sick_leave"/>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <table class="table-sm" style="text-align:center;font-size:15px;border: 1px solid #d3d3d3"
+                           width="100%">
+                        <tr>
+                            <td width="50%">
+                                <table class="table-sm table-borderless" width="100%"
+                                       style="font-size:15px;">
+                                    <thead>
+                                        <tr style="border-bottom: 1px solid #d3d3d3; margin-top: 1px;">
+                                            <td align="left">
+                                                <strong>
+                                                    Earnings
+                                                </strong>
+                                            </td>
+                                            <td align="center">
+                                                <strong style="margin-left:30px">Master</strong>
+                                            </td>
+                                            <td align="center">
+                                                <strong style="margin-left:30px">Actual</strong>
+                                            </td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="o.line_ids" t-as="l">
+                                            <t t-if="l.category_id.name in ['Allowance','Basic']">
+                                                <tr>
+                                                    <td align="left">
+                                                        <span t-esc="l.name"/>
+                                                    </td>
+                                                    <td align="right">
+                                                        <span t-if="l.code == 'BASIC'">
+                                                            <span t-esc="float('%.2f' % o.contract_id.wage)"
+                                                                  t-options='{"widget": "monetary", "display_currency": request.env.company.currency_id}'/>
+                                                        </span>
+                                                        <span t-if="l.code == 'HRA'">
+                                                            <span t-esc="float('%.2f' % o.contract_id.house_rent_allowance)"
+                                                                  t-options='{"widget": "monetary", "display_currency": request.env.company.currency_id}'/>
+                                                        </span>
+                                                        <span t-if="l.code == 'CA'">
+                                                            <span t-esc="float('%.2f' % o.contract_id.convenyance_allowance)"
+                                                                  t-options='{"widget": "monetary", "display_currency": request.env.company.currency_id}'/>
+                                                        </span>
+                                                        <span t-if="l.code == 'MA'">
+                                                            <span t-esc="float('%.2f' % o.contract_id.special_allowance)"
+                                                                  t-options='{"widget": "monetary", "display_currency": request.env.company.currency_id}'/>
+                                                        </span>
+                                                        <span t-if="l.code not in ['BASIC', 'HRA', 'CA', 'MA']">
+                                                            ₹ 0.00
+                                                        </span>
+                                                    </td>
+                                                    <td align="right">
+                                                        <span t-esc="float('%.2f' % l.total)"
+                                                              t-options='{"widget": "monetary", "display_currency": request.env.company.currency_id}'/>
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </t>
+                                        <tr>
+                                            <td align="left">
+                                                <strong>Total Earnings (Rs):</strong>
+                                            </td>
+                                            <td align="right">
+                                                <t t-set="total_master"
+                                                   t-value="o.contract_id.wage + o.contract_id.house_rent_allowance + o.contract_id.convenyance_allowance + o.contract_id.special_allowance"/>
+                                                <span t-esc="float('%.2f' % total_master)"
+                                                      t-options='{"widget": "monetary", "display_currency": request.env.company.currency_id}'/>
+                                            </td>
+                                            <td align="right">
+                                                <t t-set="total_sum"
+                                                   t-value="sum(l.total for l in o.line_ids if l.category_id.name in ['Allowance','Basic'])"/>
+                                                <span t-esc="float('%.2f' % total_sum)"
+                                                      t-options='{"widget": "monetary", "display_currency": request.env.company.currency_id}'/>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                            <td width="50%">
+                                <table class="table-sm table-borderless" width="100%"
+                                       style="font-size:15px;">
+                                    <thead>
+                                        <tr style="border-bottom: 1px solid #d3d3d3; margin-top: 1px;">
+                                            <td align="left">
+                                                <strong>Deductions</strong>
+                                            </td>
+                                            <td align="right">
+                                                <strong style="margin-right:15px">Actual</strong>
+                                            </td>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="sale_t body">
+                                        <t t-foreach="o.line_ids" t-as="l">
+                                            <t t-if="l.category_id.name == 'Deduction'">
+                                                <tr>
+                                                    <td align="left">
+                                                        <span t-esc="l.name"/>
+                                                    </td>
+                                                    <td align="right">
+                                                        <span t-esc="float('%.2f' % abs(l.total))"
+                                                              t-options='{"widget": "monetary", "display_currency": request.env.company.currency_id}'/>
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </t>
+                                        <tr>
+                                            <td align="left">
+                                                <strong>Total Deductions (Rs):</strong>
+                                            </td>
+                                            <td align="right">
+                                                <t t-set="total_sum"
+                                                   t-value="sum(l.total for l in o.line_ids if l.category_id.name == 'Deduction')"/>
+                                                <span t-esc="float('%.2f' % total_sum)"
+                                                      t-options='{"widget": "monetary", "display_currency": request.env.company.currency_id}'/>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <div class="row">
+                        <span>
+                            Net Pay for the month
+                        </span>
+                        <span class="px-1">:</span>
+                        <span t-esc="float('%.2f' % round(o.total_amount))"
+                              t-options='{"widget": "monetary", "display_currency": request.env.company.currency_id}'/>
+                    </div>
+                    <div class="row" style="font-style: italic;">
+                        <span>(</span>
+                        <span t-esc="o.amount_in_words"/>
+                        <span>)</span>
+                    </div>
+                    <h2 style="color: red; width: 100%; border-top: 2px solid #d3d3d3; margin-top: 1px;"/>
+                    <div align="center">
+                        <span style="font-size:15px;">This is a system generated payslip and does not require a
+                            signature
+                        </span>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

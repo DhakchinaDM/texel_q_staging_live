@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="skill_matrix_sequence" model="ir.sequence">
+        <field name="name">Skill Matrix</field>
+        <field name="code">skill.matrix</field>
+        <field name="prefix">SM/%(y)s/</field>
+        <field name="padding">4</field>
+        <field name="number_increment">1</field>
+        <field name="company_id" eval="False"/>
+        <field name="implementation">standard</field>
+    </record>
+</odoo>

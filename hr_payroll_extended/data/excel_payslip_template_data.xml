@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="payslip_template_1" model="payslip.excel.template">
+            <field name="name" type="base64" file="hr_payroll_extended/static/texelq_payslip_template.xlsx"/>
+            <field name="ref">Payslip Template</field>
+        </record>
+
+        <record id="payslip_template_2" model="payslip.excel.template">
+            <field name="name" type="base64" file="hr_payroll_extended/static/hr_attendance.xlsx"/>
+            <field name="ref">Attendance Template</field>
+        </record>
+
+        <record id="payslip_template_3" model="payslip.excel.template">
+            <field name="name" type="base64" file="hr_payroll_extended/static/hr_leave_allocation.xlsx"/>
+            <field name="ref">Allocation Template</field>
+        </record>
+
+
+        <record id="payslip_template_4" model="payslip.excel.template">
+            <field name="name" type="base64" file="hr_payroll_extended/static/time_off.xlsx"/>
+            <field name="ref">Time off Template</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="paperformat_delivery_challan_job_work" model="report.paperformat">
+            <field name="name">Paperformat for Delivery Challan Job Work</field>
+            <field name="default" eval="False"/>
+            <field name="disable_shrinking" eval="True"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">5</field>
+            <field name="margin_bottom">25</field>
+            <field name="margin_left">0</field>
+            <field name="margin_right">0</field>
+            <field name="header_spacing">40</field>
+            <field name="dpi">140</field>
+        </record>
+
+        <record id="report_delivery_challan_job_work" model="ir.actions.report">
+            <field name="name">Delivery Challan For Job Work</field>
+            <field name="model">stock.picking</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">report_module.report_delivery_challan_job_work_template</field>
+            <field name="report_file">report_module.report_delivery_challan_job_work_template</field>
+            <field name="paperformat_id" ref="report_module.paperformat_delivery_challan_job_work"/>
+            <field name="print_report_name">'Delivery Challan For Job Work'</field>
+            <field name="binding_model_id" ref="stock.model_stock_picking"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <template id="report_delivery_challan_job_work_template">
+            <t t-call="web.html_container">
+                <t t-call="web.basic_layout">
+                    <t t-foreach="docs" t-as="o">
+                        <div class="page">
+                            <table class="table table-sm"
+                                   style="width: 95%; margin: 2px; margin-left: 25px; margin-right: 15px; border: 1px solid black; font-size: 17px; border-spacing: 1em 0.5em; padding: 0 2em 1em 0; border-radius: 2px;">
+                                <tr>
+                                    <td colspan="2">
+                                        <img width="90%"
+                                             t-attf-src="/web/binary/company_logo"
+                                             alt="Logo"/>
+                                    </td>
+                                    <td colspan="10" align="center">
+                                        <div style="font-size: 20px">
+                                            <span t-field="o.user_id.company_id.name"/>
+                                            <br/>
+                                            <t t-if="o.user_id.company_id.street">
+                                                <span t-field="o.user_id.company_id.street"/>
+                                            </t>
+                                            <t t-if="o.user_id.company_id.street2">
+                                                <span t-field="o.user_id.company_id.street2"/>,
+                                            </t>
+                                            <t t-if="o.user_id.company_id.city">
+                                                <span t-field="o.user_id.company_id.city"/>,
+                                            </t>
+                                            <t t-if="o.user_id.company_id.state_id.name">
+                                                <span t-field="o.user_id.company_id.state_id.name"/>
+                                            </t>
+                                            <t t-if="o.user_id.company_id.zip">
+                                                -
+                                                <span t-field="o.user_id.company_id.zip"/>
+                                            </t>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="12" align="center">
+                                        <h5 style="text-transform: uppercase;">
+                                            <strong>Delivery Challan For Job Work</strong>
+                                        </h5>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="left" colspan="3" width="25%">
+                                        <strong>Job Order No</strong>
+                                    </td>
+                                    <td align="left" colspan="3" width="25%">
+                                        <span t-field="o.name"/>
+                                    </td>
+                                    <td align="left" colspan="3" width="25%">
+                                        <strong>Job Vendor Code</strong>
+                                    </td>
+                                    <td colspan="3" align="center" width="25%">
+                                        <span>-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="left" colspan="3" width="25%">
+                                        <strong>Job Order Date</strong>
+                                    </td>
+                                    <td align="left" colspan="3" width="25%">
+                                        <span t-field="o.scheduled_date" t-options='{"widget": "date"}'/>
+                                    </td>
+                                    <td align="left" colspan="3" width="25%">
+                                        <strong>Name of the Transporter</strong>
+                                    </td>
+                                    <td colspan="3" align="center" width="25%">
+                                        <span>-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="left" colspan="3" width="25%">
+                                        <strong>Reference No</strong>
+                                    </td>
+                                    <td align="left" colspan="3" width="25%">
+                                        <span t-field="o.bill_ref"/>
+                                    </td>
+                                    <td align="left" colspan="3" width="25%">
+                                        <strong>Vehicle Number</strong>
+                                    </td>
+                                    <td colspan="3" align="center" width="25%">
+                                        <span>-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="12" align="center">
+                                        <strong>TO:</strong>
+                                        <small>
+                                            <t t-set="address">
+                                                <address class="mb-0" t-field="o.partner_id"
+                                                         t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'/>
+                                            </t>
+                                            <div>
+                                                <t t-esc="address"/>
+                                            </div>
+                                        </small>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="12" align="center">
+                                        <strong>Please Receive the Following Item(S) for Job work /conversion/ Further
+                                            Process
+                                        </strong>
+                                    </td>
+                                </tr>
+                                <tr align="center">
+                                    <th width="10%" colspan="1"
+                                        style="font-size:17px;border-right:1px solid #143980;color:black;background-color:#c6cacf; border:1px solid #000;border-color: black;">
+                                        <span>SI.NO</span>
+                                    </th>
+                                    <th width="10%" colspan="1"
+                                        style="font-size:17px;border-right:1px solid #143980;color:black;background-color:#c6cacf; border:1px solid #000;border-color: black;">
+                                        <span>PART NO</span>
+                                    </th>
+                                    <th width="20%" colspan="2"
+                                        style="font-size:17px;border-right:1px solid #143980;color:black;background-color:#c6cacf; border:1px solid #000;border-color: black;">
+                                        <span>PART DESCRIPTION</span>
+                                    </th>
+                                    <th width="15%" colspan="2"
+                                        style="font-size:17px;border-right:1px solid #143980;color:black;background-color:#c6cacf; border:1px solid #000;border-color: black;">
+                                        <span>HSN CODE</span>
+                                    </th>
+                                    <th width="10%" colspan="2"
+                                        style="font-size:17px;border-right:1px solid #143980;color:black;background-color:#c6cacf; border:1px solid #000;border-color: black;">
+                                        <span>JOB WORK SERVICE</span>
+                                    </th>
+                                    <th width="10%" colspan="1"
+                                        style="font-size:17px;border-right:1px solid #143980;color:black;background-color:#c6cacf; border:1px solid #000;border-color: black;">
+                                        <span>UOM</span>
+                                    </th>
+                                    <th width="10%" colspan="1"
+                                        style="font-size:17px;border-right:1px solid #143980;color:black;background-color:#c6cacf; border:1px solid #000;border-color: black;">
+                                        <span>QTY</span>
+                                    </th>
+                                    <th width="15%" colspan="1"
+                                        style="font-size:17px;border-right:1px solid #143980;color:black;background-color:#c6cacf; border:1px solid #000;border-color: black;">
+                                        <span>RATE</span>
+                                    </th>
+                                    <th width="15%" colspan="1"
+                                        style="font-size:17px;border-right:1px solid #143980;color:black;background-color:#c6cacf; border:1px solid #000;border-color: black;">
+                                        <span>TOTAL AMOUNT</span>
+                                    </th>
+                                </tr>
+                                <t t-set="qty" t-value="0"/>
+                                <t t-set="unit_price" t-value="0"/>
+                                <t t-set="total_value" t-value="0"/>
+                                <t t-foreach="o.move_ids_without_package" t-as="line">
+                                    <t t-set="qty" t-value="qty + line.quantity"/>
+                                    <t t-set="unit_price" t-value="unit_price + line.product_id.list_price"/>
+                                    <t t-set="total_value" t-value="total_value + line.product_id.list_price"/>
+                                    <tr>
+                                        <td align="center" colspan="1">
+                                            <span t-esc="line_index+1"/>
+                                        </td>
+                                        <td colspan="1">
+                                            <span t-esc="line.product_id.default_code"/>
+                                        </td>
+                                        <td colspan="2">
+                                            <span t-esc="line.product_id.name"/>
+                                        </td>
+                                        <td colspan="2" align="center">
+                                            <span>-</span>
+                                        </td>
+                                        <td colspan="2">
+                                            <span t-esc="line.product_id.categ_id.name"/>
+                                        </td>
+                                        <td align="center" colspan="1">
+                                            <!--                                            <span t-esc="line.product_id.categ_id.name"/>-->
+                                            <span>NO'S</span>
+                                        </td>
+                                        <td align="right" colspan="1">
+                                            <span t-esc="line.quantity"/>
+                                        </td>
+                                        <td align="right" colspan="1">
+                                            <span t-esc="line.product_id.list_price"/>
+                                        </td>
+                                        <td align="right" colspan="1">
+                                            <span t-esc="line.quantity * line.product_id.list_price"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <tr>
+                                    <td align="right" colspan="10">
+                                        <span t-esc="qty"/>
+                                    </td>
+                                    <td align="right" colspan="1">
+<!--                                                                                <span t-esc="unit_price"/>-->
+                                    </td>
+                                    <td align="right" colspan="1">
+<!--                                                                                <span t-esc="total_value"/>-->
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="left" colspan="3">
+                                        <strong>Amount in Words</strong>
+                                    </td>
+                                    <td colspan="7" align="left">
+                                        <span t-esc="o.company_id.currency_id.amount_to_text(int(total_value))"/>
+                                    </td>
+                                    <td align="left" colspan="1">
+                                        <strong>Total</strong>
+                                    </td>
+                                    <td align="right" colspan="1">
+                                        <strong t-esc="total_value"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="10" align="left" rowspan="5">
+                                        <span>
+                                            Note: Refer <b>"Work Instruction"</b> for Specification for Job Work Only
+                                            not for sale.
+                                        </span>
+                                    </td>
+                                    <td align="left" colspan="1">
+                                        <strong>CGST@6%</strong>
+                                    </td>
+                                    <td align="center" colspan="1">
+                                        <strong>-</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="left" colspan="1">
+                                        <strong>SGST@6%</strong>
+                                    </td>
+                                    <td align="center" colspan="1">
+                                        <strong>-</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="left" colspan="1">
+                                        <strong>CGST@9%</strong>
+                                    </td>
+                                    <td align="center" colspan="1">
+                                        <strong>-</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="left" colspan="1">
+                                        <strong>SGST@9%</strong>
+                                    </td>
+                                    <td align="center" colspan="1">
+                                        <strong>-</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="left" colspan="1">
+                                        <strong>Grand Total</strong>
+                                    </td>
+                                    <td align="right" colspan="1">
+                                        <strong t-esc="total_value"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="left" colspan="6">
+                                        <strong>Received the above materials at good condition</strong>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <strong>Receiver Signature</strong>
+                                    </td>
+                                    <td align="right" colspan="6">
+                                        <strong>For TexelQ Engineering India Private Limited</strong>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <strong>Authorised Signatory</strong>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

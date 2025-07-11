@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record id="std_container_form_view" model="ir.ui.view">
+            <field name="name">Standard Container Form</field>
+            <field name="model">std.container</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name='name'/>
+                            <field name='company_id' invisible="1"/>
+                            <field name='currency_symbol' invisible="1"/>
+                            <field name='logged_user' invisible="1"/>
+                            <field name='active' invisible="1"/>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="std_container_tree_view" model="ir.ui.view">
+            <field name="name">Standard Container Tree</field>
+            <field name="model">std.container</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name='name'/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="std_container_action" model="ir.actions.act_window">
+            <field name="name">Standard Container</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">std.container</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_no content_smiling_face">
+                    Create a New Standard Container
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="std_container_main_menu"
+                  name="Standard Container"
+                  parent="mrp.menu_mrp_configuration"
+                  action="std_container_action"
+                  sequence="21"/>
+
+    </data>
+</odoo>

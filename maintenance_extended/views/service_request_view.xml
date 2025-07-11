@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="seq_hr_sequence" model="ir.sequence">
+            <field name="name">Services Request</field>
+            <field name="code">service.request</field>
+            <field name="prefix">SER/</field>
+            <field name="padding">3</field>
+        </record>
+    </data>
+
+    <record id="view_service_tree1" model="ir.ui.view">
+        <field name="name">service.request_tree</field>
+        <field name="model">service.request</field>
+        <field name="priority" eval="8"/>
+        <field name="arch" type="xml">
+            <tree string="Service Request">
+                <field name="machine_id"/>
+                <field name="service_date"/>
+                <field name="equip_name"/>
+                <field name="equipment_service_id"/>
+                <field name="service_name"/>
+                <field name="service_type"/>
+                <field name="category_name"/>
+                <field name="employee_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="service_request11" model="ir.ui.view">
+        <field name="name">request.service</field>
+        <field name="model">service.request</field>
+        <field name="arch" type="xml">
+            <form string="Service Request">
+                <header>
+                    <button name="submit_reg" string="Submit" type="object" class="btn-primary"
+                            invisble="state not in 'draft'"/>
+                    <button name="service_approval" type="object" string="Approve" class="oe_highlight"
+                            invisble="state not in 'check'"/>
+                    <button name="service_approved" type="object" string="Approve" class="oe_highlight"
+                            invisble="state not in 'requested'"/>
+                    <button name="service_rejection" type="object" string="Reject" class="oe_highlight"
+                            invisble="state not in 'requested'"/>
+                    <button name="service_cancel" type="object" string="Cancel" class="oe_highlight"
+                            invisble="state not in 'requested'"/>
+                    <button name="assign_executer" type="object" string="Assign" class="oe_highlight"
+                            invisble="state not in 'approved'"/>
+                    <button name="service_completed" type="object" string="Completed" class="oe_highlight"
+                            invisble="state not in 'delivered'"/>
+                    <button name="generate_invoice" type="object" string="Generate Invoice"
+                            class="oe_highlight"
+                            invisble="state != 'completed'"/>
+                    <button name="external_delivery_for_maintenance"
+                            icon="fa-truck"
+                            string="Generate External Delivery"
+                            type="object"
+                            class="oe_highlight"
+                            invisble="state != 'assign'"/>
+                    <button name="button_escalate" type="object" string="Escalate"
+                            invisble="state != 'invoiced'"/>
+                    <button name="button_approve" type="object" string="Approve"
+                            invisble="state != 'wait'"/>
+                    <button name="button_reject" type="object" string="Reject"
+                            invisble="state != 'wait'"/>
+                    <field name="state" widget="statusbar" clickable="1"
+                           statusbar_visible="draft,requested,approved"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="external_service_bill_view"
+                                class="oe_stat_info"
+                                icon="fa-files-o"
+                                type="object"
+                                invisble="external_service_order_count == 0">
+                            <field name="external_service_order_count" widget="statinfo"
+                                   options="{'reload_on_button': true}"/>
+                        </button>
+                        <button name="external_delivery_view"
+                                class="oe_stat_info"
+                                icon="fa-truck"
+                                type="object"
+                                invisble="external_delivery_service_order_count == 0">
+                            <field name="external_delivery_service_order_count" widget="statinfo"
+                                   options="{'reload_on_button': true}"/>
+                        </button>
+                    </div>
+                    <h1>
+                        <strong>
+                            <field name="name"/>
+                        </strong>
+                    </h1>
+                    <group>
+                        <group>
+                            <field name="service_name" placeholder="Title For Service"/>
+                            <field name="machine_id"/>
+                            <field name="equip_name"/>
+                            <field name="category_name"/>
+                            <field name="subcategory_id"/>
+                            <field name="service_support"/>
+                            <field name="equipment_service_id" readonly="1"/>
+                            <field name="free_service_boolean" invisible="1"/>
+                        </group>
+                        <group>
+
+                            <field name="employee_id"/>
+                            <field name="service_type"/>
+                            <field name="remarks"
+                                   invisible="service_type == False"
+                                   required="service_type != False"/>
+                            <field name="request_by" readonly="1"/>
+                            <field name="assigned_by"
+                                   required="state == 'approved'"
+                                   invisible="state != 'approved'"/>
+                            <field name="service_takeover_incharge"
+                                   required="state == 'approved'"
+                                   invisible="state != 'approved'"/>
+                            <field name="service_date" readonly="1"/>
+                            <field name="service_executer_id" readonly="1"/>
+                            <field name="read_only" invisible="1"/>
+                            <field name="supplier_name"
+                                   required="state == 'requested'"/>
+                            <field name="reference" readonly="1"/>
+                            <field name="company_id" invisible="1"/>
+                            <field name="account_invoice" invisible="1"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Cost Estimation">
+                            <field name="cost_estimation_ids" readonly="0">
+                                <tree editable="bottom" create="0" delete="0">
+                                    <field name="cost_estimation_type"/>
+                                    <field name="product_id" domain="[('detailed_type','=','consu')]"/>
+                                    <field name="description"/>
+                                    <field name="product_qty"/>
+                                    <field name="product_uom"/>
+                                    <field name="unit_price"/>
+                                    <field name="sub_total"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                    <notebook>
+                        <page string="Actual Cost Estimation">
+                            <field name="cost_estimation_actual_ids">
+                                <tree editable="bottom" create="0" delete="0">
+                                    <field name="product_id" domain="[('detailed_type','=','consu')]"/>
+                                    <field name="description"/>
+                                    <field name="product_qty"/>
+                                    <field name="product_uom"/>
+                                    <field name="unit_price"/>
+                                    <field name="sub_total"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                    <group class="oe_subtotal_footer oe_right" colspan="2">
+                        <field name="total_material_estimate" widget="monetary"
+                               options="{'currency_field': 'currency_id'}" readonly="1" force_save="1"/>
+                        <field name="total_labour_estimate" widget="monetary"
+                               options="{'currency_field': 'currency_id'}" readonly="1" force_save="1"/>
+                        <field name="total_overhead_estimate" widget="monetary"
+                               options="{'currency_field': 'currency_id'}" readonly="1" force_save="1"/>
+                        <field name="amount_total" widget="monetary"
+                               options="{'currency_field': 'currency_id'}" readonly="1" force_save="1"/>
+                        <div class="oe_subtotal_footer_separator oe_inline">
+                            <label for="total_cost_estimation"/>
+                        </div>
+                        <field name="total_cost_estimation" nolabel="1" class="oe_subtotal_footer_separator"
+                               widget="monetary" options="{'currency_field': 'currency_id'}" readonly="1"
+                               force_save="1"/>
+                        <div class="oe_subtotal_footer_separator oe_inline">
+                            <label for="actual_total_cost_estimation"/>
+                        </div>
+                        <field name="actual_total_cost_estimation" nolabel="1" class="oe_subtotal_footer_separator"
+                               widget="monetary" options="{'currency_field': 'currency_id'}" readonly="1"
+                               force_save="1"/>
+                        <div class="oe_subtotal_footer_separator oe_inline">
+                            <label for="cost_estimation_difference_amount"/>
+                        </div>
+                        <field name="cost_estimation_difference_amount" nolabel="1"
+                               class="oe_subtotal_footer_separator"
+                               widget="monetary" options="{'currency_field': 'currency_id'}" readonly="1"
+                               force_save="0"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_view_service_requests">
+        <field name="name">External Service Order</field>
+        <field name="res_model">service.request</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="oe_view_no_content_create">Create new Request
+            </p>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_view_service_approve">
+        <field name="name">Service Approval</field>
+        <field name="res_model">service.request</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[['state', '=','requested']]</field>
+        <field name="help" type="html">
+            <p class="oe_view_no_content_create">Create new record</p>
+        </field>
+    </record>
+
+<!--    <menuitem id="service_requests_menu" active="False" name="Service" parent="material_requisition.main_menu_material_request"/>-->
+<!--    <menuitem id="service_requests" name="External Service Orders" parent="service_requests_menu"-->
+<!--              action="action_view_service_requests" active="False"/>-->
+<!--    <menuitem id="service_approve" name="Service Approval" parent="service_requests_menu"-->
+<!--              action="action_view_service_approve"/>-->
+</odoo>

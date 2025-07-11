@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="seq_spc_plan_request" model="ir.sequence">
+            <field name="name">Spc Plan</field>
+            <field name="code">spc.plan.line</field>
+            <field name="prefix">SPC/</field>
+            <field name="padding">3</field>
+            <field name="number_increment">1</field>
+            <field name="company_id" eval="False"/>
+            <field name="implementation">standard</field>
+        </record>
+        <record id="spc_plan_request_form_view" model="ir.ui.view">
+            <field name="name">spc.plan.form</field>
+            <field name="model">spc.plan.line</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <!--                                            <button name="action_approve"-->
+                        <!--                                                    string="Approve"-->
+                        <!--                                                    type="object"-->
+                        <!--                                                    icon="fa-book"-->
+                        <!--                                                    class="oe_highlight"-->
+                        <!--                                                    invisible="state == 'approved' or done_bool == True"/>-->
+                        <!--                                            <button name="open_conditional_approve"-->
+                        <!--                                                    string="Conditionally Approve"-->
+                        <!--                                                    type="object"-->
+                        <!--                                                    icon="fa-book"-->
+                        <!--                                                    class="oe_highlight"-->
+                        <!--                                                    invisible="state == 'approved' or done_bool == True"/>-->
+                        <button name="values_for_resecheduled"
+                                string="Reschedule"
+                                type="object"
+                                icon="fa-book"
+                                class="oe_highlight"
+                                invisible="not capability_boolean"/>
+                        <button name="function_state"
+                                string="Done"
+                                type="object"
+                                class="oe_highlight"
+                                invisible="year_calculation_selection != 'live' or spc_state == 'done'"/>
+                        <!--                                            <field name="state" widget="statusbar"-->
+                        <!--                                                   statusbar_visible="draft,approved,conditionally_approved,revisit"/>-->
+                    </header>
+                    <sheet>
+                        <widget name="web_ribbon" title="Deadline" bg_color="text-bg-warning"
+                                invisible="year_calculation_selection != 'on_Progress'"/>
+                        <widget name="web_ribbon" title="Live" bg_color="text-bg-success"
+                                invisible="year_calculation_selection != 'live'"/>
+                        <widget name="web_ribbon" title="Expired" bg_color="text-bg-danger"
+                                invisible="year_calculation_selection != 'expired'"/>
+                        <widget name="web_ribbon" title="Rescheduled" bg_color="text-bg-info"
+                                invisible="year_calculation_selection != 'reschedule'"/>
+                        <widget name="web_ribbon" title="Request" bg_color="text-bg-light"
+                                invisible="year_calculation_selection != 'none'"/>
+
+                        <div class="oe_button_box" name="button_box">
+                            <button name="view_old_new_records" string="Related Record" type="object"
+                                    class="oe_stat_button"
+                                    icon="fa-refresh">
+                                <field name="related_record"/>Related Record
+                            </button>
+                        </div>
+                        <!--                        <div class="alert alert-success mb-4" role="alert"-->
+                        <!--                             invisible="first_approve_done == False or done_bool == True">-->
+                        <!--                            Waiting for Second Approval-->
+                        <!--                        </div>-->
+                        <h1>
+                            <field name='name' readonly="1" force_save="1"/>
+                        </h1>
+                        <div style="font-size:20px; color:red; text-align:center; font-weight:bold; padding:10px;"
+                             invisible="not capability_boolean">
+                            <field name="text" readonly="1"/>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="product_id"
+                                       required="1" readonly="spc_state == 'done'"/>
+                                <field name="part_name" readonly="spc_state == 'done'"/>
+                                <field name="parameter_id" readonly="spc_state == 'done'"/>
+                                <field name="part_drawing_no" readonly="spc_state == 'done'"/>
+                                <field name="part_drawing_date" readonly="spc_state == 'done'"/>
+                                <field name="file_name" invisible="1"/>
+                                <field name="line_id" invisible="1"/>
+                                <field name="current_date" invisible="1"/>
+                                <field name="priority_order" invisible="1"/>
+                                <field name="resecheduled_boolean" invisible="1"/>
+                                <field name="capability_boolean" invisible="1"/>
+
+                            </group>
+                            <group>
+                                <field name="specification" readonly="spc_state == 'done'"/>
+                                <field name="customer_name" readonly="spc_state == 'done'"/>
+                                <field name="gauges_id"
+                                       options="{'no_create': True, 'no_open': True}" readonly="spc_state == 'done'"/>
+                                <field name="start_date" readonly="spc_state == 'done'"/>
+                                <field name="year_calculation_selection" invisible="1"/>
+                                <field name="mmr_frequency_selection" invisible="1"/>
+                                <field name="early_done" invisible="not early_done"
+                                />
+                                <field name="end_date"/>
+                                <field name="spc_state" invisible="1"/>
+                                <field name="process_capability" string="CPK" readonly="spc_state == 'done'"
+                                />
+                                <field name="product_capability" string="CP" readonly="spc_state == 'done'"
+                                />
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Attachments">
+                                <group>
+                                    <group string="Attachments">
+                                        <field name="pdf_file" widget='many2many_binary' required="1"
+                                               readonly="spc_state == 'done'"/>
+                                    </group>
+                                    <!--                                    <group string="Attachments">-->
+                                    <!--                                        <field name="attachment" filename="file_name" required="1"-->
+                                    <!--                                               />-->
+                                    <!--                                        <field name="attachment_1" filename="file_name_1" required="1"-->
+                                    <!--                                               />-->
+                                    <!--                                        <field name="attachment_2" filename="file_name_2"-->
+                                    <!--                                               />-->
+                                    <!--                                        <field name="attachment_3" filename="file_name_3"-->
+                                    <!--                                               />-->
+
+                                    <!--                                    </group>-->
+                                </group>
+                            </page>
+                            <page string="Details">
+                                <group>
+                                    <field name="doc_num"/>
+                                    <field name="rev_num"/>
+                                    <field name="rev_date"/>
+                                </group>
+
+                            </page>
+                        </notebook>
+                        <!--                        <notebook>b-->
+                        <!--                            <page string="Others">-->
+                        <!--                                <group>-->
+                        <!--                                    <group string="Conditionally Approve">-->
+                        <!--                                        <field name="first_approve" invisible="first_approve == False" readonly="1"-->
+                        <!--                                               force_save="1"/>-->
+                        <!--                                        <field name="conditional_approve_remark"-->
+                        <!--                                               invisible="conditional_approve_remark == False" readonly="1"-->
+                        <!--                                               force_save="1"/>-->
+                        <!--                                        <field name="conditional_approve_remark_time" string="Date &amp; Time"-->
+                        <!--                                               invisible="conditional_approve_remark_time == False" readonly="1"-->
+                        <!--                                               force_save="1"/>-->
+
+                        <!--                                        <field name="second_approve" invisible="second_approve == False" readonly="1"-->
+                        <!--                                               force_save="1"/>-->
+                        <!--                                        <field name="conditional_approve_remark_two" readonly="1" force_save="1"-->
+                        <!--                                               invisible="conditional_approve_remark_two == False"/>-->
+                        <!--                                        <field name="conditional_approve_remark_two_time" string="Date &amp; Time"-->
+                        <!--                                               readonly="1" force_save="1"-->
+                        <!--                                               invisible="conditional_approve_remark_two_time == False"/>-->
+                        <!--                                    </group>-->
+                        <!--                                    <group string="Revision">-->
+                        <!--                                        <field name="first_approve_reject" string="First Approve" readonly="1"-->
+                        <!--                                               force_save="1"-->
+                        <!--                                               invisible="first_approve_reject == False"/>-->
+                        <!--                                        <field name="reject_remark" readonly="1" force_save="1"-->
+                        <!--                                               invisible="reject_remark == False"/>-->
+                        <!--                                        <field name="approve_remark_time" string="Date &amp; Time" readonly="1"-->
+                        <!--                                               force_save="1"-->
+                        <!--                                               invisible="approve_remark_time == False"/>-->
+
+                        <!--                                        <field name="first_approve_done" invisible="1"/>-->
+                        <!--                                        <field name="done_bool" invisible="1"/>-->
+
+                        <!--                                        <field name="first_approve_reject_2" invisible="first_approve_reject_2 == False"-->
+                        <!--                                               string="Second Approve" readonly="1"-->
+                        <!--                                               force_save="1"/>-->
+                        <!--                                        <field name="reject_remark_2" string="Revision Remarks" readonly="1"-->
+                        <!--                                               force_save="1"-->
+                        <!--                                               invisible="reject_remark_2 == False"/>-->
+                        <!--                                        <field name="approve_remark_time_2" string="Date &amp; Time" readonly="1"-->
+                        <!--                                               force_save="1"-->
+                        <!--                                               invisible="approve_remark_time_2 == False"/>-->
+                        <!--                                    </group>-->
+                        <!--                                </group>-->
+                        <!--                            </page>-->
+                        <!--                        </notebook>-->
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <record id="spc_plan_request_tree_view" model="ir.ui.view">
+            <field name="name">spc.plan.tree</field>
+            <field name="model">spc.plan.line</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="product_id"/>
+                    <field name="part_name"/>
+                    <field name="process_capability"/>
+                    <field name="parameter_id"/>
+                    <field name="priority_order" optional="hide"/>
+                    <field name="doc_num" optional="hide"/>
+                    <field name="rev_num" optional="hide"/>
+                    <field name="rev_date" optional="hide"/>
+                    <field name="specification"/>
+                    <field name="customer_name"/>
+                    <field name="start_date"/>
+                    <field name="create_date"/>
+                    <field name="end_date"/>
+                    <field name="year_calculation_selection" string="Status"
+                           decoration-success="year_calculation_selection == 'live'"
+                           decoration-warning="year_calculation_selection == 'on_Progress'"
+                           decoration-info="year_calculation_selection == 'reschedule'"
+                           decoration-danger="year_calculation_selection == 'expired'" widget="badge"/>
+                </tree>
+            </field>
+        </record>
+        <record id="view_spc_plan_search_view" model="ir.ui.view">
+            <field name="name">spc.plan.line.search</field>
+            <field name="model">spc.plan.line</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="product_id"/>
+                    <field name="start_date"/>
+                    <group expand="1" string="Group By">
+                        <filter string="Part No" name="product_id" context="{'group_by':'product_id'}"/>
+                    </group>
+                    <!--                    <filter>-->
+                    <!--                    <field name="product_id"/>-->
+                    <!--                    <field name="year_calculation_selection"/>-->
+                    <!--                    </filter>-->
+                    <!--                    <separator/>-->
+                    <!--                    <searchpanel>-->
+                    <!--                        <field name="mmr_state" icon="fa-filter"/>-->
+                    <!--                    </searchpanel>-->
+                </search>
+            </field>
+        </record>
+        <record id="spc_plan_request_action" model="ir.actions.act_window">
+            <field name="name">SPC Data</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">spc.plan.line</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('priority_order', '!=', '5')]</field>
+            <field name="help" type="html">
+                <p class="o_view_no content_smiling_face">
+                    SPC Plan
+                </p>
+            </field>
+        </record>
+        <record id="spc_plan_request_action_expired" model="ir.actions.act_window">
+            <field name="name">SPC History</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">spc.plan.line</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('priority_order', '=', '5')]</field>
+            <field name="help" type="html">
+                <p class="o_view_no content_smiling_face">
+                    SPC Plan
+                </p>
+            </field>
+        </record>
+        <menuitem id="spc_plan_request_main_menu"
+                  name="S-P-C"
+                  parent="quality_control.menu_quality_control"
+                  sequence="10"/>
+        <menuitem id="spc_plan"
+                  name="SPC Data "
+                  parent="spc_plan_request_main_menu"
+                  action="spc_plan_request_action"
+                  sequence="40"/>
+        <menuitem id="spc_plan_history"
+                  name="SPC History"
+                  parent="spc_plan_request_main_menu"
+                  action="spc_plan_request_action_expired"
+                  sequence="150"/>
+    </data>
+</odoo>

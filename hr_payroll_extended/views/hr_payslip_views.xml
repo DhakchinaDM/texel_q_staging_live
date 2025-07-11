@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_hr_payslip_filter_inherit" model="ir.ui.view">
+        <field name="name">hr.payslip.select</field>
+        <field name="model">hr.payslip</field>
+        <field name="inherit_id" ref="hr_payroll.view_hr_payslip_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='employee_id'][2]" position="attributes">
+                <attribute name="filter_domain">[('employee_id.emp_code', 'ilike', self)]</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hr_payslip_view_inherit" model="ir.ui.view">
+        <field name="name">hr.payslip.form.inherit</field>
+        <field name="model">hr.payslip</field>
+        <field name="inherit_id" ref="hr_payroll.view_hr_payslip_form"/>
+        <field name="arch" type="xml">
+            <button name="action_print_payslip" position="after">
+                <button name="print_payslip" string="Print Payslip" class="oe_highlight" type="object"/>
+            </button>
+            <field name="payslip_run_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <xpath expr="//group[1]" position="replace">
+                <group>
+                    <group>
+                        <label for="date_from" string="Period"/>
+                        <div>
+                            <div class="o_row" name="select_month">
+                                <field name="select_month" required="1" class="oe_inline"
+                                       readonly="state in ['cancel', 'done', 'paid']"/>
+                                <field name="select_year" required="1" class="oe_inline"
+                                       options="{'no_open': True,'no_create':True, 'no_edit':True}"
+                                       readonly="state in ['cancel', 'done', 'paid']"/>
+                            </div>
+                            <div class="o_row" name="date_from">
+                                <field name="date_from" force_save="1"
+                                       class="oe_inline"/>
+                                <field name="date_to" force_save="1" class="oe_inline"/>
+                            </div>
+                        </div>
+                    </group>
+                    <group>
+                        <field name="company_id" invisible="1"/>
+                        <field name="contract_id" context="{'default_employee_id': employee_id}" required="1"
+                               readonly="state in ['cancel', 'done', 'paid']"/>
+                        <field name="country_id" invisible="1"/>
+                        <field name="country_code" invisible="1"/>
+                        <field name="payslip_run_id" invisible="1" string="Batch"
+                               readonly="state not in ['draft', 'verify']"/>
+                        <field name="struct_id" required="1" readonly="state in ['cancel', 'done', 'paid']"/>
+                        <field name="salary_attachment_ids" invisible="1" force_save="1"/>
+                        <field name="wage_type" invisible="1"/>
+                        <field name="sum_worked_hours" invisible="1"/>
+                        <field name="credit_note" invisible="1" readonly="state not in ['draft', 'verify']"/>
+                        <field name="is_superuser" invisible="1"/>
+                        <field name="has_refund_slip" invisible="1"/>
+                        <field name="use_worked_day_lines" invisible="1"/>
+                        <field name="pay_date"/>
+                    </group>
+                </group>
+                <group>
+                    <group string="Employee Attendance Info">
+                        <field name="attendance_type"/>
+                        <field name="employee_manual_present_days" string="Present Days"
+                               invisible="attendance_type != 'manual'"/>
+                        <field name="employee_present_days" invisible="attendance_type != 'automatic'"
+                               readonly="1" force_save="1"/>
+                        <field name="extra_worked_days"/>
+                        <field name="number_of_leave" readonly="1" force_save="1"/>
+                        <field name="leave_paid_timeoff" invisible="1"/>
+                        <field name="employee_time_off_days" readonly="1" force_save="1"/>
+                        <field name="employee_final_present_days" readonly="1" force_save="1"/>
+                        <field name="allowance_amount_deduction" readonly="1" force_save="1"/>
+                    </group>
+                    <group string="Working Days Info">
+                        <field name="lop_type" widget="radio" options="{'horizontal': true}"/>
+                        <field name="employee_loptotal_days" invisible="lop_type != 'actual_lop'" readonly="1"
+                               force_save="1"/>
+                        <field name="employee_final_lop_total_days" invisible="lop_type != 'overall_lop'"
+                               readonly="1" force_save="1"/>
+                        <field name="employee_one_day_salary" readonly="1" force_save="1"/>
+                        <field name="number_working_of_days" readonly="1" force_save="1"/>
+                        <field name="total_days_of_month" readonly="1" force_save="1"/>
+                        <field name="gross_salary" readonly="1" force_save="1"/>
+                        <field name="basic_salary" readonly="1" force_save="1" invisible="1"/>
+                        <field name="hra" readonly="1" force_save="1" invisible="1"/>
+                        <field name="conveyance" readonly="1" force_save="1" invisible="1"/>
+                        <field name="medical" readonly="1" force_save="1" invisible="1"/>
+                    </group>
+                </group>
+                <group>
+                    <group string="Allowance">
+                        <field name="other_allowance"/>
+                        <field name="attendance_bonus"/>
+                        <field name="food_allowance"/>
+                        <field name="incentive"/>
+                        <field name="leave_encashment"/>
+                        <separator string="Overtime Allowance"/>
+                        <field name="overtime_per_day" class="oe_inline" invisible="1"/>
+                        <field name="overtime_hours" class="oe_inline" string="Total Hours Worked"/>
+                        <field name="overtime" class="oe_inline"
+                               string="Overtime Amount"/>
+                        <separator string="Night Shift Allowance"/>
+                        <label for="night_shift_allowance" string="Night Shift Allowance"/>
+                        <div>
+                            <field name="night_shift_allowance" class="oe_inline"/>
+                            <span>Rupees Per Day</span>
+                        </div>
+                        <field name="total_days_worked" class="oe_inline"/>
+                        <field name="night_shift_allowance_amount" class="oe_inline"
+                               string="Night shift Allowance"/>
+                        <field name="night_shift_bool" invisible="1"/>
+                        <separator string="Production Incentive" invisible="production_bool == False"/>
+                        <field name="fixed_production_amount" invisible="1"/>
+                        <field name="production_incentive" invisible="production_bool == False"/>
+                        <field name="one_day_production_cost" invisible="1"/>
+                        <field name="production_bool" invisible="1"/>
+                        <field name="emp_code" invisible="1"/>
+                    </group>
+                    <group string="Deduction">
+                        <field name="professional_tax"/>
+                        <field name="actual_professional_tax"/>
+                        <field name="other_loan"/>
+                        <field name="food_deduction"/>
+                        <field name="other_deduction"/>
+                        <field name="room_rent_deduction"/>
+                        <field name="shoe_and_uniform_deduction"/>
+                        <field name="income_tax"/>
+                        <field name="tds"/>
+                        <field name="esi_basic_percentage" invisible="1"/>
+                        <field name="esi_basic_percentage_second" invisible="1"/>
+                        <field name="esi" readonly="1" force_save="1"/>
+                        <field name="esi_second" invisible="1"/>
+                        <field name="staff_pay_bool" invisible="1"/>
+                    </group>
+                </group>
+                <group>
+                    <group string="EXTRAS">
+                        <field name="total_amount" readonly="1" force_save="1"/>
+                        <field name="amount_deduction" readonly="1" force_save="1"/>
+                        <field name="amount_deduction_only" invisible="1" readonly="1" force_save="1"/>
+                        <field name="amount_in_words" readonly="1" force_save="1"/>
+                        <field name="remarks" readonly="1" invisible="1"/>
+                    </group>
+                    <group>
+                    </group>
+                </group>
+            </xpath>
+
+            <page name="worked_days_input" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </page>
+            <page name="account_info" position="inside">
+                <group>
+                    <group string="Employee PF">
+                        <field name="pf_basic_percentage" string='Employee PF Percentage %'/>
+                        <field name="employee_pf_amount" string="Employee PF" readonly="1" force_save="1"/>
+                    </group>
+                    <group string="Employer PF">
+                        <field name="pf_basic_percentage_second" string='Employer PF Percentage'/>
+                        <field name="employer_pf_amount" string="Employer PF" readonly="1" force_save="1"/>
+                    </group>
+                </group>
+                <group>
+                    <group colspan="6">
+                        <group>
+                        </group>
+                        <group>
+                            <group string="Pension">
+                                <field name="pf_second_regular_pension_percent" string='PF Pension  %'/>
+                                <field name="pf_second_regular_pension_amt" string='PF Pension Amt  %'/>
+                            </group>
+                            <group string="Admin Charges">
+                                <field name="pf_admin_percent"/>
+                                <field name="pf_admin_amt"/>
+                            </group>
+                            <group string="Regular">
+                                <field name="pf_second_regular_percent" string='PF Regular  %'/>
+                                <field name="pf_second_regular_amt" string='PF Regular Amount'/>
+                            </group>
+                        </group>
+                    </group>
+                </group>
+            </page>
+            <page name="salary_computation" position="after">
+                <page name="leave_details" string="Leave Details">
+                    <group invisible="1">
+                        <group string="Leaves Available">
+                            <field name="cl"/>
+                            <field name="sl"/>
+                            <field name="el"/>
+                        </group>
+                        <group string="Leaves Taken">
+                            <field name="casual_leave"/>
+                            <field name="sick_leave"/>
+                            <field name="earned_leave"/>
+                            <field name="weekoff_lop"/>
+                        </group>
+                    </group>
+                    <field name="time_off_ids">
+                        <tree editable="bottom">
+                            <field name="payslip_id" column_invisible="1"/>
+                            <field name="emp_code" optional="hide"/>
+                            <field name="employee_ids" widget="many2many_tags" optional="hide"/>
+                            <field name="employee_id" optional="hide"/>
+                            <field name="request_date_from" width="20%"/>
+                            <field name="request_date_to" width="20%"/>
+                            <field name="request_unit_half" width="20%"/>
+                            <field name="name" width="20%"/>
+                            <field name="state" column_invisible="1"/>
+                            <field name="date_from" column_invisible="1"/>
+                            <field name="date_to" column_invisible="1"/>
+                            <field name="holiday_status_id" force_save="1" width="20%"
+                                   domain="[
+                                    '|',
+                                        ('requires_allocation', '=', 'no'),
+                                        '&amp;',
+                                            ('has_valid_allocation', '=', True),
+                                            '&amp;',
+                                                ('max_leaves', '>', '0'),
+                                                '|',
+                                                    ('allows_negative', '=', True),
+                                                    '&amp;',
+                                                        ('virtual_remaining_leaves', '&gt;', 0),
+                                                        ('allows_negative', '=', False),
+                                ]"
+                                   context="{'employee_id': employee_id, 'default_date_from': date_from, 'default_date_to': date_to}"
+                                   options="{'no_create': True, 'no_open': True, 'request_type': 'leave'}"
+                                   readonly="state in ['cancel', 'refuse', 'validate', 'validate1']"/>
+                            <field name="company_id" column_invisible="1"/>
+                            <field name="employee_company_id" column_invisible="1"/>
+                        </tree>
+                    </field>
+                </page>
+            </page>
+        </field>
+    </record>
+
+    <record id="hr_payslip_tree_view_inherit" model="ir.ui.view">
+        <field name="name">hr.payslip.tree.inherit</field>
+        <field name="model">hr.payslip</field>
+        <field name="inherit_id" ref="hr_payroll.view_hr_payslip_tree"/>
+        <field name="arch" type="xml">
+            <field name="employee_id" position="after">
+                <field name="emp_code"/>
+            </field>
+        </field>
+    </record>
+
+    <menuitem
+            id="hr_payroll.menu_hr_payroll_dashboard_root"
+            name="Dashboard"
+            parent="hr_work_entry_contract_enterprise.menu_hr_payroll_root"
+            action="hr_payroll.hr_payroll_dashboard_open"
+            sequence="40"
+            active="False"
+            groups="hr_payroll.group_hr_payroll_user"/>
+
+    <menuitem
+            id="hr_payroll.hr_menu_salary_attachments"
+            name="Salary Attachments"
+            active="False"/>
+    <menuitem
+            id="hr_work_entry_contract_enterprise.menu_work_entry"
+            active="False"/>
+    <menuitem
+            id="hr_payroll_holidays.menu_work_entry_leave_to_approve"
+            active="False"/>
+    <menuitem
+            id="hr_payroll.menu_hr_work_entry_report"
+            active="False"/>
+    <menuitem
+            id="hr_payroll.menu_hr_salary_attachment_type"
+            active="False"/>
+</odoo>

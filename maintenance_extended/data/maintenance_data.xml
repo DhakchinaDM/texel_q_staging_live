@@ -1,0 +1,548 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="stage_completed" model="maintenance.stage">
+            <field name="name">Completed</field>
+            <field name="sequence" eval="1"/>
+            <field name="fold" eval="False"/>
+        </record>
+
+        <!--        CHECK POINTS FOR QUARTERLY-->
+        <record id="check_point_1" model="check.point">
+            <field name="name">Clean the coolant oil tank</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">Vmc</field>
+            <field name="preventive_maintenance_type">quarterly</field>
+        </record>
+        <record id="check_point_2" model="check.point">
+            <field name="name">Check the coolant oil pipe Condition</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">Vmc</field>
+            <field name="preventive_maintenance_type">quarterly</field>
+        </record>
+        <record id="check_point_3" model="check.point">
+            <field name="name">Check the spindle wedge belt</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">Vmc</field>
+            <field name="preventive_maintenance_type">quarterly</field>
+        </record>
+        <record id="check_point_4" model="check.point">
+            <field name="name">Commanted RPM to Actual RPM</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">Vmc</field>
+            <field name="preventive_maintenance_type">quarterly</field>
+        </record>
+        <record id="check_point_5" model="check.point">
+            <field name="name">Change the coolant after cleaning the coolant tank</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">VTL</field>
+            <field name="preventive_maintenance_type">quarterly</field>
+        </record>
+        <record id="check_point_6" model="check.point">
+            <field name="name">Clean the drive heat sink fan (clogging)</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">VTL</field>
+            <field name="preventive_maintenance_type">quarterly</field>
+        </record>
+        <record id="check_point_7" model="check.point">
+            <field name="name">Check for oil leakages in metering cartridges &amp; lub hoses in guideways &amp; ball
+                screws
+            </field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">VTL</field>
+            <field name="preventive_maintenance_type">quarterly</field>
+        </record>
+        <record id="check_point_8" model="check.point">
+            <field name="name">Check the coolant pipe condition</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">TL</field>
+            <field name="preventive_maintenance_type">quarterly</field>
+        </record>
+        <record id="check_point_9" model="check.point">
+            <field name="name">Check the guard wiper condition</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">TL</field>
+            <field name="preventive_maintenance_type">quarterly</field>
+        </record>
+        <record id="check_point_10" model="check.point">
+            <field name="name">Clean the spindle motor &amp; Spindle drive fan</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">TL</field>
+            <field name="preventive_maintenance_type">quarterly</field>
+        </record>
+        <record id="check_point_11" model="check.point">
+            <field name="name">Check the coolant motor</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">TL</field>
+            <field name="preventive_maintenance_type">quarterly</field>
+        </record>
+        <record id="check_point_12" model="check.point">
+            <field name="name">Clean the operation panel and the heat exchanger filter of the electrical cabinet</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">TL</field>
+            <field name="preventive_maintenance_type">quarterly</field>
+        </record>
+        <record id="check_point_13" model="check.point">
+            <field name="name">Check the electrical cabinet whether if the contamination lube.oil or any dirt inside
+                panel board
+            </field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">TL</field>
+            <field name="preventive_maintenance_type">quarterly</field>
+        </record>
+
+        <!--        CHECK POINTS FOR HALF YEARLY-->
+        <!--        TL START-->
+        <record id="check_point_14" model="check.point">
+            <field name="name">Clean the coolant tank</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">TL</field>
+            <field name="preventive_maintenance_type">semi_annually</field>
+        </record>
+
+        <record id="check_point_15" model="check.point">
+            <field name="name">Check any abnormal noise, Vibration, and heat generation in power pack</field>
+            <field name="method_of_check">Hearing</field>
+            <field name="mc_type">TL</field>
+            <field name="preventive_maintenance_type">semi_annually</field>
+        </record>
+
+        <record id="check_point_16" model="check.point">
+            <field name="name">Remove and clean the spindle chuck</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">TL</field>
+            <field name="preventive_maintenance_type">semi_annually</field>
+        </record>
+
+        <record id="check_point_17" model="check.point">
+            <field name="name">Change the turret oil</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">TL</field>
+            <field name="preventive_maintenance_type">semi_annually</field>
+        </record>
+
+        <record id="check_point_18" model="check.point">
+            <field name="name">Check the panel board electrical connection</field>
+            <field name="method_of_check">Multimeter</field>
+            <field name="mc_type">TL</field>
+            <field name="preventive_maintenance_type">semi_annually</field>
+        </record>
+
+        <!--            VMC START-->
+        <record id="check_point_19" model="check.point">
+            <field name="name">Check the guard wiper condition</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">VMC</field>
+            <field name="preventive_maintenance_type">semi_annually</field>
+        </record>
+
+        <record id="check_point_20" model="check.point">
+            <field name="name">Clean the machine lamp</field>
+            <field name="method_of_check">Multimeter</field>
+            <field name="mc_type">VMC</field>
+            <field name="preventive_maintenance_type">semi_annually</field>
+        </record>
+
+        <record id="check_point_21" model="check.point">
+            <field name="name">Clean the spindle motor &amp; Spindle drive fan</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">VMC</field>
+            <field name="preventive_maintenance_type">semi_annually</field>
+        </record>
+
+        <record id="check_point_22" model="check.point">
+            <field name="name">Clean the coolant tank</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">VMC</field>
+            <field name="preventive_maintenance_type">semi_annually</field>
+        </record>
+
+        <record id="check_point_23" model="check.point">
+            <field name="name">Clean the tool packet, Arm &amp; near the spindle area</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">VMC</field>
+            <field name="preventive_maintenance_type">semi_annually</field>
+        </record>
+
+        <record id="check_point_24" model="check.point">
+            <field name="name">Clean and remove the X axis, Y axis, Z axis telescopic cover</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">VMC</field>
+            <field name="preventive_maintenance_type">semi_annually</field>
+        </record>
+
+        <record id="check_point_25" model="check.point">
+            <field name="name">Clean the display cooling fan</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">VMC</field>
+            <field name="preventive_maintenance_type">semi_annually</field>
+        </record>
+
+        <!--        VTL START-->
+        <record id="check_point_26" model="check.point">
+            <field name="name">Check the hydraulic oil condition in hydraulic tank</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">VTL</field>
+            <field name="preventive_maintenance_type">semi_annually</field>
+        </record>
+
+        <record id="check_point_27" model="check.point">
+            <field name="name">Check the belt tension &amp; belt condition in spindle indirect drive</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">VTL</field>
+            <field name="preventive_maintenance_type">semi_annually</field>
+        </record>
+
+        <record id="check_point_28" model="check.point">
+            <field name="name">Clean the suction strainer &amp; return line filter in the hydraulic power pack</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">VTL</field>
+            <field name="preventive_maintenance_type">semi_annually</field>
+        </record>
+
+        <record id="check_point_29" model="check.point">
+            <field name="name">Clean for any dust collection in the drive fan</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">VTL</field>
+            <field name="preventive_maintenance_type">semi_annually</field>
+        </record>
+
+        <record id="check_point_30" model="check.point">
+            <field name="name">Clean for any dust collection in the system fan</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">VTL</field>
+            <field name="preventive_maintenance_type">semi_annually</field>
+        </record>
+
+        <!--    DG START-->
+        <record id="check_point_31" model="check.point">
+            <field name="name">Change the coolant water</field>
+            <field name="method_of_check">Manual</field>
+            <field name="mc_type">DG</field>
+            <field name="preventive_maintenance_type">semi_annually</field>
+        </record>
+
+        <record id="check_point_32" model="check.point">
+            <field name="name">Check and adjust the V-belt tension</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">DG</field>
+            <field name="preventive_maintenance_type">semi_annually</field>
+        </record>
+
+        <record id="check_point_33" model="check.point">
+            <field name="name">Check the radiator for cooling system</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">DG</field>
+            <field name="preventive_maintenance_type">semi_annually</field>
+        </record>
+
+        <record id="check_point_34" model="check.point">
+            <field name="name">Remove sediment from fuel tank</field>
+            <field name="method_of_check">Manual</field>
+            <field name="mc_type">DG</field>
+            <field name="preventive_maintenance_type">semi_annually</field>
+        </record>
+
+        <record id="check_point_35" model="check.point">
+            <field name="name">Replace coarse fuel filter</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">DG</field>
+            <field name="preventive_maintenance_type">semi_annually</field>
+        </record>
+
+        <record id="check_point_36" model="check.point">
+            <field name="name">Check the compression pressure</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">DG</field>
+            <field name="preventive_maintenance_type">semi_annually</field>
+        </record>
+
+        <record id="check_point_37" model="check.point">
+            <field name="name">Adjust intake/exhaust valve clearance</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">DG</field>
+            <field name="preventive_maintenance_type">semi_annually</field>
+        </record>
+
+        <record id="check_point_38" model="check.point">
+            <field name="name">Check all electrical connections</field>
+            <field name="method_of_check">Multimeter</field>
+            <field name="mc_type">DG</field>
+            <field name="preventive_maintenance_type">semi_annually</field>
+        </record>
+
+        <record id="check_point_39" model="check.point">
+            <field name="name">Check the engine oil level</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">DG</field>
+            <field name="preventive_maintenance_type">semi_annually</field>
+        </record>
+
+        <!--            Air compressor-->
+        <record id="check_point_40" model="check.point">
+            <field name="name">Check the condition of air inlet filter</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">Air Compressor</field>
+            <field name="preventive_maintenance_type">semi_annually</field>
+        </record>
+
+        <record id="check_point_41" model="check.point">
+            <field name="name">Check the condition of oil level</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">Air Compressor</field>
+            <field name="preventive_maintenance_type">semi_annually</field>
+        </record>
+
+        <record id="check_point_42" model="check.point">
+            <field name="name">Check the condition of filter net</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">Air Compressor</field>
+            <field name="preventive_maintenance_type">semi_annually</field>
+        </record>
+
+        <record id="check_point_43" model="check.point">
+            <field name="name">Check the condition of all contactors</field>
+            <field name="method_of_check">Multimeter</field>
+            <field name="mc_type">Air Compressor</field>
+            <field name="preventive_maintenance_type">semi_annually</field>
+        </record>
+
+        <record id="check_point_44" model="check.point">
+            <field name="name">Check the working condition of Oil separator</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">Air Compressor</field>
+            <field name="preventive_maintenance_type">semi_annually</field>
+        </record>
+
+        <record id="check_point_45" model="check.point">
+            <field name="name">Check the compressor motor coupling &amp; Bearing area</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">Air Compressor</field>
+            <field name="preventive_maintenance_type">semi_annually</field>
+        </record>
+
+        <!--Washing M/C Start-->
+        <record id="check_point_46" model="check.point">
+            <field name="name">Clean all working motors</field>
+            <field name="method_of_check">Manual</field>
+            <field name="mc_type">Washing M/C</field>
+            <field name="preventive_maintenance_type">semi_annually</field>
+        </record>
+
+        <record id="check_point_47" model="check.point">
+            <field name="name">Clean panel board motor fans</field>
+            <field name="method_of_check">Manual</field>
+            <field name="mc_type">Washing M/C</field>
+            <field name="preventive_maintenance_type">semi_annually</field>
+        </record>
+
+        <record id="check_point_48" model="check.point">
+            <field name="name">Check the pneumatic hose condition</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">Washing M/C</field>
+            <field name="preventive_maintenance_type">semi_annually</field>
+        </record>
+
+        <!--Marking M/C Start-->
+        <record id="check_point_49" model="check.point">
+            <field name="name">Clean the panel</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">Marking M/C</field>
+            <field name="preventive_maintenance_type">semi_annually</field>
+        </record>
+
+        <record id="check_point_50" model="check.point">
+            <field name="name">Check the push buttons</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">Marking M/C</field>
+            <field name="preventive_maintenance_type">semi_annually</field>
+        </record>
+
+        <record id="check_point_51" model="check.point">
+            <field name="name">Check the panel board electrical connection</field>
+            <field name="method_of_check">Multimeter</field>
+            <field name="mc_type">Marking M/C</field>
+            <field name="preventive_maintenance_type">semi_annually</field>
+        </record>
+
+        <record id="check_point_52" model="check.point">
+            <field name="name">Check for pneumatics fitting</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">Marking M/C</field>
+            <field name="preventive_maintenance_type">semi_annually</field>
+        </record>
+
+        <!--        YEARLY Start-->
+        <record id="check_point_53" model="check.point">
+            <field name="name">Change the Hydraulic oil</field>
+            <field name="method_of_check">Manual</field>
+            <field name="mc_type">TL</field>
+            <field name="preventive_maintenance_type">annually</field>
+        </record>
+
+        <record id="check_point_54" model="check.point">
+            <field name="name">Clean the electrical panel board</field>
+            <field name="method_of_check">Multimeter</field>
+            <field name="mc_type">TL</field>
+            <field name="preventive_maintenance_type">annually</field>
+        </record>
+
+        <record id="check_point_55" model="check.point">
+            <field name="name">Clean all proximity's and limit switches</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">TL</field>
+            <field name="preventive_maintenance_type">annually</field>
+        </record>
+
+        <record id="check_point_56" model="check.point">
+            <field name="name">Change the lubricant oil</field>
+            <field name="method_of_check">Manual</field>
+            <field name="mc_type">TL</field>
+            <field name="preventive_maintenance_type">annually</field>
+        </record>
+
+        <!--            VMC START-->
+        <record id="check_point_57" model="check.point">
+            <field name="name">Change the Hydraulic oil</field>
+            <field name="method_of_check">Manual</field>
+            <field name="mc_type">VMC</field>
+            <field name="preventive_maintenance_type">annually</field>
+        </record>
+
+        <record id="check_point_58" model="check.point">
+            <field name="name">Clean the electrical panel board</field>
+            <field name="method_of_check">Multimeter</field>
+            <field name="mc_type">VMC</field>
+            <field name="preventive_maintenance_type">annually</field>
+        </record>
+
+        <record id="check_point_59" model="check.point">
+            <field name="name">Checked spindle taper runout with test mandrel of 300 mm</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">VMC</field>
+            <field name="preventive_maintenance_type">annually</field>
+        </record>
+
+        <record id="check_point_60" model="check.point">
+            <field name="name">Clean all proximity's and limit switches</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">VMC</field>
+            <field name="preventive_maintenance_type">annually</field>
+        </record>
+
+        <!--     Annually Washing M/C-->
+        <record id="check_point_61" model="check.point">
+            <field name="name">Checked pump working condition volt/amps</field>
+            <field name="method_of_check">Multimeter</field>
+            <field name="mc_type">Washing M/C</field>
+            <field name="preventive_maintenance_type">annually</field>
+        </record>
+
+        <record id="check_point_62" model="check.point">
+            <field name="name">Checked pallet chain and sprocket</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">Washing M/C</field>
+            <field name="preventive_maintenance_type">annually</field>
+        </record>
+
+        <record id="check_point_63" model="check.point">
+            <field name="name">Checked pneumatic fittings and solenoid valve</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">Washing M/C</field>
+            <field name="preventive_maintenance_type">annually</field>
+        </record>
+
+        <record id="check_point_64" model="check.point">
+            <field name="name">Changed gear box oil</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">Washing M/C</field>
+            <field name="preventive_maintenance_type">annually</field>
+        </record>
+
+        <!--            Air Compressor-->
+        <record id="check_point_65" model="check.point">
+            <field name="name">Check all bearings of the motor</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">Air Compressor</field>
+            <field name="preventive_maintenance_type">annually</field>
+        </record>
+
+        <record id="check_point_66" model="check.point">
+            <field name="name">Check all electrical cable connections</field>
+            <field name="method_of_check">Multimeter</field>
+            <field name="mc_type">Air Compressor</field>
+            <field name="preventive_maintenance_type">annually</field>
+        </record>
+
+        <record id="check_point_67" model="check.point">
+            <field name="name">Air compressor unit packings</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">Air Compressor</field>
+            <field name="preventive_maintenance_type">annually</field>
+        </record>
+
+        <record id="check_point_68" model="check.point">
+            <field name="name">Check the condition of pressure gauge</field>
+            <field name="method_of_check">Calibration Gauge</field>
+            <field name="mc_type">Air Compressor</field>
+            <field name="preventive_maintenance_type">annually</field>
+        </record>
+
+        <record id="check_point_69" model="check.point">
+            <field name="name">Changed engine oil</field>
+            <field name="method_of_check">Manual</field>
+            <field name="mc_type">DG</field>
+            <field name="preventive_maintenance_type">annually</field>
+        </record>
+
+        <!-- ANNUALLY DG START-->
+        <record id="check_point_70" model="check.point">
+            <field name="name">Adjust intake/exhaust valve clearance</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">DG</field>
+            <field name="preventive_maintenance_type">annually</field>
+        </record>
+
+        <record id="check_point_71" model="check.point">
+            <field name="name">Checked output voltage of alternator (400V to 420V)</field>
+            <field name="method_of_check">Multimeter</field>
+            <field name="mc_type">DG</field>
+            <field name="preventive_maintenance_type">annually</field>
+        </record>
+
+        <record id="check_point_72" model="check.point">
+            <field name="name">Check all electrical connections</field>
+            <field name="method_of_check">Multimeter</field>
+            <field name="mc_type">DG</field>
+            <field name="preventive_maintenance_type">annually</field>
+        </record>
+
+        <record id="check_point_73" model="check.point">
+            <field name="name">Checked cable terminals bolt and nuts</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">DG</field>
+            <field name="preventive_maintenance_type">annually</field>
+        </record>
+
+        <record id="check_point_74" model="check.point">
+            <field name="name">Check and Adjust V-Belt tension</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">DG</field>
+            <field name="preventive_maintenance_type">annually</field>
+        </record>
+
+        <record id="check_point_75" model="check.point">
+            <field name="name">Check the shutoff valve tightness &amp; any gas leakage in hydraulic accumulators</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">VTL</field>
+            <field name="preventive_maintenance_type">annually</field>
+        </record>
+
+        <record id="check_point_76" model="check.point">
+            <field name="name">Check softwares &amp; hardwares</field>
+            <field name="method_of_check">Visual</field>
+            <field name="mc_type">Marking M/C</field>
+            <field name="preventive_maintenance_type">annually</field>
+        </record>
+    </data>
+</odoo>

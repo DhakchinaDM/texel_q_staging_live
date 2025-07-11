@@ -1,0 +1,681 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record id="paperformat_delivery_challan_report" model="report.paperformat">
+            <field name="name">Custom Paperformat for Delivery Challan Report</field>
+            <field name="default" eval="False"/>
+            <field name="disable_shrinking" eval="True"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">5</field>
+            <field name="margin_bottom">25</field>
+            <field name="margin_left">0</field>
+            <field name="margin_right">0</field>
+            <field name="header_spacing">40</field>
+            <field name="dpi">140</field>
+        </record>
+
+        <!--                <record id="stock.action_report_picking" model="ir.actions.report">-->
+        <!--                    <field name="binding_model_id" eval="False"/>-->
+        <!--                </record>-->
+        <!--                <record id="stock.action_report_delivery" model="ir.actions.report">-->
+        <!--                    <field name="binding_model_id" eval="False"/>-->
+        <!--                </record>-->
+        <!--                <record id="stock.return_label_report" model="ir.actions.report">-->
+        <!--                    <field name="binding_model_id" eval="False"/>-->
+        <!--                </record>-->
+
+
+        <record id="report_delivery_challan_record_1" model="ir.actions.report">
+            <field name="name">Delivery Challan</field>
+            <field name="model">stock.picking</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">report_module.report_delivery_challan_report_template_new</field>
+            <field name="report_file">report_module.report_delivery_challan_report_template_new</field>
+            <field name="paperformat_id" ref="report_module.paperformat_delivery_challan_report"/>
+            <field name="print_report_name">'Delivery Challan'</field>
+            <field name="binding_model_id" ref="stock.model_stock_picking"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <template id="report_delivery_challan_report_template_new">
+            <t t-call="web.html_container">
+                <t t-call="web.basic_layout">
+                    <t t-foreach="docs" t-as="o">
+                        <div class="page">
+                            <table class="table table-sm"
+                                   style="width: 95%; margin: 2px; margin-left: 25px; margin-right: 15px; border: 1px solid black; font-size: 17px; border-spacing: 1em 0.5em; padding: 0 2em 1em 0; border-radius: 2px;">
+                                <tr>
+                                    <td colspan="2">
+                                        <img width="100%"
+                                             t-attf-src="/web/binary/company_logo"
+                                             alt="Logo"/>
+                                    </td>
+                                    <td colspan="10" align="center">
+                                        <div style="font-size: 20px">
+                                            <span t-field="o.user_id.company_id.name"/>
+                                            <br/>
+                                            <t t-if="o.user_id.company_id.street">
+                                                <span t-field="o.user_id.company_id.street"/>
+                                            </t>
+                                            <t t-if="o.user_id.company_id.street2">
+                                                <span t-field="o.user_id.company_id.street2"/>,
+                                            </t>
+                                            <t t-if="o.user_id.company_id.city">
+                                                <span t-field="o.user_id.company_id.city"/>,
+                                            </t>
+                                            <t t-if="o.user_id.company_id.state_id.name">
+                                                <span t-field="o.user_id.company_id.state_id.name"/>
+                                            </t>
+                                            <t t-if="o.user_id.company_id.zip">
+                                                -
+                                                <span t-field="o.user_id.company_id.zip"/>
+                                            </t>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="12" align="center">
+                                        <strong>Delivery Challan</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">
+                                        <strong>
+                                            GST
+                                        </strong>
+                                    </td>
+                                    <td colspan="3">
+                                        <span t-field="o.company_id.vat"/>
+                                    </td>
+                                    <td colspan="3">
+                                        <strong>
+                                            D.C
+                                        </strong>
+                                    </td>
+                                    <td colspan="3">
+                                        <span t-field="o.name"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="20%" colspan="3">
+                                        <strong>
+                                            Phone
+                                        </strong>
+                                    </td>
+                                    <td colspan="3">
+                                        <span t-field="o.user_id.company_id.phone"/>
+                                    </td>
+                                    <td colspan="3">
+                                        <strong>
+                                            Date
+                                        </strong>
+                                    </td>
+                                    <td colspan="3">
+                                        <span t-field="o.scheduled_date" t-options='{"widget": "date"}'/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6"/>
+                                    <td colspan="3">
+                                        <strong>Transport Name</strong>
+                                    </td>
+                                    <td colspan="3" class="padding_all tleft tbottom ttop text-center">
+                                        <span>-</span>
+                                        <!--                                        <span t-field="o.origin"/>-->
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="12" align="center">
+                                        <strong>TO ADDRESS :</strong>
+                                        <small>
+                                            <t t-set="address">
+                                                <address class="mb-0" t-field="o.partner_id"
+                                                         t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'/>
+                                            </t>
+                                            <div>
+                                                <t t-esc="address"/>
+                                            </div>
+                                        </small>
+                                    </td>
+                                </tr>
+
+
+                                <tr align="center">
+                                    <td colspan="3">
+                                        <strong>Mode of Transport</strong>
+                                    </td>
+                                    <td colspan="3">
+                                        <strong>Contact Person Name &amp; Phone No</strong>
+                                    </td>
+                                    <td colspan="3">
+                                        <strong>Supplier Reference</strong>
+                                    </td>
+                                    <td colspan="3">
+                                        <strong>Place of Supply</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" class="padding_all tleft tbottom ttop text-center">
+                                        <strong align="center">-</strong>
+                                    </td>
+                                    <td colspan="3">
+                                        <span t-foreach="o.partner_id.child_ids.filtered(lambda r: r.type == 'contact')"
+                                              t-as="contact">
+                                            <strong style="font-size:12px;" t-field="contact.name"/>
+                                        </span>
+                                    </td>
+                                    <td colspan="3">
+                                        <strong t-field="o.bill_ref"></strong>
+                                    </td>
+                                    <td colspan="3" class="padding_all tleft tbottom ttop text-center">
+                                        <strong align="center">-</strong>
+                                    </td>
+                                </tr>
+                                <tr align="center">
+                                    <th width="10%" colspan="1"
+                                        style="font-size:17px;border-right:1px solid #143980;color:black;background-color:#c6cacf; border:1px solid #000;border-color: black;">
+                                        <strong>SL.NO</strong>
+                                    </th>
+                                    <th width="10%" colspan="1"
+                                        style="font-size:17px;border-right:1px solid #143980;color:black;background-color:#c6cacf; border:1px solid #000;border-color: black;">
+                                        <strong>PART NO</strong>
+                                    </th>
+                                    <th width="20%" colspan="2"
+                                        style="font-size:17px;border-right:1px solid #143980;color:black;background-color:#c6cacf; border:1px solid #000;border-color: black;">
+                                        <strong>PART DESCRIPTION</strong>
+                                    </th>
+                                    <th width="15%" colspan="2"
+                                        style="font-size:17px;border-right:1px solid #143980;color:black;background-color:#c6cacf; border:1px solid #000;border-color: black;">
+                                        <strong>SERVICE</strong>
+                                    </th>
+                                    <th width="10%" colspan="1"
+                                        style="font-size:17px;border-right:1px solid #143980;color:black;background-color:#c6cacf; border:1px solid #000;border-color: black;">
+                                        <strong>UOM</strong>
+                                    </th>
+                                    <th width="10%" colspan="1"
+                                        style="font-size:17px;border-right:1px solid #143980;color:black;background-color:#c6cacf; border:1px solid #000;border-color: black;">
+                                        <strong>QTY</strong>
+                                    </th>
+                                    <th width="10%" colspan="2"
+                                        style="font-size:17px;border-right:1px solid #143980;color:black;background-color:#c6cacf; border:1px solid #000;border-color: black;">
+                                        <strong>UNIT PRICE</strong>
+                                    </th>
+                                    <th width="15%" colspan="2"
+                                        style="font-size:17px;border-right:1px solid #143980;color:black;background-color:#c6cacf; border:1px solid #000;border-color: black;">
+                                        <strong>TOTAL VALUE</strong>
+                                    </th>
+                                </tr>
+                                <t t-set="qty" t-value="0"/>
+                                <t t-set="unit_price" t-value="0"/>
+                                <t t-set="total_value" t-value="0"/>
+                                <t t-foreach="o.move_ids_without_package" t-as="line">
+                                    <t t-set="qty" t-value="qty + line.quantity"/>
+                                    <t t-set="unit_price" t-value="unit_price + line.product_id.list_price"/>
+                                    <t t-set="total_value" t-value="total_value + line.product_id.list_price"/>
+                                    <tr>
+                                        <td align="center" colspan="1">
+                                            <span t-esc="line_index+1"/>
+                                        </td>
+                                        <td colspan="1">
+                                            <span t-esc="line.product_id.default_code"/>
+                                        </td>
+                                        <td colspan="2">
+                                            <span t-esc="line.product_id.name"/>
+                                        </td>
+                                        <td colspan="2">
+                                            <span t-esc="line.product_id.categ_id.name"/>
+                                        </td>
+                                        <td align="center" colspan="1">
+                                            <!--                                            <span t-esc="line.product_id.categ_id.name"/>-->
+                                            <span>NO'S</span>
+                                        </td>
+                                        <td align="right" colspan="1">
+                                            <span t-esc="line.quantity"/>
+                                        </td>
+                                        <td align="right" colspan="2">
+                                            <span t-esc="line.product_id.list_price"/>
+                                        </td>
+                                        <td align="right" colspan="2">
+                                            <span t-esc="line.quantity * line.product_id.list_price"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <tr>
+                                    <td align="right" colspan="7">
+                                        <strong>Grand Total</strong>
+                                    </td>
+                                    <td align="right" colspan="1">
+                                        <span t-esc="qty"/>
+                                    </td>
+                                    <td align="right" colspan="2">
+                                        <span t-esc="unit_price"/>
+                                    </td>
+                                    <td align="right" colspan="2">
+                                        <span t-esc="total_value"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="left" colspan="3">
+                                        <span>Amount in Words</span>
+                                    </td>
+                                    <td colspan="9" align="left">
+                                        <span t-esc="o.company_id.currency_id.amount_to_text(int(total_value))"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="8">
+                                        <strong>Declaration:-</strong>
+                                    </td>
+                                    <td colspan="4" rowspan="3">
+                                        <strong>M.Kevin John</strong>
+                                        <hr style="color:black; border-top:1px solid black; margin-top:1px"/>
+                                        <span>Authorized By</span>
+                                        <br/>
+                                        <span>Date:</span>
+                                        <strong t-field="o.scheduled_date"/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <strong>Received the above Material in good condition</strong>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <strong>Receiver Signature</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="8">
+                                        <strong>Certified the I /we have checked and found the
+                                            quantity and quality of the goods to my /our entire statisfaction and taken
+                                            delivery . The amount indicated represent the job charges actually charged
+                                            and that there is no flow of additional consideration directly /Indirectly
+                                            from the Supplier
+                                        </strong>
+                                        <strong>Dialog box to be open for entering the comments based on the job . You
+                                            can gives us the option to choose based on the supplier.
+                                        </strong>
+                                        <br/>
+                                        <strong>Eg. 1. Material sent for testing on DC is on
+                                            returnable basis alongwith Invoice mentioning our DC reference.
+                                        </strong>
+                                        <br/>
+                                        <strong style="margin-left:20px">2. Material sent for rework will be
+                                            returned by supplier DC mentioning our DC reference .
+                                        </strong>
+                                        <br/>
+                                        <strong style="margin-left:20px">3.Bin &amp; Covers supplied to the
+                                            Vendor on returnable basis.
+                                        </strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="8">
+                                        <strong>M.Kevin John</strong>
+                                        <br/>
+                                        <span t-field="o.user_id.company_id.name"/>
+                                        <br/>
+                                        <t t-if="o.user_id.company_id.street">
+                                            <span t-field="o.user_id.company_id.street"/>
+                                        </t>
+                                        <t t-if="o.user_id.company_id.street2">
+                                            <span t-field="o.user_id.company_id.street2"/>,
+                                        </t>
+                                        <br/>
+                                        <t t-if="o.user_id.company_id.city">
+                                            <span t-field="o.user_id.company_id.city"/>,
+                                        </t>
+                                        <t t-if="o.user_id.company_id.state_id.name">
+                                            <span t-field="o.user_id.company_id.state_id.name"/>
+                                        </t>
+                                        <t t-if="o.user_id.company_id.zip">
+                                            -
+                                            <span t-field="o.user_id.company_id.zip"/>
+                                        </t>
+                                    </td>
+                                </tr>
+                            </table>
+                            <br/>
+                            <br/>
+                            <div align="center" class="px-3">
+                                <h7 style="color: black; text-align:center; font-weight: bold; letter-spacing: 1px; ">
+                                    ******This is computer generated document and requires no signature******
+                                </h7>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+        <!--        <template id="delivery_challan_report_footer">-->
+        <!--            <t t-foreach="docs" t-as="o">-->
+        <!--                <div class="footer"-->
+        <!--                     style="border-right:1.5px solid #000;border-left:1.5px solid #000;">-->
+        <!--                    <div class="container-fluid">-->
+        <!--                        <span style="width: 34%;">-->
+        <!--                            Total-->
+        <!--                        </span>-->
+        <!--                        <span style="width: 7%;">-->
+        <!--                            Total-->
+        <!--                        </span>-->
+        <!--                        <span style="width: 7%;">-->
+        <!--                            Total-->
+        <!--                        </span>-->
+        <!--                        <span style="width: 7%;">-->
+        <!--                            Total-->
+        <!--                        </span>-->
+        <!--                        <span style="width: 7%;">-->
+        <!--                            Total-->
+        <!--                        </span>-->
+        <!--                        <span style="width: 9%;">-->
+        <!--                            Total-->
+        <!--                        </span>-->
+        <!--                        <span style="width: 9%;">-->
+        <!--                            568419-->
+        <!--                        </span>-->
+        <!--                        <span>-->
+        <!--                            Total-->
+        <!--                        </span>-->
+        <!--                    </div>-->
+        <!--                    <div class="row" style="border-bottom: 1.5px solid #000;border-top: 1.5px solid #000;">-->
+        <!--                        <span>-->
+        <!--                            Amount in Words:-->
+        <!--                            <span t-field="o.lead_time"/>-->
+        <!--                        </span>-->
+        <!--                    </div>-->
+        <!--                    <div class="row" style="border-bottom: 1.5px solid #000;">-->
+        <!--                        <span>-->
+        <!--                            1. Lead time :-->
+        <!--                            <span t-field="o.lead_time"/>-->
+        <!--                        </span>-->
+        <!--                    </div>-->
+        <!--                    <div class="row" style="border-bottom: 1.5px solid #000;">-->
+        <!--                        <span>-->
+        <!--                            2. Purpose :-->
+        <!--                            <span t-field="o.req_details"/>-->
+        <!--                        </span>-->
+        <!--                    </div>-->
+        <!--                </div>-->
+        <!--            </t>-->
+        <!--        </template>-->
+
+        <!--        <template id="report_delivery_challan_report_template">-->
+        <!--            <t t-call="web.html_container">-->
+        <!--                <t t-foreach="docs" t-as="o">-->
+        <!--                    <t t-call="web.basic_layout">-->
+        <!--                        <div class="page">-->
+        <!--                            <style>-->
+        <!--                                .table-container {-->
+        <!--                                position: relative;-->
+        <!--                                display: flex;-->
+        <!--                                flex-direction: column;-->
+        <!--                                }-->
+
+        <!--                                .table {-->
+        <!--                                margin-bottom: 20px; /* Adjust as needed for spacing between tables */-->
+        <!--                                }-->
+
+        <!--                                .table:first-child {-->
+        <!--                                margin-bottom: 0; /* Remove margin for the first table to align with the second table */-->
+        <!--                                }-->
+
+        <!--                                .table-container > .table:last-child {-->
+        <!--                                position: absolute;-->
+        <!--                                top: 100%;-->
+        <!--                                left: 0;-->
+        <!--                                }-->
+
+        <!--                            </style>-->
+        <!--                            <t t-call="report_module.delivery_challan_report_header"/>-->
+        <!--                            <table class="table table-sm"-->
+        <!--                                   style="border:2px solid #000;border-color: black">-->
+        <!--                                        <tr>-->
+        <!--                                            <td colspan="8" align="center">-->
+        <!--                                                <strong>TO ADDRESS :</strong>-->
+        <!--                                                <small>-->
+        <!--                                                    <t t-set="address">-->
+        <!--                                                        <address class="mb-0" t-field="o.partner_id"-->
+        <!--                                                                 t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'/>-->
+        <!--                                                    </t>-->
+        <!--                                                    <div>-->
+        <!--                                                        <t t-esc="address"/>-->
+        <!--                                                    </div>-->
+        <!--                                                </small>-->
+        <!--                                            </td>-->
+        <!--                                        </tr>-->
+        <!--                                        <tr align="center">-->
+        <!--                                            <td colspan="2">-->
+        <!--                                                <strong>Mode of Transport</strong>-->
+        <!--                                            </td>-->
+        <!--                                            <td>-->
+        <!--                                                <strong>Contact Person Name &amp; Phone No</strong>-->
+        <!--                                            </td>-->
+        <!--                                            <td colspan="3">-->
+        <!--                                                <strong>Supplier Reference</strong>-->
+        <!--                                            </td>-->
+        <!--                                            <td colspan="2">-->
+        <!--                                                <strong>Place of Supply</strong>-->
+        <!--                                            </td>-->
+        <!--                                        </tr>-->
+        <!--                                        <tr>-->
+        <!--                                            <td colspan="2">-->
+        <!--                                                <strong>-</strong>-->
+        <!--                                            </td>-->
+        <!--                                            <td>-->
+        <!--                                                <span t-foreach="o.partner_id.child_ids.filtered(lambda r: r.type == 'contact')"-->
+        <!--                                                      t-as="contact">-->
+        <!--                                                    <strong style="font-size:12px;" t-field="contact.name"/>-->
+        <!--                                                </span>-->
+        <!--                                            </td>-->
+        <!--                                            <td colspan="3">-->
+        <!--                                                <strong t-field="o.bill_ref"></strong>-->
+        <!--                                            </td>-->
+        <!--                                            <td colspan="2">-->
+        <!--                                                <strong>-</strong>-->
+        <!--                                            </td>-->
+        <!--                                        </tr>-->
+        <!--                                        <tr align="center">-->
+        <!--                                            <td width="10%">-->
+        <!--                                                <strong>SL.NO</strong>-->
+        <!--                                            </td>-->
+        <!--                                            <td width="10%">-->
+        <!--                                                <strong>PART NO</strong>-->
+        <!--                                            </td>-->
+        <!--                                            <td width="20%">-->
+        <!--                                                <strong>PART DESCRIPTION</strong>-->
+        <!--                                            </td>-->
+        <!--                                            <td width="15%">-->
+        <!--                                                <strong>SERVICE</strong>-->
+        <!--                                            </td>-->
+        <!--                                            <td width="10%">-->
+        <!--                                                <strong>UOM</strong>-->
+        <!--                                            </td>-->
+        <!--                                            <td width="10%">-->
+        <!--                                                <strong>QTY</strong>-->
+        <!--                                            </td>-->
+        <!--                                            <td width="10%">-->
+        <!--                                                <strong>UNIT PRICE</strong>-->
+        <!--                                            </td>-->
+        <!--                                            <td width="15%">-->
+        <!--                                                <strong>TOTAL VALUE</strong>-->
+        <!--                                            </td>-->
+        <!--                                        </tr>-->
+        <!--                                        <t t-set="qty" t-value="0"/>-->
+        <!--                                        <t t-set="unit_price" t-value="0"/>-->
+        <!--                                        <t t-set="total_value" t-value="0"/>-->
+        <!--                                        <t t-foreach="o.move_ids_without_package" t-as="line">-->
+        <!--                                            <t t-set="qty" t-value="qty + line.quantity"/>-->
+        <!--                                            <t t-set="unit_price" t-value="unit_price + line.product_id.list_price"/>-->
+        <!--                                            <t t-set="total_value" t-value="total_value + line.product_id.list_price"/>-->
+        <!--                                            <tr>-->
+        <!--                                                <td align="right">-->
+        <!--                                                    <span t-esc="line_index+1"/>-->
+        <!--                                                </td>-->
+        <!--                                                <td>-->
+        <!--                                                    <span t-esc="line.product_id.default_code"/>-->
+        <!--                                                </td>-->
+        <!--                                                <td>-->
+        <!--                                                    <span t-esc="line.product_id.name"/>-->
+        <!--                                                </td>-->
+        <!--                                                <td>-->
+        <!--                                                    <span t-esc="line.product_id.categ_id.name"/>-->
+        <!--                                                </td>-->
+        <!--                                                <td align="center">-->
+        <!--                                                    &lt;!&ndash;                                            <span t-esc="line.product_id.categ_id.name"/>&ndash;&gt;-->
+        <!--                                                    <span>NO'S</span>-->
+        <!--                                                </td>-->
+        <!--                                                <td align="right">-->
+        <!--                                                    <span t-esc="line.quantity"/>-->
+        <!--                                                </td>-->
+        <!--                                                <td align="right">-->
+        <!--                                                    <span t-esc="line.product_id.list_price"/>-->
+        <!--                                                </td>-->
+        <!--                                                <td align="right">-->
+        <!--                                                    <span t-esc="line.quantity * line.product_id.list_price"/>-->
+        <!--                                                </td>-->
+        <!--                                            </tr>-->
+        <!--                                        </t>-->
+        <!--                                        <tr>-->
+        <!--                                            <td align="right" colspan="5">-->
+        <!--                                                <strong>Grand Total</strong>-->
+        <!--                                            </td>-->
+        <!--                                            <td align="right">-->
+        <!--                                                <span t-esc="qty"/>-->
+        <!--                                            </td>-->
+        <!--                                            <td align="right">-->
+        <!--                                                <span t-esc="unit_price"/>-->
+        <!--                                            </td>-->
+        <!--                                            <td align="right">-->
+        <!--                                                <span t-esc="total_value"/>-->
+        <!--                                            </td>-->
+        <!--                                        </tr>-->
+        <!--                                        <tr>-->
+        <!--                                            <td align="left">-->
+        <!--                                                <span>Rupees</span>-->
+        <!--                                            </td>-->
+        <!--                                            <td colspan="7" align="left">-->
+        <!--                                                <span t-esc="o.company_id.currency_id.amount_to_text(int(total_value))"/>-->
+        <!--                                            </td>-->
+        <!--                                        </tr>-->
+        <!--                                        <tr>-->
+        <!--                                            <td colspan="8">-->
+        <!--                                                <strong>Declaration:-</strong>-->
+        <!--                                            </td>-->
+        <!--                                        </tr>-->
+        <!--                                        <tr>-->
+        <!--                                            <td colspan="8">-->
+        <!--                                                <strong>Certified the I /we have checked and found the-->
+        <!--                                                    quantity and quality of the goods to my /our entire statisfaction and taken-->
+        <!--                                                    delivery . The amount indicated represent the job charges actually charged-->
+        <!--                                                    and that there is no flow of additional consideration directly /Indirectly-->
+        <!--                                                    from the Supplier-->
+        <!--                                                </strong>-->
+        <!--                                                <strong>Dialog box to be open for entering the comments based on the job . You-->
+        <!--                                                    can gives us the option to choose based on the supplier.-->
+        <!--                                                </strong>-->
+        <!--                                                <br/>-->
+        <!--                                                <strong>Eg. 1. Material sent for testing on DC is on-->
+        <!--                                                    returnable basis alongwith Invoice mentioning our DC reference.-->
+        <!--                                                </strong>-->
+        <!--                                                <br/>-->
+        <!--                                                <strong style="margin-left:20px">2. Material sent for rework will be-->
+        <!--                                                    returned by supplier DC mentioning our DC reference .-->
+        <!--                                                </strong>-->
+        <!--                                                <br/>-->
+        <!--                                                <strong style="margin-left:20px">3.Bin &amp; Covers supplied to the-->
+        <!--                                                    Vendor on returnable basis.-->
+        <!--                                                </strong>-->
+        <!--                                            </td>-->
+        <!--                                        </tr>-->
+        <!--                                        <tr>-->
+        <!--                                            <td colspan="2">-->
+        <!--                                                <span>Authorized By :</span>-->
+        <!--                                            </td>-->
+        <!--                                            <td colspan="2">-->
+        <!--                                                &lt;!&ndash;                                        <strong t-field="o.responsible.phone"/>&ndash;&gt;-->
+        <!--                                            </td>-->
+        <!--                                            <td colspan="2">-->
+        <!--                                                <span>Date:</span>-->
+        <!--                                            </td>-->
+        <!--                                            <td colspan="2">-->
+        <!--                                                <strong t-field="o.scheduled_date"/>-->
+        <!--                                            </td>-->
+        <!--                                        </tr>-->
+        <!--                                    <div class="row">-->
+        <!--                                        <div class="col-6">-->
+        <!--                                            <t t-if="o.responsible.name">-->
+        <!--                                                <strong t-field="o.responsible.name"/>-->
+        <!--                                                <br/>-->
+        <!--                                            </t>-->
+        <!--                                            <t t-if="o.responsible.name">-->
+        <!--                                                <strong t-field="o.responsible.company_id.name"/>-->
+        <!--                                                <br/>-->
+        <!--                                            </t>-->
+        <!--                                            <t t-if="o.responsible.street">-->
+        <!--                                                <strong t-field="o.responsible.street"/>-->
+        <!--                                                <br/>-->
+        <!--                                            </t>-->
+        <!--                                            <t t-if="o.responsible.street2">-->
+        <!--                                                <strong t-field="o.responsible.street2"/>-->
+        <!--                                                <br/>-->
+        <!--                                            </t>-->
+        <!--                                            <t t-if="o.responsible.city">-->
+        <!--                                                <strong t-field="o.responsible.city"/>-->
+        <!--                                                <br/>-->
+        <!--                                            </t>-->
+        <!--                                            <t t-if="o.responsible.state_id">-->
+        <!--                                                <strong t-field="o.responsible.state_id.name"/>-->
+        <!--                                                <t t-if="o.responsible.zip">-->
+        <!--                                                    - -->
+        <!--                                                    <strong t-field="o.responsible.zip"/>-->
+        <!--                                                </t>-->
+        <!--                                                <br/>-->
+        <!--                                            </t>-->
+        <!--                                            <t t-if="o.responsible.country_id">-->
+        <!--                                                <strong t-field="o.responsible.country_id.name"/>-->
+        <!--                                            </t>-->
+        <!--                                            <t t-if="o.responsible.phone">-->
+        <!--                                                <strong class="px-1">Ph :</strong>-->
+        <!--                                                <strong t-field="o.responsible.state_id.name"/>-->
+        <!--                                                <br/>-->
+        <!--                                            </t>-->
+        <!--                                            <t t-if="o.responsible.phone">-->
+        <!--                                                <strong class="px-1">Mail :</strong>-->
+        <!--                                                <strong t-field="o.responsible.mail"/>-->
+        <!--                                                <br/>-->
+        <!--                                            </t>-->
+        <!--                                        </div>-->
+        <!--                                        <div class="col-6">-->
+        <!--                                            <br/>-->
+        <!--                                            <br/>-->
+        <!--                                            <strong>Received the above Material in good condition</strong>-->
+        <!--                                            <br/>-->
+        <!--                                            <br/>-->
+        <!--                                            <br/>-->
+        <!--                                            <br/>-->
+        <!--                                            <strong>Receiver Signature</strong>-->
+        <!--                                        </div>-->
+        <!--                                        </div>-->
+        <!--                                <div align="center">-->
+        <!--                                    <br/>-->
+        <!--                                    <br/>-->
+        <!--                                    <strong>** This is computer generated document and requires no signature **</strong>-->
+        <!--                                </div>-->
+        <!--                    </t>-->
+        <!--                </t>-->
+        <!--            </t>-->
+        <!--        </template>-->
+    </data>
+</odoo>

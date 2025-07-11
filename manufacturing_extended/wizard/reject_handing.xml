@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_reject_handling_form" model="ir.ui.view">
+        <field name="name">reject.handling.form</field>
+        <field name="model">reject.handling</field>
+        <field name="arch" type="xml">
+            <form string="Reject Handling">
+                <group>
+                    <group>
+                        <field name="name"/>
+                        <field name="date"/>
+                    </group>
+                    <group>
+                        <field name="partner_id"/>
+                        <field name="lot_type" invisible="1"/>
+                        <field name="partial_done" invisible="1"/>
+                    </group>
+                    <separator string="Reject Handling" colspan="4"/>
+                    <field name="reject_handling_line_ids" create="0" nolabel="1">
+                        <tree string="Reject Record" editable="bottom" create="0">
+                            <field name="reject_rework_lot_id" force_save="1" readonly="1"/>
+                            <field name="product_id" force_save="1" readonly="1"/>
+                            <field name="lot_id" force_save="1" readonly="1"/>
+                            <field name="quantity" force_save="1" readonly="1"/>
+                            <field name="confirm_qty"/>
+                            <field name="remark"/>
+                            <field name="state" force_save="1" readonly="1"/>
+                            <field name="lot_type" force_save="1" readonly="1"/>
+                        </tree>
+                    </field>
+                </group>
+                <footer>
+                    <button string='Make Ok' name='make_ok' type='object' class='btn-primary'
+                            confirm="Need to confirm to Make Ok"/>
+                    <button string="Make Material Reject" name="make_material_reject" type="object" class="btn-primary"
+                            confirm="Need to confirm to Make Material Reject"/>
+                    <button string="Make Process Reject" name="make_process_reject" type="object" class="btn-primary"
+                            confirm="Need to confirm to Make Process Reject"/>
+                    <button string="Make Rework Reject" name="make_rework_reject" type="object" class="btn-primary"
+                            confirm="Need to confirm to Make Rework Reject"/>
+                    <button string="Make Rework" name="make_rework" type="object" class="btn-primary"
+                            confirm="Need to confirm to Make Rework"/>
+                    <button string='Cancel' class='btn-default' special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="reject_handling_action" model="ir.actions.act_window">
+        <field name="name">Reject Handling</field>
+        <field name="res_model">reject.handling</field>
+        <field name="view_mode">form</field>
+        <field name="binding_view_types">list</field>
+        <field name="binding_model_id" ref="manufacturing_extended.model_reject_rework_lot"/>
+        <field name="target">new</field>
+    </record>
+
+    <!--    <record id="new_confirm_reject_action" model="ir.actions.server">-->
+    <!--        <field name="name">Confirm Reject</field>-->
+    <!--        <field name="model_id" ref="model_reject_rework_lot"/>-->
+    <!--        <field name="binding_model_id" ref="manufacturing_extended.model_reject_rework_lot"/>-->
+    <!--        <field name="state">code</field>-->
+    <!--        <field name="code">model.confirm_rejection()</field>-->
+    <!--    </record>-->
+
+</odoo>

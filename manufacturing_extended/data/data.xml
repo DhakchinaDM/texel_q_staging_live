@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record id="location_production" model="stock.location">
+            <field name="name">Production</field>
+            <field name="location_id" model="stock.location"
+                   eval="obj().env.ref('stock.warehouse0').view_location_id.id"/>
+        </record>
+
+        <record id="stock.picking_type_in" model="stock.picking.type">
+            <field name="default_location_dest_id" model="stock.location"
+                   eval="obj().env.ref('stock.warehouse0').wh_qc_stock_loc_id.id"/>
+        </record>
+        <record id="stock.picking_type_out" model="stock.picking.type">
+
+            <field name="default_location_src_id" ref="manufacturing_extended.location_production"/>
+            <field name="default_location_dest_id" ref="stock.stock_location_customers"/>
+
+        </record>
+
+        <record id="stock.picking_type_internal" model="stock.picking.type">
+            <field name="default_location_src_id" model="stock.location"
+                   eval="obj().env.ref('stock.warehouse0').lot_stock_id.id"/>
+            <field name="default_location_dest_id" ref="manufacturing_extended.location_production"/>
+        </record>
+
+        <record id="manufacturing_iqc" model="stock.picking.type">
+            <field name="name">Manufacturing IQC - RAW</field>
+            <field name="code">mrp_operation</field>
+            <field name="sequence_code">IQC-RAW</field>
+            <field name="reservation_method">manual</field>
+            <field name="default_location_src_id" model="stock.location"
+                   eval="obj().env.ref('stock.warehouse0').wh_qc_stock_loc_id.id"/>
+            <field name="default_location_dest_id" model="stock.location"
+                   eval="obj().env.ref('stock.warehouse0').lot_stock_id.id"/>
+        </record>
+
+
+        <record id="manufacturing_iqc_part" model="stock.picking.type">
+            <field name="name">Manufacturing IQC - Part</field>
+            <field name="code">mrp_operation</field>
+            <field name="sequence_code">IQC-PART</field>
+            <field name="reservation_method">manual</field>
+            <field name="default_location_src_id" model="stock.location"
+                   eval="obj().env.ref('stock.warehouse0').wh_qc_stock_loc_id.id"/>
+            <field name="default_location_dest_id" ref="manufacturing_extended.location_production"/>
+        </record>
+
+        <record id="op_receiving" model="mrp.operation.list">
+            <field name="name">Receiving</field>
+            <field name="operation_code">GRN</field>
+            <field name="picking_type_id" ref="stock.picking_type_in"/>
+        </record>
+
+        <record id="op_iqc_raw" model="mrp.operation.list">
+            <field name="name">Incoming - Raw</field>
+            <field name="operation_code">IQC - Raw</field>
+            <field name="picking_type_id" ref="manufacturing_extended.manufacturing_iqc"/>
+        </record>
+
+        <record id="op_machining" model="mrp.operation.list">
+            <field name="name">Machining</field>
+            <field name="operation_code">Int</field>
+            <field name="picking_type_id" model="stock.picking.type"
+                   eval="obj().env.ref('stock.warehouse0').manu_type_id.id"/>
+        </record>
+
+        <record id="op_external" model="mrp.operation.list">
+            <field name="name">External</field>
+            <field name="operation_code">OUT</field>
+            <field name="picking_type_id" ref="delivery_challan.jw_operation"/>
+        </record>
+
+        <record id="op_receiving_part" model="mrp.operation.list">
+            <field name="name">Receiving Part</field>
+            <field name="operation_code">GRN - Part</field>
+            <field name="picking_type_id" ref="delivery_challan.return_jw_operation"/>
+        </record>
+
+        <record id="op_iqc_part" model="mrp.operation.list">
+            <field name="name">Incoming - Part</field>
+            <field name="operation_code">IQC - Part</field>
+            <field name="picking_type_id" ref="manufacturing_extended.manufacturing_iqc_part"/>
+        </record>
+
+        <record id="op_final_inspection" model="mrp.operation.list">
+            <field name="name">Final Inspection</field>
+            <field name="operation_code">FI</field>
+            <field name="picking_type_id" model="stock.picking.type"
+                   eval="obj().env.ref('stock.warehouse0').manu_type_id.id"/>
+        </record>
+
+        <record id="op_packing" model="mrp.operation.list">
+            <field name="name">Packing</field>
+            <field name="operation_code">P</field>
+            <field name="picking_type_id" model="stock.picking.type"
+                   eval="obj().env.ref('stock.warehouse0').manu_type_id.id"/>
+        </record>
+
+
+    </data>
+</odoo>

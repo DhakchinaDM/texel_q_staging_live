@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+<!--         <record id="sequence_stock_picking" model="ir.cron">-->
+<!--            <field name="name">stock picking sequence updatation</field>-->
+<!--            <field name="model_id" ref="stock.model_stock_picking_type"/>-->
+<!--            <field name="state">code</field>-->
+<!--            <field name="code">model.update_a_sequence_prefix()</field>-->
+<!--            <field name="interval_number">1</field>-->
+<!--            <field name="interval_type">days</field>-->
+<!--            <field name="numbercall">-1</field>-->
+<!--            <field eval="False" name="doall"/>-->
+<!--            <field name="priority">3</field>-->
+<!--        </record>-->
+
+        <record id="category_dc_general" model="product.category">
+            <field name="name">General (DC)</field>
+        </record>
+        <record id="product_dc_general" model="product.template">
+            <field name="name">General</field>
+            <field name="default_code">General</field>
+<!--            <field name="detailed_type">consu</field>-->
+            <field name="categ_id" ref="delivery_challan.category_dc_general"/>
+        </record>
+        <record id="product_dc_general_sjw" model="product.template">
+            <field name="name">General SJW</field>
+            <field name="default_code">General</field>
+<!--            <field name="detailed_type">consu</field>-->
+            <field name="categ_id" ref="delivery_challan.category_dc_general"/>
+        </record>
+
+
+
+
+        <record id="return_dc_operation" model="stock.picking.type">
+            <field name="name">Return DC</field>
+            <field name="code">incoming</field>
+            <field name="dc_entry_type">r_dc</field>
+            <field name="sequence_code">TQ/R-DC/25-26/</field>
+        </record>
+        <record id="dc_operation" model="stock.picking.type">
+            <field name="name">DC</field>
+            <field name="code">outgoing</field>
+            <field name="dc_entry_type">dc</field>
+            <field name="sequence_code">TQ/DC/25-26/</field>
+            <field name="return_picking_type_id" ref="delivery_challan.return_dc_operation"/>
+        </record>
+        <record id="return_jw_operation" model="stock.picking.type">
+            <field name="name">Return JW</field>
+            <field name="code">incoming</field>
+            <field name="dc_entry_type">r_jw</field>
+            <field name="sequence_code">TQ/R-JW/25-26/</field>
+            <field name="default_location_src_id" ref="stock.stock_location_suppliers"/>
+            <field name="default_location_dest_id" model="stock.location"
+                   eval="obj().env.ref('stock.warehouse0').wh_qc_stock_loc_id.id"/>
+
+        </record>
+        <record id="jw_operation" model="stock.picking.type">
+            <field name="name">JW</field>
+            <field name="code">outgoing</field>
+            <field name="dc_entry_type">jw</field>
+            <field name="sequence_code">TQ/JW/25-26/</field>
+            <field name="return_picking_type_id" ref="delivery_challan.return_jw_operation"/>
+            <field name="default_location_src_id" ref="manufacturing_extended.location_production"/>
+            <field name="default_location_dest_id" ref="stock.stock_location_suppliers"/>
+
+        </record>
+        <record id="return_sjw_operation" model="stock.picking.type">
+            <field name="name">Return SJW</field>
+            <field name="code">outgoing</field>
+            <field name="dc_entry_type">r_sjw</field>
+            <field name="sequence_code">TQ/R-SJW/25-26/</field>
+        </record>
+        <record id="sjw_operation" model="stock.picking.type">
+            <field name="name">SJW</field>
+            <field name="code">incoming</field>
+            <field name="dc_entry_type">sjw</field>
+            <field name="sequence_code">TQ/SJW/25-26/</field>
+            <field name="return_picking_type_id" ref="delivery_challan.return_sjw_operation"/>
+        </record>
+    </data>
+</odoo>

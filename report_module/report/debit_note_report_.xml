@@ -1,0 +1,605 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="paperformat_debit_note" model="report.paperformat">
+            <field name="name">Paperformat for Debit Note</field>
+            <field name="default" eval="False"/>
+            <field name="disable_shrinking" eval="True"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">5</field>
+            <field name="margin_bottom">25</field>
+            <field name="margin_left">10</field>
+            <field name="margin_right">10</field>
+            <field name="header_spacing">0</field>
+            <field name="dpi">120</field>
+        </record>
+
+        <record id="report_debit_note" model="ir.actions.report">
+            <field name="name">Debit Note Report</field>
+            <field name="model">account.move</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">report_module.report_debit_note_template</field>
+            <field name="report_file">report_module.report_debit_note_template</field>
+            <field name="paperformat_id" ref="report_module.paperformat_debit_note"/>
+            <field name="print_report_name">'Debit Note Report'</field>
+            <field name="binding_model_id" ref="account.model_account_move"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <template id="report_debit_note_template">
+            <t t-call="web.html_container">
+                <t t-call="web.basic_layout">
+                    <t t-foreach="docs" t-as="o">
+                        <div class="page">
+                            <h6 align="center">
+                                <small>Tax Invoice</small>
+                            </h6>
+                            <table style="width:100%">
+                                <tbody>
+                                    <tr>
+                                        <td class="bl br bt" style="width:50%">
+                                            <div class="row" style="border-bottom:1px solid;">
+                                                <div class="col-3">
+                                                    <img
+                                                            t-if="env.company.logo"
+                                                            t-att-src="image_data_uri(env.company.logo)"
+                                                            alt="Company Logo"
+                                                            style="max-width: 100px;height: 100px;"
+                                                    />
+                                                </div>
+                                                <div class="col-9">
+                                                    <div style="margin:15px; font-size:10px">
+                                                        <strong style="font-size:15px">
+                                                            <span t-esc="res_company.name"/>
+                                                        </strong>
+                                                        <br/>
+                                                        <span t-esc="res_company.street"/>
+                                                        <span t-esc="res_company.street2"/>
+                                                        <br/>
+                                                        <span t-esc="res_company.city"/>
+                                                        -
+                                                        <span t-esc="res_company.zip"/>
+                                                        <br/>
+                                                        <strong>GSTIN/UIN :</strong>
+                                                        <span t-esc="res_company.vat"/>
+                                                        <br/>
+                                                        <strong>State Name :</strong>
+                                                        <span t-esc="res_company.state_id.name"/>,
+                                                        <strong>Code :</strong>
+                                                        <span t-esc="res_company.state_id.l10n_in_tin"/>
+                                                        <br/>
+                                                        <strong>Contact :</strong>
+                                                        <span t-esc="res_company.mobile"/>,
+                                                        <span t-esc="res_company.phone"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div style="border-bottom:1px solid;">
+                                                <div style="margin:10px; font-size:9px">
+                                                    <strong>( Shipping Address )</strong>
+                                                    <br/>
+                                                    <strong>
+                                                        <span t-esc="o.partner_id.name"/>
+                                                    </strong>
+                                                    <br/>
+                                                    <span t-esc="o.partner_id.street"/>
+                                                    <span t-esc="o.partner_id.street2"/>
+                                                    <br/>
+                                                    <span t-esc="o.partner_id.city"/>
+                                                    -
+                                                    <span t-esc="o.partner_id.zip"/>
+                                                    <br/>
+                                                    <strong>GSTIN/UIN :</strong>
+                                                    <span t-esc="o.partner_id.vat"/>
+                                                    <br/>
+                                                    <strong>State Name :</strong>
+                                                    <span t-esc="o.partner_id.state_id.name"/>,
+                                                    <strong>Code :</strong>
+                                                    <span t-esc="o.partner_id.state_id.l10n_in_tin"/>
+                                                    <br/>
+                                                    <strong>Contact :</strong>
+                                                    <span t-esc="o.partner_id.mobile"/>,
+                                                    <span t-esc="o.partner_id.phone"/>
+                                                </div>
+                                            </div>
+                                            <div style="margin:10px; font-size:9px">
+                                                <strong>( Delivery Address )</strong>
+                                                <br/>
+                                                <strong>
+                                                    <span t-esc="o.partner_shipping_id.name"/>
+                                                </strong>
+                                                <br/>
+                                                <span t-esc="o.partner_shipping_id.street"/>
+                                                <span t-esc="o.partner_shipping_id.street2"/>
+                                                <br/>
+                                                <span t-esc="o.partner_shipping_id.city"/>
+                                                -
+                                                <span t-esc="o.partner_shipping_id.zip"/>
+                                                <br/>
+                                                <strong>GSTIN/UIN :</strong>
+                                                <span t-esc="o.partner_shipping_id.vat"/>
+                                                <br/>
+                                                <strong>State Name :</strong>
+                                                <span t-esc="o.partner_shipping_id.state_id.name"/>,
+                                                <strong>Code :</strong>
+                                                <span t-esc="o.partner_shipping_id.state_id.l10n_in_tin"/>
+                                                <br/>
+                                                <strong>Contact :</strong>
+                                                <span t-esc="o.partner_shipping_id.mobile"/>,
+                                                <span t-esc="o.partner_shipping_id.phone"/>
+                                            </div>
+                                        </td>
+                                        <td class="bt br"
+                                            style="width:50%; padding: 0; margin: 0; vertical-align: top; line-height: 1;">
+                                            <table class="table table-sm table-bordered"
+                                                   style="font-size:10px; border-collapse: collapse; margin: 0; padding: 0; line-height: 1;">
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="bb br">
+                                                            <div>
+                                                                <span style="font-weight:bold">Invoice No.</span>
+                                                            </div>
+                                                            <div>
+                                                                <span t-field="o.name"/>
+                                                            </div>
+                                                        </td>
+                                                        <td class="bb">
+                                                            <div>
+                                                                <span style="font-weight:bold">Date</span>
+                                                            </div>
+                                                            <div>
+                                                                <span t-field="o.invoice_date"/>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="bb br">
+                                                            <div>
+                                                                <span style="font-weight:bold">Delivery Note</span>
+                                                            </div>
+                                                            <div>
+<!--                                                                <span t-field="o.invoice_picking_id"/>-->
+                                                            </div>
+                                                        </td>
+                                                        <td class="bb">
+                                                            <div>
+                                                                <span style="font-weight:bold">Mode/Term of Payment
+                                                                </span>
+                                                            </div>
+                                                            <div>
+                                                                <span t-field="o.invoice_payment_term_id"/>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="bb br">
+                                                            <div>
+                                                                <span style="font-weight:bold">Reference No &amp;
+                                                                    Date
+                                                                </span>
+                                                            </div>
+                                                            <div>
+                                                                <span t-field="o.ref"/>
+                                                            </div>
+                                                        </td>
+                                                        <td class="bb">
+                                                            <div>
+                                                                <span style="font-weight:bold">Delivery Note Date
+                                                                </span>
+                                                            </div>
+                                                            <div>
+<!--                                                                <span t-field="o.invoice_picking_id.scheduled_date"/>-->
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="bb br">
+                                                            <div>
+                                                                <span style="font-weight:bold">Dispatched Through
+                                                                </span>
+                                                            </div>
+                                                            <div>
+<!--                                                                <span t-field="o.dispatched_through"/>-->
+                                                            </div>
+                                                        </td>
+                                                        <td class="bb">
+                                                            <div>
+                                                                <span style="font-weight:bold">Destination</span>
+                                                            </div>
+                                                            <div>
+                                                                <span t-field="o.l10n_in_state_id"/>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <div style="margin:3px; font-size:12px">
+                                                <span t-field="o.narration"/>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <style>
+                                .my-table tbody tr:nth-child(even) {
+                                background-color: #faf2f0;
+                                }
+                                .my-table tbody tr:nth-child(odd) {
+                                background-color: white;
+                                }
+                                .bb{
+                                border-bottom: 1px solid;
+                                }
+                                .bl{
+                                border-left: 1px solid;
+                                }
+                                .br{
+                                border-right: 1px solid;
+                                }
+                                .bt{
+                                border-top: 1px solid;
+                                }
+                            </style>
+                            <table class="table table-sm table-bordered">
+                                <thead style="border:1px solid;background-color:#c4c4c4; font-size:10px">
+                                    <tr>
+                                        <th class="br" style="text-align: center; font-weight: bold;">Sl No.</th>
+                                        <th class="br" style="text-align: center; font-weight: bold;">Description of
+                                            Goods
+                                        </th>
+                                        <th class="br" style="text-align: center; font-weight: bold;">HSN/SAC</th>
+                                        <th class="br" style="text-align: center; font-weight: bold;">Quantity</th>
+                                        <th class="br" style="text-align: center; font-weight: bold;">Rate</th>
+                                        <th class="br" style="text-align: center; font-weight: bold;">Per</th>
+                                        <th class="br" style="text-align: center; font-weight: bold;">Disc. %</th>
+                                        <th style="text-align: center; font-weight: bold;">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody style="font-size:10px">
+                                    <t t-set="total_qty" t-value="0"/>
+                                    <t t-foreach="o.invoice_line_ids" t-as="line" t-index="line_index">
+                                        <t t-set="total_qty" t-value="total_qty + line.quantity"/>
+                                        <tr style="border-bottom:0px white">
+                                            <td class="bl" align="center">
+                                                <t t-esc="line_index + 1"/>
+                                            </td>
+                                            <td class="bl" align="left">
+                                                <t t-esc="line.product_id.name"/>
+                                            </td>
+                                            <td class="bl" align="right">
+<!--                                                <t t-esc="line.l10n_in_hsn_code"/>-->
+                                            </td>
+                                            <td class="bl" align="right">
+                                                <t t-esc="line.quantity"/>
+                                            </td>
+                                            <td class="bl" align="right">
+                                                <t t-esc="line.price_unit"/>
+                                            </td>
+                                            <td class="bl" align="center">
+                                                <t t-esc="line.product_uom_id.name"/>
+                                            </td>
+                                            <td class="bl" align="right">
+                                                <t t-esc="line.discount"/>
+                                            </td>
+                                            <td class="bl br" align="right">
+                                                <t t-esc="line.price_subtotal"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                    <!-- Totals Row -->
+<!--                                    <t t-set="tax_totals" t-value="o.tax_totals"/>-->
+<!--                                    <t t-set="currency" t-value="o.company_currency_id"/>-->
+<!--                                    <t t-set="same_tax_base" t-value="tax_totals['same_tax_base']"/>-->
+<!--                                    <t t-foreach="o.tax_totals['subtotals']" t-as="subtotal">-->
+<!--                                        <tr class="o_subtotal" style="border-bottom: 0px solid white;">-->
+<!--                                            <td class="bl">-->
+<!--                                            </td>-->
+<!--                                            <td class="bl">-->
+<!--                                            </td>-->
+<!--                                            <td class="bl">-->
+<!--                                            </td>-->
+<!--                                            <td class="bl">-->
+<!--                                            </td>-->
+<!--                                            <td class="bl">-->
+<!--                                            </td>-->
+<!--                                            <td class="bl">-->
+<!--                                            </td>-->
+<!--                                            <td class="bl">-->
+<!--                                                &lt;!&ndash;<span t-out="subtotal['name']">Untaxed amount</span>&ndash;&gt;-->
+<!--                                            </td>-->
+<!--                                            <td class="bl br text-end" style="border-top:1px dashed">-->
+<!--                                                <span t-out="subtotal['base_amount']"-->
+<!--                                                      t-options='{"widget": "monetary", "display_currency": currency}'>-->
+<!--                                                </span>-->
+<!--                                            </td>-->
+<!--                                        </tr>-->
+<!--                                        <t t-foreach="subtotal['tax_groups']" t-as="tax_group">-->
+<!--                                            <tr class="o_taxes">-->
+<!--                                                <td class="bl" align="right"></td>-->
+<!--                                                <td class="bl" align="right"></td>-->
+<!--                                                <td class="bl" align="right"></td>-->
+<!--                                                <td class="bl" align="right"></td>-->
+<!--                                                <td class="bl"></td>-->
+<!--                                                <td class="bl"></td>-->
+
+<!--                                                &lt;!&ndash; Tax group name (always shown) &ndash;&gt;-->
+<!--                                                <td class="bl">-->
+<!--                                                    <span style="font-weight:bold;" class="text-nowrap"-->
+<!--                                                          t-out="tax_group['group_name']"/>-->
+<!--                                                </td>-->
+
+<!--                                                &lt;!&ndash; Tax amount (always shown) &ndash;&gt;-->
+<!--                                                <td class="text-end bl br o_price_total">-->
+<!--                                                    <span class="text-nowrap"-->
+<!--                                                          t-out="tax_group['tax_amount']"-->
+<!--                                                          t-options='{"widget": "monetary", "display_currency": currency}'/>-->
+<!--                                                </td>-->
+<!--                                            </tr>-->
+<!--                                        </t>-->
+<!--                                    </t>-->
+<!--                                    <tr t-if="'cash_rounding_base_amount_currency' in tax_totals"-->
+<!--                                        style="border:1px solid" class="o_total">-->
+<!--                                        <td class="bl" align="right">-->
+<!--                                        </td>-->
+<!--                                        <td class="bl" align="right">-->
+<!--                                        </td>-->
+<!--                                        <td class="bl" align="right">-->
+<!--                                        </td>-->
+<!--                                        <td class="bl" align="right">-->
+<!--                                        </td>-->
+<!--                                        <td class="bl">-->
+<!--                                        </td>-->
+<!--                                        <td class="bl">-->
+<!--                                        </td>-->
+<!--                                        <td class="br bl">-->
+<!--                                            <strong>Rounding</strong>-->
+<!--                                        </td>-->
+<!--                                        <td class="text-end">-->
+<!--                                            <span t-out="tax_totals['cash_rounding_base_amount_currency']"-->
+<!--                                                  t-options='{"widget": "monetary", "display_currency": currency}'-->
+<!--                                            >0-->
+<!--                                            </span>-->
+<!--                                        </td>-->
+<!--                                    </tr>-->
+<!--                                    <tr style="border:1px solid" class="o_total">-->
+<!--                                        <td class="br" colspan="3" align="right">-->
+<!--                                            <strong>Total Qty</strong>-->
+<!--                                        </td>-->
+<!--                                        <td class="br" align="right">-->
+<!--                                            <strong>-->
+<!--                                                <t t-esc="total_qty"/>-->
+<!--                                            </strong>-->
+<!--                                        </td>-->
+<!--                                        <td class="br" colspan="2">-->
+<!--                                        </td>-->
+<!--                                        <td class="br">-->
+<!--                                            <strong>Total</strong>-->
+<!--                                        </td>-->
+<!--                                        <td class="text-end">-->
+<!--                                            <strong t-out="tax_totals['total_amount']"-->
+<!--                                                    t-options='{"widget": "monetary", "display_currency": currency}'>-->
+<!--                                            </strong>-->
+<!--                                        </td>-->
+<!--                                    </tr>-->
+                                </tbody>
+                            </table>
+                            <p style="page-break-inside: avoid;" class="text-end lh-sm">
+                                Total amount (In words):
+                                <br/>
+                                <small class="text-muted lh-sm">
+                                    <span t-field="o.amount_total_words"/>
+                                </small>
+                            </p>
+                            <t t-if="o.company_id.account_fiscal_country_id.code == 'IN'">
+                                <t t-set="hsn_summary" t-value="o._l10n_in_get_hsn_summary_table()"/>
+                                <t t-if="hsn_summary">
+                                    <div name="l10n_in_hsn_summary" style="page-break-inside: avoid;">
+                                        <table class="table table-sm table-bordered col-6"
+                                               style="page-break-inside: avoid;font-size:10px">
+                                            <thead style="border:1px solid; background-color:#c4c4c4">
+                                                <th class="br" style="text-align:center; font-weight:bold;">
+                                                    HSN/SAC
+                                                </th>
+                                                <th class="br" style="text-align:center; font-weight:bold;">Quantity
+                                                </th>
+                                                <th class="br" style="text-align:center; font-weight:bold;">Rate %
+                                                </th>
+                                                <th class="br" style="text-align:center; font-weight:bold;">Taxable
+                                                    Value
+                                                </th>
+                                                <th class="bl" style="text-align:center; font-weight:bold;"
+                                                    t-if="hsn_summary['has_gst']">SGST
+                                                </th>
+                                                <th class="bl" style="text-align:center; font-weight:bold;"
+                                                    t-if="hsn_summary['has_gst']">CGST
+                                                </th>
+                                                <th class="bl" style="text-align:center; font-weight:bold;"
+                                                    t-if="hsn_summary['has_igst']">IGST
+                                                </th>
+                                                <th class="bl" style="text-align:center; font-weight:bold;"
+                                                    t-if="hsn_summary['has_cess']">CESS
+                                                </th>
+                                                <th class="bl" style="text-align:center; font-weight:bold;">
+                                                    Total Tax Amount
+                                                </th>
+                                            </thead>
+                                            <t t-set="total_untaxed" t-value="0.0"/>
+                                            <t t-set="total_sgst" t-value="0.0"/>
+                                            <t t-set="total_cgst" t-value="0.0"/>
+                                            <t t-set="total_igst" t-value="0.0"/>
+                                            <t t-set="total_cess" t-value="0.0"/>
+                                            <t t-set="total_tax" t-value="0.0"/>
+
+                                            <tr style="border:1px solid" t-foreach="hsn_summary['items']"
+                                                t-as="item">
+                                                <t t-set="tax_total" t-value="
+                                                    (item.get('tax_amount_sgst', 0.0) or 0.0) +
+                                                    (item.get('tax_amount_cgst', 0.0) or 0.0) +
+                                                    (item.get('tax_amount_igst', 0.0) or 0.0) +
+                                                    (item.get('tax_amount_cess', 0.0) or 0.0)
+                                                "/>
+                                                <t t-set="total_untaxed"
+                                                   t-value="total_untaxed + (item.get('amount_untaxed', 0.0) or 0.0)"/>
+                                                <t t-set="total_sgst"
+                                                   t-value="total_sgst + (item.get('tax_amount_sgst', 0.0) or 0.0)"/>
+                                                <t t-set="total_cgst"
+                                                   t-value="total_cgst + (item.get('tax_amount_cgst', 0.0) or 0.0)"/>
+                                                <t t-set="total_igst"
+                                                   t-value="total_igst + (item.get('tax_amount_igst', 0.0) or 0.0)"/>
+                                                <t t-set="total_cess"
+                                                   t-value="total_cess + (item.get('tax_amount_cess', 0.0) or 0.0)"/>
+                                                <t t-set="total_tax" t-value="total_tax + tax_total"/>
+
+
+                                                <td class="br" t-esc="item['l10n_in_hsn_code']"/>
+
+                                                <td class="br text-end">
+                                                    <span t-esc="item['quantity']"/>
+                                                    <span t-if="hsn_summary['display_uom']">()
+                                                    </span>
+                                                </td>
+
+                                                <td class="br text-end" t-esc="item['rate']"/>
+
+                                                <td class="br text-end">
+                                                    <span t-esc="item['amount_untaxed']"
+                                                          t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                                </td>
+
+                                                <td class="bl text-end" t-if="hsn_summary['has_gst']">
+                                                    <span t-esc="item['tax_amount_sgst']"
+                                                          t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                                </td>
+
+                                                <td class="bl text-end" t-if="hsn_summary['has_gst']">
+                                                    <span t-esc="item['tax_amount_cgst']"
+                                                          t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                                </td>
+
+                                                <td class="bl text-end" t-if="hsn_summary['has_igst']">
+                                                    <span t-esc="item['tax_amount_igst']"
+                                                          t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                                </td>
+
+                                                <td class="bl text-end" t-if="hsn_summary['has_cess']">
+                                                    <span t-esc="item['tax_amount_cess']"
+                                                          t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                                </td>
+
+                                                <td class="bl text-end">
+                                                    <span t-esc="tax_total"
+                                                          t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                                </td>
+                                            </tr>
+                                            <tr style="border:1px solid; font-weight: bold; background-color:#f0f0f0;">
+                                                <td colspan="3" class="br text-end">Total</td>
+
+                                                <td class="br text-end">
+                                                    <span t-esc="total_untaxed"
+                                                          t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                                </td>
+
+                                                <td class="bl text-end" t-if="hsn_summary['has_gst']">
+                                                    <span t-esc="total_sgst"
+                                                          t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                                </td>
+
+                                                <td class="bl text-end" t-if="hsn_summary['has_gst']">
+                                                    <span t-esc="total_cgst"
+                                                          t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                                </td>
+
+                                                <td class="bl text-end" t-if="hsn_summary['has_igst']">
+                                                    <span t-esc="total_igst"
+                                                          t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                                </td>
+
+                                                <td class="bl text-end" t-if="hsn_summary['has_cess']">
+                                                    <span t-esc="total_cess"
+                                                          t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                                </td>
+
+                                                <td class="bl text-end">
+                                                    <span t-esc="total_tax"
+                                                          t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                                </td>
+                                            </tr>
+
+
+                                        </table>
+                                    </div>
+                                </t>
+                            </t>
+                            <div class="row" style="page-break-inside: avoid;">
+                                <div class="col-7">
+                                    <span style="font-size:15px;font-weight:bolder">Company's Bank Details :</span>
+                                    <table class="table table-sm table-borderless"
+                                           style="font-size:12px;width:100%">
+                                        <tr>
+                                            <td style="font-weight:bold;width:40%">
+                                                Bank Name
+                                            </td>
+                                            <td style="width:10%" align="center">
+                                                :
+                                            </td>
+                                            <td style="width:50%">
+                                                Tamilnad Mercantile Bank Ltd.,
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight:bold;width:40%">
+                                                A/c no
+                                            </td>
+                                            <td style="width:10%" align="center">
+                                                :
+                                            </td>
+                                            <td style="width:50%">
+                                                448150050800342
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight:bold;width:40%">
+                                                Branch &amp; IFSC Code
+                                            </td>
+                                            <td style="width:10%" align="center">
+                                                :
+                                            </td>
+                                            <td style="width:50%">
+                                                Oppanakara Street Branch &amp; TMBL0000448
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="col-5">
+
+                                </div>
+                            </div>
+                            <div class=" footer row">
+                                <div class="col-6">
+                                    <span style="font-size:15px;font-weight:bolder">Declaration :</span>
+                                    <p style="font-size:12px">We declare that this invoice shows the actual price of
+                                        the
+                                        goods described and that
+                                        all particulars are true and correct.
+                                    </p>
+                                </div>
+                                <div class="col-6" style="font-size:12px">
+                                    <p class="text-end lh-sm" style="font-weight:bold;margin-bottom:40px">
+                                        For
+                                        <span t-esc="res_company.name"/>
+                                    </p>
+                                    <p class="text-end lh-sm">
+                                        Authorised Signatory
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

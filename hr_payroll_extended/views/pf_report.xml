@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_provident_fund_statement_report" model="ir.actions.act_window">
+        <field name="name">Provident Fund Statement Report</field>
+        <field name="res_model">provident.fund</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context"></field>
+    </record>
+
+    <record id="view_provident_fund_form" model="ir.ui.view">
+        <field name="name">provident.fund.form</field>
+        <field name="model">provident.fund</field>
+        <field name="arch" type="xml">
+            <form string="Provident Fund Form">
+                <sheet>
+                    <group>
+                        <group invisible="1">
+                            <field name="employee_id" options='{"no_open": False, "no_create": True,"no_edit": True}'
+                                   invisible="1"/>
+                            <field name="start_date" invisible="1"/>
+                            <field name="end_date" invisible="1"/>
+                        </group>
+                        <group>
+                            <label for="select_month" string="Month/Year"/>
+                            <div class="o_row">
+                                <field name="select_month" class="oe_inline"/>
+                                <field name="select_year" class="oe_inline"
+                                       options='{"no_open": False, "no_create": True,"no_edit": True}'/>
+                            </div>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="report_printed" invisible="1"/>
+                        <group invisible="report_printed != True">
+                            <field name="file_name" invisible="1"/>
+                            <field name="summary_file" readonly="1" filename="file_name"/>
+                        </group>
+                    </group>
+                </sheet>
+
+                <footer>
+                    <button name="action_provident_fund_excel" string="Print PF Statement" type="object"
+                            class="oe_highlight" data-hotkey="q"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel" data-hotkey="x"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <menuitem
+            id="menu_hr_provident_fund_statement_report"
+            name="Provident Fund Statement"
+            action="hr_provident_fund_statement_report"
+            sequence="21"
+            parent="hr_payroll.menu_hr_payroll_report"/>
+</odoo>

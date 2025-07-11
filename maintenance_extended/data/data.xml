@@ -1,0 +1,8 @@
+<odoo>
+    <data>
+        <record id="bulding_one" model="build_details">
+            <field name="name">Build Details 1</field>
+            <field name="buildcode">001</field>
+        </record>
+    </data>
+</odoo>

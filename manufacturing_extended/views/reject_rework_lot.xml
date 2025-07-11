@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record id="reject_rework_tree_view" model="ir.ui.view">
+            <field name="name">Reject Rework Tree View</field>
+            <field name="model">reject.rework.lot</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name" optional="show"/>
+                    <field name="date" optional="show"/>
+                    <field name="product_id" optional="show"/>
+                    <field name="part_name" optional="show"/>
+                    <field name="customer_id" optional="show"/>
+                    <field name="operation_no" string="OP No" optional="show"/>
+                    <field name="problem" optional="show"/>
+                    <field name="doc_num" optional="hide"/>
+                    <field name="rev_num" optional="hide"/>
+                    <field name="rev_date" optional="hide"/>
+                    <field name="supplier_id" optional="show"/>
+                    <field name="workcenter_id" optional="show"/>
+                    <field name="operator_id" optional="show"/>
+                    <field name="shift" optional="show"/>
+                    <field name="process_name" optional="show"/>
+                    <field name="batch_no" optional="show"/>
+                    <field name="lot_id" optional="show"/>
+                    <field name="quantity" optional="show"/>
+                    <field name="confirm_qty" optional="show" column_invisible="1"/>
+                    <field name="state" widget="badge" decoration-success="state in 'done'"
+                           decoration-warning="state in 'draft'" decoration-danger="state in 'cancel'" optional="show"/>
+                    <field name="lot_type" optional="show"/>
+                </tree>
+            </field>
+        </record>
+        <record id="reject_rework_form_view" model="ir.ui.view">
+            <field name="name">Reject Rework Form View</field>
+            <field name="model">reject.rework.lot</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Reject/Rework Lot">
+                    <header>
+                        <button name="confirm_rejection" type="object" string="Confirm"
+                                class="oe_highlight" invisible="state != 'draft'"/>
+                        <button name="confirm_cancel" type="object" string="Cancel"
+                                class="oe_highlight" invisible="state != 'draft'"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" readonly="state != 'draft'"/>
+                                <field name="product_id" readonly="state != 'draft'"/>
+                                <field name="part_name" readonly="state != 'draft'"/>
+                                <field name="lot_id" readonly="state != 'draft'"/>
+                                <field name="quantity" readonly="state != 'draft'"/>
+                                <field name="confirm_qty" invisible="1" readonly="state != 'draft'"/>
+                                <field name="batch_no" readonly="state != 'draft'"/>
+                            </group>
+                            <group>
+                                <field name="lot_type" readonly="state != 'draft'"/>
+                                <field name="reason" readonly="state != 'draft'"/>
+                                <field name="approver_reason" readonly="state != 'draft'"/>
+                                <field name="debit_note_id" readonly="state != 'draft'"/>
+                                <field name="scrap_id" readonly="state != 'draft'"/>
+                                <field name="parent_id" readonly="state != 'draft'"/>
+                                <field name="delivery_id" readonly="state != 'draft'"/>
+                                <field name="part_operation_line_id" readonly="state != 'draft'"/>
+                                <field name="doc_num"/>
+                                <field name="rev_num"/>
+                                <field name="rev_date"/>
+                            </group>
+                        </group>
+                    </sheet>
+
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="reject_rework_search_view" model="ir.ui.view">
+            <field name="name">Reject Rework Search View</field>
+            <field name="model">reject.rework.lot</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="product_id"/>
+                    <field name="lot_id"/>
+                    <filter string="State" name="state" domain="[('state', '=', 'draft')]"/>
+                    <searchpanel>
+                        <field name="state" string="State" filter_domain="[('state', '=', 'draft')]"/>
+                        <field name="lot_type" string="Lot Type" filter_domain="[('lot_type', '=', 'm_reject')]"/>
+                    </searchpanel>
+                </search>
+            </field>
+        </record>
+
+        <record id="reject_rework_lot_action" model="ir.actions.act_window">
+            <field name="name">Reject/Rework Lots</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">reject.rework.lot</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="menu_reject_rework_lot" name="Reject/Rework Lot" parent="mrp.menu_mrp_manufacturing"
+                  action="reject_rework_lot_action"/>
+
+        <menuitem id="menu_reject_rework_lot_quality" name="Reject/Rework Lot"
+                  parent="quality_control.menu_quality_control"
+                  sequence="7"
+                  action="reject_rework_lot_action"/>
+    </data>
+</odoo>

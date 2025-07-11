@@ -1,0 +1,50 @@
+<odoo>
+    <data noupdate="0">
+        <record id="lop" model="hr.salary.rule.category">
+            <field name="name">LOP</field>
+            <field name="code">LOP</field>
+        </record>
+    </data>
+    <record id="staff_lop" model="hr.salary.rule">
+        <field name="name">LOP</field>
+        <field name="category_id" ref="hr_payroll.DED"/>
+        <field name="code">LOP</field>
+        <field name="struct_id" ref="hr_payroll.structure_002"/>
+        <field name="active">True</field>
+        <field name="appears_on_payslip">True</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = payslip.allowance_amount_deduction</field>
+    </record>
+    <!-- WORKER PAY LOP -->
+    <function model="hr.salary.rule" name="write">
+        <value model="hr.salary.rule" search="[
+        ('struct_id', '=', ref('hr_payroll.structure_002')),
+        ('code', '=', 'LOP')]"/>
+        <value eval="{
+        'category_id': ref('hr_payroll_extended.lop')
+    }"/>
+    </function>
+
+    <!-- STAFF PAY LOP -->
+    <function model="hr.salary.rule" name="write">
+        <value model="hr.salary.rule" search="[
+        ('struct_id', '=', ref('hr_payroll.structure_worker_001')),
+        ('code', '=', 'LOP')]"/>
+        <value eval="{
+        'category_id': ref('hr_payroll_extended.lop')
+    }"/>
+    </function>
+
+    <!-- STAFF PAY LOP -->
+    <function model="hr.salary.rule" name="write">
+        <value model="hr.salary.rule" search="[
+        ('struct_id', '=', ref('hr_payroll_extended.structure_staff_sat001')),
+        ('code', '=', 'LOP')]"/>
+        <value eval="{
+        'category_id': ref('hr_payroll_extended.lop')
+    }"/>
+    </function>
+
+</odoo>
+

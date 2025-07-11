@@ -1,0 +1,94 @@
+<odoo>
+    <data>
+
+        <record id="process_master_form_view" model="ir.ui.view">
+            <field name="name">Process Master Form View</field>
+            <field name="model">process.master</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name='name'/>
+                                <field name="part_no" required="1"/>
+                                <field name="operation_no" required="1"/>
+                                <field name="opr_name" invisible="1"/>
+                                <field name='operation_id' required="1" widget="many2many_tags"/>
+                            </group>
+                        </group>
+                        <separator string="Process Parameter"/>
+                        <field name="parameter_ids">
+                            <tree editable="bottom">
+                                <field name="characteristics"/>
+                                <field name="specification"/>
+                                <field name="method_of_check"/>
+                            </tree>
+                        </field>
+                        <separator string="Tool Details"/>
+                        <field name="tool_detail_ids">
+                            <tree editable="bottom">
+                                <field name="characteristics"/>
+                                <field name="no_of_edges"/>
+                                <field name="holder"/>
+                                <field name="insert"/>
+                                <field name="method_of_check"/>
+                                <field name="speed"/>
+                                <field name="feed"/>
+                                <field name="tool_life"/>
+                            </tree>
+                        </field>
+                        <separator string="Product Parameter"/>
+                        <field name="product_parameter_ids">
+                            <tree editable="bottom">
+                                <field name="characteristics"/>
+                                <field name="spl_class"/>
+                                <field name="specification"/>
+                                <field name="invalid_min_max" optional="hide"/>
+                                <field name="minimum" decoration-danger="invalid_min_max == True"/>
+                                <field name="maximum" decoration-danger="invalid_min_max == True"/>
+                                <field name="method_of_check"/>
+                                <field name="sample_size"/>
+                                <field name="frequency"/>
+                            </tree>
+                        </field>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="process_master_tree_view" model="ir.ui.view">
+            <field name="name">Process Master Tree View</field>
+            <field name="model">process.master</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="operation_no" string="Process No."/>
+                    <field name='name'/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="process_master_action" model="ir.actions.act_window">
+            <field name="name">Process No. &amp; Name</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">process.master</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_no content_smiling_face">
+                    Process Information
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="process_main_menu"
+                  name="Process No. &amp; Name"
+                  parent="quality_control.menu_quality_configuration"
+                  action="process_master_action"
+                  sequence="3"/>
+    </data>
+</odoo>

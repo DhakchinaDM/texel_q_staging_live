@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="category_approval_view_form" model="ir.ui.view">
+            <field name="name">category.approval.form</field>
+            <field name="model">category.approval</field>
+            <field name="arch" type="xml">
+                <form string="Approval">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" required="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="no_of_approvers"/>
+                            </group>
+                            <group>
+                                <label for="approver_one" string="First Approver"/>
+                                <div class="o_row">
+                                    <field name="approver_one" required="1" class="oe_inline"/>
+                                    <field name="purchase_limit_one" class="oe_inline"/>
+                                </div>
+                                <label for="approver_two" string="Second Approver" invisible="no_of_approvers in ['1']"/>
+                                <div class="o_row">
+                                    <field name="approver_two" invisible="no_of_approvers in ['1']"
+                                           required="no_of_approvers not in ['1']"/>
+                                    <field name="purchase_limit_two" invisible="no_of_approvers in ['1']"
+                                           required="no_of_approvers not in ['1']" class="oe_inline"/>
+                                </div>
+                                <label for="approver_three" string="Second Third Approver" invisible="no_of_approvers in ['1','2']"/>
+                                <div class="o_row">
+                                    <field name="approver_three" invisible="no_of_approvers in ['1','2']"
+                                           required="no_of_approvers not in ['1','2']"/>
+                                </div>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="category_approval_tree_view" model="ir.ui.view">
+            <field name="name">category.approval.tree</field>
+            <field name="model">category.approval</field>
+            <field name="arch" type="xml">
+                <tree string="Purchase Request">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="category_approval_calendar_view" model="ir.ui.view">
+            <field name="name">category.approval.calendar</field>
+            <field name="model">category.approval</field>
+            <field name="arch" type="xml">
+                <calendar string="Purchase Request">
+                    <field name="name"/>
+                </calendar>
+            </field>
+        </record>
+
+        <record id="category_approval_search_view" model="ir.ui.view">
+            <field name="name">category.approval.search</field>
+            <field name="model">category.approval</field>
+            <field name="arch" type="xml">
+                <search string="Purchase Request">
+                    <group expand="1" string="Group By">
+                        <filter string="Name" name="name"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="category_approval_kanban_view" model="ir.ui.view">
+            <field name="name">category.approval.kanban</field>
+            <field name="model">category.approval</field>
+            <field name="arch" type="xml">
+                <kanban>
+                    <field name="name"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click o_res_partner_kanban">
+                                <div class="oe_kanban_details">
+                                    <strong class="o_kanban_record_title oe_partner_heading">
+                                        <field name="name"/>
+                                    </strong>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record id="view_approval_request_action" model="ir.actions.act_window">
+            <field name="name">Approval</field>
+            <field name="res_model">category.approval</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    There is no examples click here to add new ModelTitle.
+                </p>
+            </field>
+        </record>
+
+        <menuitem
+                id="approval_main_menu_root"
+                name="Approval"
+                parent="purchase.menu_purchase_config"
+                sequence="99"/>
+        <menuitem
+                id="approval_menu_root"
+                name="Purchase Approval"
+                action="view_approval_request_action"
+                parent="approval_main_menu_root"
+                sequence="9"/>
+    </data>
+</odoo>

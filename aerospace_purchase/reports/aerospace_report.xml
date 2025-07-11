@@ -1,0 +1,653 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="paperformat_aerospace_purchase_order_report_new" model="report.paperformat">
+            <field name="name">Aerospace Purchase Order Report</field>
+            <field name="default" eval="False"/>
+            <field name="disable_shrinking" eval="True"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">5</field>
+            <field name="margin_bottom">25</field>
+            <field name="margin_left">0</field>
+            <field name="margin_right">0</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">40</field>
+            <field name="dpi">140</field>
+        </record>
+
+        <record id="report_aerospace_purchase_order_report" model="ir.actions.report">
+            <field name="name">Aerospace Purchase Order Report</field>
+            <field name="model">purchase.order</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">aerospace_purchase.aerospace_purchase_order_report_header</field>
+            <field name="report_file">aerospace_purchase.aerospace_purchase_order_report_header</field>
+            <field name="paperformat_id" ref="aerospace_purchase.paperformat_aerospace_purchase_order_report_new"/>
+            <field name="print_report_name">'Aerospace Purchase Order Report'</field>
+            <field name="binding_model_id" ref="purchase.model_purchase_order"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <template id="aerospace_purchase_order_report_header">
+            <t t-call="web.html_container">
+                <t t-call="web.basic_layout">
+                    <t t-foreach="docs" t-as="o">
+                        <div class="page">
+                                <table class="table table-sm"
+                                   style="width: 95%; margin: 2px; margin-left: 25px; margin-right: 15px; border: 1px solid black; font-size: 17px; border-spacing: 1em 0.5em; padding: 0 2em 1em 0; border-radius: 2px;">
+                                    <tr>
+                                        <td align="center"
+                                            style="color:blue; font-size:25px;vertical-align:middle;text-align:center;"
+                                            width="27%">
+                                            <img width="90%"
+                                                t-attf-src="/web/binary/company_logo"
+                                                alt="Logo"/>
+                                        </td>
+                                        <td align="center">
+                                            <h2 style="text-align:center; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin-right:40px">
+                                                <strong t-esc="res_company.name"/>
+                                            </h2>
+                                            <t t-if="res_company.street">
+                                                <span t-field="res_company.street"/>,
+                                            </t>
+                                            <t t-if="res_company.street2">
+                                                <span t-field="res_company.street2"/>,
+                                            </t>
+                                            <t t-if="res_company.city">
+                                                <span t-field="res_company.city"/>,
+                                            </t>
+                                            <br/>
+                                            <t t-if="res_company.state_id.name">
+                                                <span t-field="res_company.state_id.name"/>,
+                                            </t>
+                                            <t t-if="res_company.zip">
+                                                -
+                                                <span t-field="res_company.zip"/>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table class="table table-sm"
+                                    style="width: 95%; margin: 2px; margin-left: 25px; margin-right: 15px; border: 1px solid white; font-size: 17px; border-spacing: 1em 0.5em; padding: 0 2em 1em 0; border-radius: 2px;">
+                                    <tr>
+                                        <td align="center">
+                                            <strong style="text-align:center font-size: 20px">AEROSPACE PURCHASE ORDER</strong>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                            <table class="table table-sm"
+                                   style="width: 95%; margin: 2px; margin-left: 25px; margin-right: 15px; border: 1px solid black; font-size: 17px; border-spacing: 1em 0.5em; padding: 0 2em 1em 0; border-radius: 2px;">
+                                <tr width="20%">
+                                    <td width="10%" colspan="3" rowspan="1">
+                                        <strong style="font-size:17px;">GST</strong>
+                                    </td>
+                                    <td width="10%" colspan="3" rowspan="1">
+                                        <span style="color:black;font-size:17px;"
+                                              t-esc="o.company_id.vat"/>
+                                    </td>
+                                    <td align="left" width="10%" colspan="3" rowspan="1">
+                                        <b style="font-size:17px;">PO</b>
+                                    </td>
+                                    <!-- <td align="right" width="10%" colspan="3" rowspan="1">
+                                        <span style="color:black;font-style:17px;"
+                                              t-esc="o.name"/>
+                                    </td> -->
+                                    <td align="right" width="10%" colspan="3" rowspan="1">
+                                        <span style="color:black;font-size:17px;"
+                                            t-esc="'TEX/SPO/24-25/' + o.name.split('P')[1] if 'P' in o.name else o.name"/>
+                                    </td>
+                                </tr>
+                                <tr width="20%">
+                                    <td width="10%" colspan="3" rowspan="1">
+                                        <strong style="font-size:17px;">Phone</strong>
+                                    </td>
+                                    <td width="10%" colspan="3" rowspan="1">
+                                        <span style="color:black;font-size:17px;"
+                                              t-esc="o.company_id.mobile"/>
+                                    </td>
+                                    <td align="left" width="10%" colspan="3" rowspan="1">
+                                        <strong style="font-size:17px;">Date</strong>
+                                    </td>
+                                    <td align="right" width="10%" colspan="3" rowspan="1">
+                                        <span style="color:black;font-style:17px;"
+                                              t-esc="o.create_date" t-options='{"widget": "date"}'/>
+                                    </td>
+                                </tr>
+                                <tr width="20%">
+                                    <td colspan="6">
+                                        <!--                                        <strong style="color:black;font-size:17px">Vendor:</strong>-->
+                                    </td>
+                                    <td width="10%" align="left" colspan="3" rowspan="1">
+                                        <strong style="color:black;font-style:17px;">Supplier ID</strong>
+                                    </td>
+                                    <td width="10%" align="right" colspan="3" rowspan="1">
+                                        <span style="color:black;font-size:17px"
+                                              t-esc="o.partner_id.supplier_id"/>
+                                    </td>
+                                </tr>
+                                <t t-if="o.shipped_to">
+                                    <tr>
+                                        <td colspan="4">
+                                            <strong style="color:black;font-size:17px">Vendor:</strong>
+                                        </td>
+                                        <td align="left" colspan="4">
+                                            <strong style="color:black;font-size:17px">Bill To:</strong>
+                                        </td>
+                                        <td align="left" colspan="4">
+                                            <strong style="color:black;font-size:17px">Ship To:</strong>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4">
+                                            <span>
+                                                <t t-set="address">
+                                                    <address class="mb-0" t-field="o.partner_id"
+                                                             t-options='{"widget": "contact", "fields": ["name","address","phone","vat"], "no_marker": True}'/>
+                                                </t>
+                                                <span t-esc="address"/>
+                                            </span>
+                                        </td>
+                                        <td align="left" colspan="4">
+                                            <span>
+                                                <t t-set="address">
+                                                    <address class="mb-0" t-field="o.company_id.partner_id"
+                                                             t-options='{"widget": "contact", "fields": ["name","address","phone"], "no_marker": True}'/>
+                                                </t>
+                                                <span t-esc="address"/>
+                                            </span>
+                                        </td>
+                                        <td align="left" colspan="4">
+                                            <span>
+                                                <t t-set="address">
+                                                    <address class="mb-0" t-field="o.shipped_to"
+                                                             t-options='{"widget": "contact", "fields": ["name","address","vat"], "no_marker": True}'/>
+                                                </t>
+                                                <span t-esc="address"/>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <t t-else="">
+                                    <tr width="20%">
+                                        <td width="10%" colspan="6">
+                                            <strong style="color:black;font-size:17px">Vendor:</strong>
+                                        </td>
+                                        <td align="left" width="10%" colspan="6">
+                                            <strong style="color:black;font-size:17px">Bill To:</strong>
+                                        </td>
+                                    </tr>
+                                    <tr width="40%">
+                                        <td width="20%" colspan="6">
+                                            <span>
+                                                <t t-set="address">
+                                                    <address class="mb-0" t-field="o.partner_id"
+                                                             t-options='{"widget": "contact", "fields": ["name","address","phone","vat"], "no_marker": True}'/>
+                                                </t>
+                                                <span t-esc="address"/>
+                                            </span>
+                                        </td>
+                                        <td align="left" width="20%" colspan="6">
+                                            <span>
+                                                <t t-set="address">
+                                                    <address class="mb-0" t-field="o.company_id.partner_id"
+                                                             t-options='{"widget": "contact", "fields": ["name","address","phone","vat"], "no_marker": True}'/>
+                                                </t>
+                                                <span t-esc="address"/>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <tr>
+                                    <td colspan="4" align="center">
+                                        <strong style="font-size:17px;">SHIPPING METHOD</strong>
+
+                                    </td>
+                                    <td colspan="4" align="center">
+                                        <strong style="font-size:17px;">SHIPPING TERMS</strong>
+                                    </td>
+                                    <td colspan="4" align="center">
+                                        <strong style="font-size:17px;">DELIVERY DUE DATE</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" align="center">
+                                        <span style="font-size:17px;"
+                                              t-esc="dict(o._fields['shipping_method'].selection).get(o.shipping_method)"/>
+
+                                    </td>
+                                    <td colspan="4" align="center">
+                                        <span style="font-size:17px;" t-esc="dict(o._fields['shipping_terms'].selection).get(o.shipping_terms)"/>
+                                    </td>
+                                    <td colspan="4" align="center">
+                                        <span style="font-size:17px;" t-esc="o.date_planned"
+                                              t-options='{"widget": "date"}'/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" align="center">
+                                        <strong style="font-size:17px;">SUPPLIER REFERENCE / DATE</strong>
+                                    </td>
+                                    <td colspan="4" align="center">
+                                        <strong style="font-size:17px;">PAYMENT TERMS</strong>
+                                    </td>
+                                    <td colspan="4" align="center">
+                                        <strong style="font-size:17px;">SUPPLIER CONTACT</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" align="center">
+                                        <span style="font-size:17px;" t-esc="o.partner_ref"/>
+                                    </td>
+                                    <td colspan="4" align="center">
+                                        <span style="font-size:17px;" t-esc="o.payment_term_id.name"/>
+                                    </td>
+                                    <td colspan="4" align="center">
+                                        <span t-foreach="o.partner_id.child_ids.filtered(lambda r: r.type == 'contact')"
+                                              t-as="contact">
+                                            <span style="font-size:17px;" t-field="contact.title"/>
+                                            <span style="font-size:17px;" t-field="contact.name"/>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="text-center" 
+                                        style="font-size:17px;border-right:1px solid #143980;color:black;background-color:#c6cacf; border:1px solid #000;border-color: black;">
+                                        PART ID S.NO.
+                                    </th>
+                                    <th class="text-center" 
+                                        style="font-size:17px;border-right:1px solid #143980;color:black;background-color:#c6cacf;
+                                                                    border:1px solid #000;border-color: black;">
+                                        PART DRW NO.#
+                                    </th>
+                                    <th class="text-center" 
+                                        style="font-size:17px;border-right:1px solid #143980;color:black;background-color:#c6cacf;
+                                                                    border:1px solid #000;border-color: black;">
+                                        Rev NO.#
+                                    </th>
+                                    <th class="text-center" 
+                                        style="font-size:17px;border-right:1px solid #143980;color:black;background-color:#c6cacf;
+                                                                    border:1px solid #000;border-color: black;">
+                                        PART NAME
+                                    </th>
+                                    <th class="text-center"
+                                        style="font-size:17px;border-right:1px solid #143980;color:black;background-color:#c6cacf;
+                                                                    border:1px solid #000;border-color: black;">
+                                        Material spec
+                                    </th>
+                                    <th  class="text-center" 
+                                        style="font-size:17px;border-right:1px solid #143980;color:black;background-color:#c6cacf;
+                                                                    border:1px solid #000;border-color: black;">
+                                        Process
+                                    </th>
+                                    <th class="text-center" 
+                                        style="font-size:17px;color:black;background-color:#c6cacf;border-right:2px solid black !important;">
+                                        Document Ref.
+                                    </th>
+                                    <th class="text-center" 
+                                        style="font-size:17px;color:black;background-color:#c6cacf;border-right:2px solid black !important;">
+                                        QTY
+                                    </th>
+                                    <th class="text-center" 
+                                        style="font-size:17px;color:black;background-color:#c6cacf;border-right:2px solid black !important;">
+                                        UNITS
+                                    </th>
+                                    <th class="text-center"
+                                        style="font-size:17px;color:black;background-color:#c6cacf;border-right:2px solid black !important;">
+                                        UNIT PRICE
+                                    </th>
+                                    <th class="text-center" 
+                                        style="font-size:17px;color:black;background-color:#c6cacf;border-right:2px solid black !important;">
+                                        LINE TOTAL
+                                    </th>
+
+                                </tr>
+                                <tbody style="border: 1px solid color;font-size:15px;page-break-inside: avoid;">
+                                    <t t-if="o.purchase_aerospace_ids">
+                                        <t t-foreach="o.purchase_aerospace_ids" t-as="line">
+                                            <tr>
+                                                <t t-if="line.partid">
+                                                    <td  align="center"
+                                                        style="color:black;border-left:1px">
+                                                        <span t-esc="line.partid"/>
+                                                    </td>
+                                                </t>
+                                                <t t-else="">
+                                                    <td  align="center"
+                                                        style="color:black;border-left:1px">
+                                                        -
+                                                    </td>
+                                                </t>
+
+                                                <t t-if="line.part_drw_no">
+                                                    <td align="center"
+                                                        style="color:black;border-left:1px">
+                                                        <span t-esc="line.part_drw_no"/>
+                                                    </td>
+                                                </t>
+
+                                                <t t-else="">
+                                                    <td  align="center"
+                                                        style="color:black;border-left:1px">
+                                                        -
+                                                    </td>
+                                                </t>
+
+                                                <td align="center" 
+                                                    style="color:black;border-left:1px">
+                                                    <span t-esc="line.rev_no"/>
+                                                </td>
+
+
+
+                                                <t t-if="line.part_name">
+                                                    <td  align="center"
+                                                        style="color:black;border-left:1px">
+                                                        <span t-esc="line.part_name"/>
+                                                    </td>
+                                                </t>
+
+                                                <t t-else="">
+                                                    <td align="center"
+                                                        style="color:black;border-left:1px">
+                                                        -
+                                                    </td>
+                                                </t>
+
+                                                <t t-if="line.material_spec">
+                                                    <td align="center"
+                                                        style="color:black;border-left:1px">
+                                                        <span t-esc="line.material_spec"/>
+                                                    </td>
+                                                </t>
+
+                                                <t t-else="">
+                                                    <td align="center"
+                                                        style="color:black;border-left:1px">
+                                                        -
+                                                    </td>
+                                                </t>
+
+                                                <t t-if="line.process">
+                                                    <td align="center"
+                                                        style="color:black;border-left:1px">
+                                                        <span t-esc="line.process"/>
+                                                    </td>
+                                                </t>
+
+                                                <t t-else="">
+                                                    <td align="center"
+                                                        style="color:black;border-left:1px">
+                                                        -
+                                                    </td>
+                                                </t>
+
+                                                <t t-if="line.document_ref">
+                                                    <td align="center"
+                                                        style="color:black;border-left:1px">
+                                                        <span t-esc="line.document_ref"/>
+                                                    </td>
+                                                </t>
+
+                                                <t t-else="">
+                                                    <td align="center"
+                                                        style="color:black;border-left:1px">
+                                                        -
+                                                    </td>
+                                                </t>
+                                                <t t-if="line.qty">
+                                                    <td align="center"
+                                                        style="color:black;border-left:1px">
+                                                        <span t-esc="line.qty"/>
+                                                    </td>
+                                                </t>
+
+                                                <t t-else="">
+                                                    <td align="center"
+                                                        style="color:black;border-left:1px">
+                                                        -
+                                                    </td>
+                                                </t>
+                                                <t t-if="line.units">
+                                                    <td align="center"
+                                                        style="color:black;border-left:1px">
+                                                        <span t-esc="line.units.name"/>
+                                                    </td>
+                                                </t>
+
+                                                <t t-else="">
+                                                    <td align="center"
+                                                        style="color:black;border-left:1px">
+                                                        -
+                                                    </td>
+                                                </t>
+                                                <t t-if="line.unit_prce">
+                                                    <td align="right"
+                                                        style="color:black;border-left:1px">
+                                                        <span t-esc="line.unit_prce"/>
+                                                    </td>
+                                                </t>
+
+                                                <t t-else="">
+                                                    <td align="center"
+                                                        style="color:black;border-left:1px">
+                                                        -
+                                                    </td>
+                                                </t>
+                                                <t t-if="line.line_total">
+                                                    <td align="right"
+                                                        style="color:black;border-left:1px">
+                                                        <span t-esc="line.line_total"/>
+                                                    </td>
+                                                </t>
+
+                                                <t t-else="">
+                                                    <td align="center"
+                                                        style="color:black;border-left:1px">
+                                                        -
+                                                    </td>
+                                                </t>
+                                            </tr>
+                                        </t>
+                                        <tr>
+                                            <td colspan="10" align="right"
+                                                style="color:black;border-left:1px">
+                                                <strong>Untaxed Amount</strong>
+                                            </td>
+                                            <td colspan="2" align="right" style="color:black;border-left:1px">
+                                                <t t-set="total" t-value="0" />  
+                                                <t t-foreach="o.purchase_aerospace_ids" t-as="line">
+                                                    <t t-set="total" t-value="total + line.line_total" />
+                                                </t>
+                                                <strong t-esc="total"/>  
+                                            </td>
+                                        </tr>
+                                        <!-- <tr>
+                                            <td colspan="12" class="p-0" style="font-size:15px;">
+                                                <t t-set="tax_vals" t-value="o.over_all_tax()"/>
+                                                <table class="table table-sm table-bordered m-0"
+                                                       style="border:1px solid black;font-size:15px;">
+                                                    <style>
+                                                        .table > :not(:first-child) {
+                                                        border-top: 1px solid black !important;
+                                                        }
+                                                    </style>
+                                                    <thead>
+                                                        <tr>
+                                                            <t t-foreach="tax_vals['header']" t-as="header">
+                                                                <t t-if="header['rowspan'] == 0">
+                                                                    <th rowspan="2" class="text-center"
+                                                                        style="font-size:17px;color:black;background-color:#c6cacf;">
+                                                                        <t t-esc="header['name']"/>
+                                                                    </th>
+                                                                </t>
+                                                                <t t-if="header['rowspan'] == 1">
+                                                                    <th colspan="2" class="text-center"
+                                                                        style="font-size:17px;color:black;background-color:#c6cacf;">
+                                                                        <t t-esc="header['name']"/>
+                                                                    </th>
+                                                                </t>
+                                                            </t>
+                                                        </tr>
+                                                        <tr>
+                                                            <t t-foreach="tax_vals['header']" t-as="header">
+                                                                <t t-if="header['rowspan'] == 1">
+                                                                    <th class="text-center"
+                                                                        style="font-size:17px;color:black;background-color:#c6cacf;">
+                                                                        Tax
+                                                                    </th>
+                                                                    <th class="text-center"
+                                                                        style="font-size:17px;color:black;background-color:#c6cacf;">
+                                                                        Amount
+                                                                    </th>
+                                                                </t>
+                                                            </t>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <t t-set="index" t-value="0"/>
+                                                        <t t-foreach="tax_vals['content']" t-as="line">
+                                                            <t t-if="'IGST' in tax_vals['content'][line]['name']">
+                                                                <tr>
+                                                                    <td align="center">
+                                                                        <t t-esc="tax_vals['content'][line]['name']"/>
+                                                                    </td>
+                                                                    <td align="center">
+                                                                        <t t-esc="tax_vals['content'][line]['id']"/>
+                                                                        %
+                                                                    </td>
+                                                                    <td align="center">
+                                                                        <t t-esc="tax_vals['content'][line]['amount']"/>
+                                                                    </td>
+                                                                    <t t-set="tax_total"
+                                                                       t-value="tax_vals['content'][line]['amount']*2"/>
+                                                                    <td align="right">
+                                                                        <t t-esc="tax_vals['content'][line]['amount']"
+                                                                           t-options='{"widget": "float", "precision": 2}'/>
+                                                                    </td>
+                                                                </tr>
+                                                            </t>
+                                                            <t t-else="">
+                                                                <t t-set="index" t-value="index + 1"/>
+                                                                <t t-if="index % 2 == 0">
+                                                                    <tr>
+                                                                        <td align="center">
+                                                                            <t t-esc="tax_vals['content'][line]['name']"/>
+                                                                        </td>
+                                                                        <t t-set="tax_va"
+                                                                           t-value="tax_vals['content'][line]['id']/2"/>
+                                                                        <td align="center">
+                                                                            <t t-esc="tax_va"/>
+                                                                            %
+                                                                        </td>
+                                                                        <td align="center">
+                                                                            <t t-esc="tax_vals['content'][line]['amount']"
+                                                                               t-options='{"widget": "float", "precision": 2}'/>
+                                                                        </td>
+                                                                        <td align="center">
+                                                                            <t t-esc="tax_va"/>
+                                                                            %
+                                                                        </td>
+                                                                        <td align="center">
+                                                                            <t t-esc="tax_vals['content'][line]['amount']"
+                                                                               t-options='{"widget": "float", "precision": 2}'/>
+                                                                        </td>
+                                                                        <t t-set="tax_total"
+                                                                           t-value="tax_vals['content'][line]['amount']*2"/>
+                                                                        <td align="right">
+                                                                            <t t-esc="tax_total"
+                                                                               t-options='{"widget": "float", "precision": 2}'/>
+                                                                        </td>
+                                                                    </tr>
+                                                                </t>
+                                                            </t>
+                                                        </t>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr> -->
+                                        <tr>
+                                            <td colspan="10" align="right"
+                                                style="color:black;border-left:1px">
+                                                <strong>Taxable Value</strong>
+                                            </td>
+                                            <td colspan="2" align="right" style="color:black;border-left:1px">
+                                                <t t-set="tax_val" t-value="0" />  
+                                                <t t-foreach="o.purchase_aerospace_ids" t-as="line">
+                                                    <t t-set="tax_val" t-value="tax_val + line.tax_val" />
+                                                </t>
+                                                <strong t-esc="tax_val"/>  
+                                            </td>
+                                        </tr>
+                                        <tr>   
+                                            <td colspan="10" align="right"
+                                                style="color:black;border-left:1px">
+                                                <strong>Total</strong>
+                                            </td>
+                                            <td colspan="2" align="right"
+                                                style="color:black;border-left:1px">
+                                                <t t-set="tatal_tax" t-value="total + tax_val" />
+                                                <strong t-esc="tatal_tax"/>
+                                            </td>
+                                        </tr>
+                                        <t t-if="o.state == 'purchase'">
+                                            <tr style="border-right:3px">
+                                                <td colspan="6"
+                                                    style="font-size: 15px;">
+                                                    <span t-esc="o.notes"/>
+                                                </td>
+                                                <td colspan="6" align="center">
+                                                    <div style=" font-size: 17px">
+                                                        <strong>M.Kevin John
+                                                            <hr style="color:black; border-top:1px solid black; margin-top:1px"/>
+                                                            <span>Authorized By</span>
+                                                            <br/>
+                                                            <span>Date:</span>
+                                                            <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y')"/>
+                                                        </strong>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </t>
+                                <tr>
+                                    <td colspan="6">
+                                        <span><b>Note :</b></span>
+                                        <br/>
+                                        <span><t t-esc="o.notes"/></span>
+                                        <!--<span style="font-size:9px" t-field="o.notes"/>-->
+                                    </td>
+                                    <td colspan="6">
+                                        <span>Authorised By</span>
+                                        <br/>
+                                        <span>Date</span>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td colspan="12">
+                                        <span><b>Terms &amp; Conditions :</b></span><br/>
+                                        <span><t t-esc="o.terms_and_conditin"/></span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <br/>
+                            <br/>
+                            <div align="center" class="px-3">
+                                <h7 style="color: black; text-align:center; font-weight: bold; letter-spacing: 1px; ">
+                                    ******This is computer generated document and requires no signature******
+                                </h7>
+                            </div>
+                            
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+
+    </data>
+</odoo>

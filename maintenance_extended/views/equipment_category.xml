@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="maintenance_category_button" model="ir.ui.view">
+            <field name="name">equipment.category.form</field>
+            <field name="model">maintenance.equipment.category</field>
+            <field name="inherit_id" ref="maintenance.hr_equipment_category_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='%(maintenance.hr_equipment_action_from_category_form)d']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                 <xpath expr="//button[@name='%(maintenance.hr_equipment_request_action_link)d']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//div [@name='button_box']" position="inside">
+                    <button name="action_equipments_subcategory"
+                            class="oe_stat_info"
+                            icon="fa-bars"
+                            type="object"
+                            invisible="sub_count == 0">
+                        <field name="sub_count"/>
+                        <span class="oe_stat_text">Sub Category</span>
+                    </button>
+                </xpath>
+                <xpath expr="//div[hasclass('oe_title')]" position="before">
+                    <field name="image"
+                            widget="image"
+                            class="oe_avatar oe_right"
+                            options="{'preview_image': 'image_128'}"/>
+                </xpath>
+                <xpath expr="//field[@name='technician_user_id']" position="after">
+                    <field name="code" required="1"/>
+                </xpath>
+                <xpath expr="//field[@name='code']" position="after">
+                    <field name="subcategory_id" invisible="True"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="hr_equipment_category_action" model="ir.actions.act_window">
+            <field name="name">Equipment Categories</field>
+            <field name="res_model">maintenance.equipment.category</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Add a new equipment category
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>
+
+

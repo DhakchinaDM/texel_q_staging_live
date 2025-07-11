@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="supplier_category_tree" model="ir.ui.view">
+        <field name="name">supplier.perform.category.tree</field>
+        <field name="model">supplier.perform.category</field>
+        <field name="arch" type="xml">
+            <tree string="Supplier Perform Category" editable="bottom">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="supplier_category_action" model="ir.actions.act_window">
+        <field name="name">Supplier perform category</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">supplier.perform.category</field>
+        <field name="view_mode">tree</field>
+    </record>
+
+    <menuitem id="supplier_category_menu"
+              name="Supplier perform category"
+              action="supplier_category_action"
+              parent="purchase.menu_purchase_config"
+              sequence="6"/>
+    <menuitem id="menu_action_payment_term_form_new"
+              name="Payment Terms"
+              action="account.action_payment_term_form"
+              parent="purchase.menu_purchase_config"
+              sequence="1"/>
+
+
+    <record id="stock_picking_inherit_for_evaluation" model="ir.ui.view">
+        <field name="name">stock.picking.form.inherit</field>
+        <field name="model">stock.picking</field>
+        <field name="priority">5</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='do_print_picking']" position="after">
+                <button name="print_grn_label" string="GRN Label" type="object" class="oe_highlight"
+                        invisible="pick_type == 'out' or state != 'done'"/>
+            </xpath>
+            <xpath expr="//notebook/page[2]" position="after">
+                <page string="Supplier Evaluation">
+                    <group invisible="1">
+                        <field name="pick_type"/>
+                    </group>
+                    <field name="evaluation_line" string="Evaluation">
+                        <tree editable="bottom" create="0">
+                            <field name="evaluation_category"/>
+                            <field name="value" widget="priority"/>
+                            <field name="val" widget="progressbar" readonly="0"/>
+                            <field name="note"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

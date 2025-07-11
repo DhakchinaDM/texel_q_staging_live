@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="action_odoo_services_products" model="ir.actions.client">
+            <field name="name">Inventory Tracking</field>
+            <field name="tag">productivity_report_js.OdooServices</field>
+        </record>
+
+         <menuitem name="Inventory Tracking"
+                  id="main_productivity" parent="stock.menu_warehouse_report" sequence="262"
+                  action="action_odoo_services_products"
+                  />
+
+    </data>
+</odoo>

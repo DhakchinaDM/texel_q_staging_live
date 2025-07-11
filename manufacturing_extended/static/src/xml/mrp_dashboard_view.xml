@@ -1,0 +1,88 @@
+<template id="template" xml:space="preserve">
+    <t t-name="MrpDashboard" owl="1">
+        <div class="o_action_manager" style="height: 100%; overflow-y: scroll" t-ref="mrp-dashboard">
+            <div class="employee_dashboard">
+                <!-- Header -->
+                <div style="padding: 20px; text-align: center;">
+                    <h1 style="margin-bottom: 20px;">Material Requirements Planning Over Time</h1>
+                </div>
+
+                <!-- Part No and Supplier (Swapped to the top) -->
+                <div style="display: flex; justify-content: center; gap: 30px; align-items: center; margin-top: 20px; flex-wrap: wrap;">
+                    <!-- Part No Field -->
+                    <div style="display: flex; align-items: center; gap: 10px; max-width: 300px;">
+                        <label for="product_selection" style="font-weight: bold; margin-right: 10px; white-space: nowrap;">Part No :</label>
+                        <select id="product_selection"
+                                style="padding: 5px; width: 200px; border-radius: 4px; border: 1px solid #ccc;"
+                                t-on-change="() => this.loadHeaders()">
+                            <option value="null">Select Part No</option>
+                            <t t-foreach="state.products" t-as="product" t-key="product.id">
+                                <option t-att-value="product.id"><t t-esc="product.name"/></option>
+                            </t>
+                        </select>
+                    </div>
+
+                    <!-- Supplier Name Field -->
+                    <div style="display: flex; align-items: center; gap: 10px; max-width: 300px;">
+                        <label for="supplier_selection"
+                               style="font-weight: bold; margin-right: 10px; white-space: nowrap;">Supplier Name :</label>
+                        <select id="supplier_selection"
+                                style="padding: 5px; width: 200px; border-radius: 4px; border: 1px solid #ccc;"
+                                t-on-change="() => this.loadHeaders()">
+                            <option value="null">Select Supplier</option>
+                            <t t-foreach="state.suppliers" t-as="supplier" t-key="supplier.id">
+                                <option t-att-value="supplier.id"><t t-esc="supplier.name"/></option>
+                            </t>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Filter (Window and Duration) -->
+                <div style="display: flex; justify-content: center; gap: 30px; align-items: center; margin-top: 20px; flex-wrap: wrap;">
+                    <!-- Window Field -->
+                    <div style="display: flex; align-items: center; gap: 10px; max-width: 300px;">
+                        <label for="integer_field" style="font-weight: bold; margin-right: 10px; white-space: nowrap;">Window :</label>
+                        <input type="number" id="integer_field"
+                               style="padding: 5px; width: 200px; border-radius: 4px; border: 1px solid #ccc;"
+                               t-on-change="() => this.loadHeaders()"/>
+                    </div>
+
+                    <!-- Duration Field -->
+                    <div style="display: flex; align-items: center; gap: 10px; max-width: 300px;">
+                        <label for="filter_duration" style="font-weight: bold; margin-right: 10px; white-space: nowrap;">Duration :</label>
+                        <select id="filter_duration"
+                                style="border:1px solid #ccc; padding: 5px; width: 200px; border-radius: 4px;"
+                                t-on-change="() => this.loadHeaders()">
+                            <option value="">Select Duration</option>
+                            <option value="day">Day</option>
+                            <option value="week">Week</option>
+                            <option value="month">Month</option>
+                            <option value="year">Year</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Table Section -->
+                <div style="display: flex; justify-content: center; margin-top: 20px;">
+                    <table class="table" id="mrp_dashboard_table_nm">
+                        <thead>
+                            <tr>
+                                <th class="border"><strong>Part No</strong></th>
+                                <th class="border"><strong>Supplier</strong></th>
+                                <th class="border"><strong>Inventory</strong></th>
+                                <th class="border"><strong></strong></th>
+                                <th class="border"><strong>Past Due</strong></th>
+                                <t t-foreach="state.dynamicHeaders" t-as="date_header" t-key="date_header">
+                                    <th class="border"><t t-esc="date_header" /></th>
+                                </t>
+                            </tr>
+                        </thead>
+                        <tbody id="mrp_dashboard_table_body">
+                        <!-- Dynamic rows will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </t>
+</template>

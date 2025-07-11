@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="instrument_sequence" model="ir.sequence">
+            <field name="name">Instrument</field>
+            <field name="code">instrument.seq</field>
+            <field name="prefix">IN</field>
+            <field name="padding">4</field>
+        </record>
+        <record id="gauge_sequence" model="ir.sequence">
+            <field name="name">Gauge</field>
+            <field name="code">gauge.seq</field>
+            <field name="prefix">G</field>
+            <field name="padding">4</field>
+        </record>
+
+        <record id="mmr_list_form_view" model="ir.ui.view">
+            <field name="name">mmr.list.form</field>
+            <field name="model">mmr.list</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <field name="mmr_state" widget="statusbar"
+                               statusbar_visible="working,not_working,obsolete"
+                               options="{'clickable': '1'}" readonly="mmr_state in ('obsolete')"/>
+                    </header>
+                    <sheet>
+                        <h1>
+                            <field name="code_no" placeholder="Enter the Code No" nolabel="1"
+                                   readonly="mmr_state in ('obsolete')"/>
+                        </h1>
+                        <group>
+                            <group>
+                                <field name="description" required="1"
+                                       readonly="mmr_state in ('obsolete')"/>
+                                <field name="mmr_range" invisible="instruments in 'gauges'"/>
+                                <field name="least_count" invisible="instruments in 'gauges'"/>
+                                <field name="acceptance_criteria" invisible="instruments in 'gauges'"/>
+                                <field name="size" invisible="instruments in 'calibration'"
+                                       readonly="mmr_state in ('obsolete')"/>
+                                <field name="part_no" readonly="mmr_state in ('obsolete')"
+                                       invisible="instruments != 'gauges'"/>
+                                <field name="part_name" invisible="1"
+                                       readonly="mmr_state in ('obsolete')"/>
+                                <field name="part_char_name" invisible="instruments in 'calibration'"
+                                       readonly="mmr_state in ('obsolete')"/>
+                                <field name="make" required="1"
+                                       readonly="mmr_state in ('obsolete')"/>
+                                <field name="parameter_id" options="{'no_create': True, 'no_open': True}"
+                                       readonly="mmr_state in ('obsolete')"
+                                       invisible="instruments != 'gauges'"/>
+                                <field name="old_gage_no" readonly="mmr_state in ('obsolete')"
+                                       invisible="instruments != 'gauges'"/>
+                                <field name="customer_gage_no" readonly="mmr_state in ('obsolete')"
+                                       invisible="instruments != 'gauges'"/>
+
+                                <field name="status" readonly="mmr_state in ('obsolete')"
+                                       widget="radio"/>
+                                <field name="mmr_code_number"
+                                       invisible="instruments in 'gauges'"/>
+                            </group>
+                            <group>
+                                <!--                                <field name="calib_frequency" readonly="mmr_state in ('obsolete')"/>-->
+                                <field name="calib_frequency_selection" readonly="mmr_state in ('obsolete')"/>
+                                <field name="calib_source" readonly="mmr_state in ('obsolete')"/>
+                                <!--                                <field name="machine_name" readonly="mmr_state in ('obsolete')"-->
+                                <!--                                       invisible="instruments != 'gauges'"/>-->
+                                <field name="machine_name_new" readonly="mmr_state in ('obsolete')"
+                                       invisible="instruments != 'gauges'"/>
+                                <!--                                <field name="machine_no" readonly="mmr_state in ('obsolete')"-->
+                                <!--                                       invisible="instruments != 'gauges'"/>-->
+                                <field name="machine_no_new" readonly="mmr_state in ('obsolete')"
+                                       invisible="instruments != 'gauges'"/>
+                                <field name="department" options="{'no_create': True, 'no_open': True}"
+                                       readonly="mmr_state in ('obsolete')"
+                                       invisible="instruments != 'gauges'"/>
+                                <field name="calib_date" string="Date of Calibration"
+                                       required="1" readonly="mmr_state in ('obsolete')"/>
+                                <field name="due_date" string="Next Due Date"
+                                       readonly="1" force_save="1"/>
+                                <field name="instruments" invisible="1"/>
+                                <field name="location" readonly="mmr_state in ('obsolete')"/>
+                                <field name="report_no"/>
+                                <field name="attachment" widget="image" string="Image"/>
+                                <field name="attachment_report" filename="file_name" invisible="1"/>
+                                <field name="pdf_file" widget='many2many_binary' filename="file_name" string="Report"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="remarks"/>
+                            <field name="doc_num"/>
+                            <field name="rev_num"/>
+                            <field name="rev_date"/>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <record id="mmr_list_tree_view" model="ir.ui.view">
+            <field name="name">mmr.list.tree</field>
+            <field name="model">mmr.list</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="code_no"/>
+                    <field name="description"/>
+
+                    <field name="instruments" string="Instrument"/>
+                    <field name="make"/>
+                    <field name="calib_date" string="Date of Calibration"/>
+                    <field name="due_date" string="Due Date"/>
+                    <field name="calib_source"/>
+                    <field name="status" widget="badge"
+                           decoration-success="status in 'active'"
+                           decoration-warning="status in 'inactive'"
+                           decoration-danger="status in 'obsolete'"/>
+                     <field name="doc_num"  optional="hide"/>
+                     <field name="rev_num"  optional="hide"/>
+                            <field name="rev_date"  optional="hide"/>
+                </tree>
+            </field>
+        </record>
+        <record id="mmr_list_tree_view_gauge" model="ir.ui.view">
+            <field name="name">mmr.list.tree</field>
+            <field name="model">mmr.list</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="code_no"/>
+                    <field name="description"/>
+                    <field name="instruments" string="Instrument"/>
+                    <field name="make"/>
+                    <field name="calib_date" string="Date of Calibration"/>
+                    <field name="due_date" string="Due Date"/>
+                    <field name="part_no" optional="hide"/>
+                    <field name="part_char_name" optional="hide"/>
+                    <field name="machine_name_new" optional="hide"/>
+                    <field name="machine_no_new" optional="hide"/>
+                    <field name="department"/>
+                    <field name="calib_source"/>
+                    <field name="status" widget="badge"
+                           decoration-success="status in 'active'"
+                           decoration-warning="status in 'inactive'"
+                           decoration-danger="status in 'obsolete'"/>
+                      <field name="doc_num"  optional="hide"/>
+                      <field name="rev_num"  optional="hide"/>
+                            <field name="rev_date"  optional="hide"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_mmr_list_search_view" model="ir.ui.view">
+            <field name="name">mmr.list.search</field>
+            <field name="model">mmr.list</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="code_no"/>
+                    <field name="description"/>
+                    <field name="instruments"/>
+                    <field name="make"/>
+                    <field name="calib_date"/>
+                    <field name="calib_source"/>
+                    <field name="mmr_state"/>
+                    <separator/>
+                    <searchpanel>
+                        <field name="mmr_state" icon="fa-filter"/>
+                    </searchpanel>
+                </search>
+            </field>
+        </record>
+
+        <record id="mmr_list_action" model="ir.actions.act_window">
+            <field name="name">Instruments</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">mmr.list</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'default_instruments': 'calibration'}</field>
+            <field name="domain">[('instruments', '=', 'calibration')]</field>
+            <field name="view_id" ref="mmr_list_tree_view"/>
+            <field name="help" type="html">
+                <p class="o_view_no content_smiling_face">
+                    Instruments List (MMR)
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="mmr_list_main_menu"
+                  name="Instruments"
+                  parent="quality_control.menu_quality_configuration"
+                  action="mmr_list_action"
+                  sequence="22"/>
+
+
+        <record id="gauges_list_action" model="ir.actions.act_window">
+            <field name="name">Gauges</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">mmr.list</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'default_instruments': 'gauges'}</field>
+            <field name="domain">[('instruments', '=', 'gauges')]</field>
+            <field name="view_id" ref="mmr_list_tree_view_gauge"/>
+            <field name="help" type="html">
+                <p class="o_view_no content_smiling_face">
+                    Gauges List
+                </p>
+            </field>
+        </record>
+        <menuitem id="gauges_list_main_menu"
+                  name="Gauges"
+                  parent="quality_control.menu_quality_configuration"
+                  action="gauges_list_action"
+                  sequence="22"/>
+
+        <menuitem id="gauges_main_menu_maintenance"
+                  name="Gauges"
+                  parent="maintenance.menu_maintenance_title"
+                  sequence="22">
+
+            <menuitem id="gauges_list_main_menu_maintenance_1"
+                      name="Gauges Master"
+                      action="gauges_list_action"
+                      sequence="1"/>
+
+            <menuitem id="gauges_list_main_menu_maintenance_2"
+                      name="Gauges-Request"
+                      action="action_gauge_request"
+                      sequence="2"/>
+        </menuitem>
+    </data>
+</odoo>

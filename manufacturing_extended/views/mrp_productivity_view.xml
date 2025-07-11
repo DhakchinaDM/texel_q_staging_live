@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+
+        <record id="oee_form_view_print" model="ir.ui.view">
+            <field name="name">mrp.workcenter.productivity.form.print</field>
+            <field name="model">mrp.workcenter.productivity</field>
+            <field name="inherit_id" ref="mrp.oee_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="inside">
+                    <header>
+                        <button name="action_print_label" string="Print" type="object" class="btn-primary"/>
+                    </header>
+                    <notebook>
+                        <page name="other" string="Other">
+                            <group>
+                                <group>
+                                    <field name="produced_qty"/>
+                                    <field name="ok_qty"/>
+                                    <field name="material_reject_qty"/>
+                                    <field name="process_reject_qty"/>
+                                    <field name="pause_reason"/>
+                                    <field name="process_reject_reason"/>
+                                    <field name="material_reject_reason"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page name="productivity" string="Productivity">
+                            <field name="productivity_line_ids">
+                                <tree editable="bottom">
+                                    <field name="total_produced_qty"/>
+                                    <field name="job_id"/>
+                                    <field name="lot_id"/>
+                                    <field name="product_id"/>
+                                    <field name="out_product_id"/>
+                                    <field name="remarks"/>
+                                    <field name="op_code"/>
+                                    <field name="next_op_code"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="oee_tree_view_work_order" model="ir.ui.view">
+            <field name="name">mrp.workcenter.productivity.tree.order</field>
+            <field name="model">mrp.workcenter.productivity</field>
+            <field name="inherit_id" ref="mrp.oee_tree_view"/>
+            <field name="arch" type="xml">
+                <field name="user_id" position="after">
+                    <field name="employee_id"/>
+                </field>
+                <field name="loss_id" position="attributes">
+                    <attribute name="column_invisible">1</attribute>
+                </field>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="mrp.mrp_workcenter_productivity_report">
+            <field name="name">Work order Entry</field>
+            <field name="res_model">mrp.workcenter.productivity</field>
+            <field name="view_mode">tree,graph,pivot,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{'create':False,'edit':False}
+            </field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Overall Equipment Effectiveness: no working or blocked time
+                </p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="mrp.mrp_workorder_report">
+            <field name="name">Work Orders</field>
+            <field name="res_model">mrp.workorder</field>
+            <field name="domain">[]</field>
+            <field name="context">{'search_default_workcenter': 1,
+                'search_default_ready': True,
+                'search_default_progress': True,}
+            </field>
+            <field name="view_mode">tree,graph,pivot,form,gantt</field>
+            <field name="search_view_id" ref="mrp.view_mrp_production_work_order_search"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new work orders performance
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

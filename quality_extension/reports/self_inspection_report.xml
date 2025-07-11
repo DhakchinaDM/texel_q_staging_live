@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="paper_format_self_inspection_report" model="report.paperformat">
+            <field name="name">Self Inspection Report</field>
+            <field name="default" eval="False"/>
+            <field name="disable_shrinking" eval="True"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">30</field>
+            <field name="margin_bottom">30</field>
+            <field name="margin_left">5</field>
+            <field name="margin_right">5</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">22</field>
+            <field name="dpi">150</field>
+        </record>
+        <record id="report_self_inspection_report" model="ir.actions.report">
+            <field name="name">Self Inspection</field>
+            <field name="model">self.inspection</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">quality_extension.self_inspection_report</field>
+            <field name="report_file">quality_extension.self_inspection_report</field>
+            <field name="print_report_name">'Self Inspection'</field>
+            <field name="binding_model_id" ref="quality_extension.model_self_inspection"/>
+            <field name="paperformat_id" ref="quality_extension.paper_format_self_inspection_report"/>
+            <field name="binding_type">report</field>
+        </record>
+        <template id="self_inspection_report_header">
+            <div class="header" style="border: 1px solid black;">
+                <div class="row">
+                    <div class="col-3" style="border-right:1px solid black;">
+                        <div>
+                            <img src='/web/binary/company_logo' class="img-fluid img-thumbnail"
+                                 style="width:100%;margin-top:1px;"/>
+                        </div>
+                    </div>
+                    <div class="col-6" style="border-right:1px solid black;">
+                        <div style="text-align:center;color:black;margin:25px; padding:25px;">
+                            <h4>
+                                SELF INSPECTION
+                            </h4>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div style="text-align:center;font-size:23px;margin:25px; padding:25px;
+                                                            color:black;">
+                            <strong>QA/DI/R/07</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+        <template id="self_inspection_report_body">
+            <t t-call="web.basic_layout">
+                <style>
+                    left, center
+                    {
+                    text-align:left;
+                    text-align:center;
+                    }
+                </style>
+                <section>
+                    <div class="row" style="border-bottom:1px solid black;border-left:1px solid black;
+                                                border-right:1px solid black;border-top:1px solid black;">
+                        <div class="col-4">
+                            <div style="border-right:1px solid black;margin-left:7px;font-size:19px;">
+                                <strong>Part Name</strong>
+                                <strong>:</strong>
+                                <span style="font-size:18px;" t-field="o.part_name"/>
+                            </div>
+                        </div>
+                        <div class="col-5">
+                            <div style="border-right:1px solid black;margin-left:7px;font-size:19px;">
+                                <strong>Operation No &amp; Name</strong>
+                                <strong>:</strong>
+                                <span style="font-size:18px;" t-field="o.operation_no"/>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div style="margin-left:7px;font-size:19px;">
+                                <div class="row"
+                                     style="margin-left:-8px;font-size:19px;border-left:1px solid black;border-bottom:1px solid black;">
+                                    <div class="col" style="margin-left:7px;">
+                                        <strong>Date</strong>
+                                        <strong>:</strong>
+                                        <span style="font-size:18px;" t-field="o.date"/>
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-left:-8px;font-size:19px;border-left:1px solid black;">
+                                    <div class="col" style="margin-left:7px;">
+                                        <strong>Shift</strong>
+                                        <strong>:</strong>
+                                        <span style="font-size:18px;" t-field="o.shift"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="border-bottom:1px solid black;border-left:1px solid black;
+                                                border-right:1px solid black;">
+                        <div class="col-4">
+                            <div style="border-right:1px solid black;margin-left:7px;font-size:19px;">
+                                <strong>Part No</strong>
+                                <strong>:</strong>
+                                <span style="font-size:18px;" t-field="o.product_id.default_code"/>
+                            </div>
+                        </div>
+                        <div class="col-5">
+                            <div style="border-right:1px solid black;margin-left:7px;font-size:19px;">
+                                <strong>Operator Name</strong>
+                                <strong>:</strong>
+                                <span style="font-size:18px;" t-field="o.operator_name"/>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div style="margin-left:7px;font-size:19px;">
+                                <strong>M/C No.</strong>
+                                <strong>:</strong>
+                                <span style="font-size:18px;" t-field="o.machine_no"/>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </t>
+        </template>
+        <template id="self_inspection_report">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="quality_extension.self_inspection_report_header"/>
+                    <t t-call="quality_extension.self_inspection_report_body"/>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

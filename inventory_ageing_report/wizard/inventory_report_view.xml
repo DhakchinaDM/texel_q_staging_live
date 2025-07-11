@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <data>
+        <record model='ir.ui.view' id='wizard_inventory_report_form'>
+            <field name="name">wizard.inventory.report.form</field>
+            <field name="model">wizard.inventory.report</field>
+            <field name="arch" type="xml">
+                <form string="Wizard">
+                    <group>
+                        <group invisible="report_printed != False">
+                            <field name="warehouse_id" widget="selection" required="1"/>
+                            <field name="stock_locations" invisible="1"
+                                   options='{"no_create_edit":True,"no_open":True}'/>
+                        </group>
+                        <group invisible="report_printed != False">
+                            <field name="start_dt" required="1"/>
+                            <field name="interval_days" required="1"/>
+                        </group>
+                        <group invisible="report_printed == False">
+                            <field name="report_printed" invisible="1"/>
+                            <field name="file_name" invisible="1"/>
+                            <field name="summary_file" readonly="1" filename="file_name"/>
+                        </group>
+                        <field name="location_ids" domain="[('id','in',stock_locations)]"
+                               invisible="report_printed != False"
+                               options='{"no_create_edit":True,"no_open":True}'/>
+                    </group>
+                    <footer>
+                        <button name="export_xls" type="object" default_focus="1"
+                                string="Download Excel" class="oe_highlight"
+                                context="{'xls_ageing_export':1}" icon="fa-download"
+                                invisible="report_printed != False"/>
+                        <button string="Cancel" class="oe_link" special="cancel"
+                                invisible="report_printed != False"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record model='ir.actions.act_window' id='wizard_inventory_report_action'>
+            <field name="name">Inventory Ageing</field>
+            <field name="res_model">wizard.inventory.report</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="wizard_inventory_report_form"/>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem id="menu_inventory_report"
+                  name="Inventory Ageing"
+                  parent="stock.menu_warehouse_report"
+                  action="wizard_inventory_report_action"
+                  sequence="6"/>
+    </data>
+</odoo>

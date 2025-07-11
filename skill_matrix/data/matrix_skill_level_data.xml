@@ -1,0 +1,31 @@
+<odoo>
+    <data noupdate="1">
+        <record id="skill_level1" model="matrix.skill.level">
+            <field name="name">LEVEL 1</field>
+            <field name="description">To be Trained</field>
+            <field name="progress">25</field>
+            <field name="image" type="base64" file="skill_matrix/static/images/quater.png"/>
+
+        </record>
+        <record id="skill_level2" model="matrix.skill.level">
+            <field name="name">LEVEL 2</field>
+            <field name="description">Can work with Guidance</field>
+            <field name="progress">50</field>
+            <field name="image" type="base64" file="skill_matrix/static/images/half.png"/>
+
+        </record>
+        <record id="skill_level3" model="matrix.skill.level">
+            <field name="name">LEVEL 3</field>
+            <field name="description">Can work Independently</field>
+            <field name="progress">75</field>
+            <field name="image" type="base64" file="skill_matrix/static/images/three_quarters.png"/>
+
+        </record>
+        <record id="skill_level4" model="matrix.skill.level">
+            <field name="name">LEVEL 4</field>
+            <field name="description">Can train others</field>
+            <field name="progress">100</field>
+            <field name="image" type="base64" file="skill_matrix/static/images/full.png"/>
+        </record>
+    </data>
+</odoo>

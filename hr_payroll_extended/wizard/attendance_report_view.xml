@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- ======== ATTENDANCE REPORT WIZARD ======== -->
+        <record id="view_attendance_wizard_report" model="ir.ui.view">
+            <field name="name">Attendance Wizard.form</field>
+            <field name="model">attendance.summary.report</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="start_date"/>
+                                <field name="end_date"/>
+                                <field name="summary_file" invisible="report_printed == False"
+                                       readonly="1"
+                                       filename="file_name"/>
+                            </group>
+                            <group>
+                                <field name="report_all_attendance_report"/>
+                                <field name="report_all_present_absent"/>
+                                <field name="report_printed" invisible="1"/>
+                                <field name="file_name" invisible="1"/>
+                            </group>
+                        </group>
+                        <footer>
+                            <button name="print_attendance_report_pdf" type="object" string="PDF"
+                                    class="btn btn-danger" icon="fa-file-pdf-o"/>
+                            <button name="print_product_excel_report" string="Excel"
+                                    type="object" default_focus="1" class="btn btn-success"
+                                    icon="fa-file-text"/>
+                            <button string="Cancel" class="btn-default" special="cancel" icon="fa-times"/>
+                        </footer>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!--ACTION FOR ATTENDANCE REPORT WIZARD-->
+        <record id="attendance_report_action" model="ir.actions.act_window">
+            <field name="name">Attendance Summary Report</field>
+            <field name="res_model">attendance.summary.report</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem id="hr_attendance.menu_hr_attendance_reporting"
+                  name="Reporting"
+                  parent="hr_attendance.menu_hr_attendance_root"
+                  sequence="15"
+                  groups="hr_attendance.group_hr_attendance_officer"/>
+
+        <menuitem id="menu_hr_attendance_reporting_sub"
+                  name="Reporting"
+                  parent="hr_attendance.menu_hr_attendance_reporting"
+                  action="hr_attendance.hr_attendance_reporting"
+                  sequence="1"
+                  groups="hr_attendance.group_hr_attendance_officer"/>
+
+        <menuitem id="menu_hr_attendance_view_report_sub_menu"
+                  name="Attendance Summary Report"
+                  sequence="2"
+                  action="hr_payroll_extended.attendance_report_action"
+                  parent="hr_attendance.menu_hr_attendance_reporting"/>
+
+
+    </data>
+</odoo>

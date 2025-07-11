@@ -1,0 +1,30 @@
+{
+    'name': 'Skill Matrix',
+    'version': '17.21',
+    'summary': '',
+    'description': """ Skill Matrix """,
+    'category': 'Human Resources/Employees',
+    'author': 'AppsComp Widgets Pvt Ltd',
+    'website': 'https://www.appscomp.com',
+    'depends': ['hr', 'base','hr_skills'],
+    'data': [
+        'data/matrix_skill_level_data.xml',
+        'data/hr_skill_type_data.xml',
+        'security/ir.model.access.csv',
+        'views/matrix_skill_level_view.xml',
+        'views/hr_skill_view.xml',
+        'views/employee_skill_view.xml',
+        'views/skill_master_view.xml',
+    ],
+    'assets': {
+        'web.assets_backend': [
+            'skill_matrix/static/src/js/skill_master.js',
+            'skill_matrix/static/src/xml/skill_master.xml',
+            'web/static/lib/select2/select2.css',
+            'web/static/lib/select2/select2.js',
+        ],
+    },
+    'installable': True,
+    'application': True,
+    'license': 'LGPL-3',
+}

@@ -1,0 +1,284 @@
+<templates xml:space="preserve">
+    <t t-name="ProductionDashboard">
+        <!-- Login Screen -->
+        <t t-if="!state.isLoggedIn">
+            <div class="container d-flex justify-content-center align-items-center vh-100">
+                <div class="card p-4 shadow-lg" style="width: 350px;">
+                    <h2 class="text-center">Production Dashboard Login</h2>
+                    <div class="mb-3">
+                        <label class="form-label">Employee ID:</label>
+                        <input type="text" class="form-control" t-model="state.empId"/>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Password:</label>
+                        <input type="password" class="form-control" t-model="state.password"/>
+                    </div>
+                    <button class="btn btn-primary w-100" t-on-click="login">Login</button>
+                </div>
+            </div>
+        </t>
+
+        <!-- Workcenter Selection -->
+        <t t-if="state.isLoggedIn and !state.selectedWorkcenter">
+            <div class="container mt-5" style="height: 90%; overflow-y: auto;">
+                <h2 class="text-center mb-4">Welcome, <t t-esc="state.employeeName"/>!</h2>
+                <div class="text-center mb-4">
+                    <h4>Select Workcenter</h4>
+                </div>
+
+                <!-- Search Bar -->
+                <div class="mb-4">
+                    <input type="text" class="form-control" placeholder="Search Workcenter..."
+                           t-model="state.searchQuery" />
+                </div>
+
+                <div class="row justify-content-center">
+                    <!-- Filter workcenters based on search query -->
+                    <t t-foreach="state.workcenters.filter(wc => !state.searchQuery || wc.name?.toLowerCase().includes(state.searchQuery?.toLowerCase()))"
+                       t-as="wc" t-key="wc.id">
+                        <div class="col-md-4">
+                            <div class="card text-center p-3 shadow-sm">
+                                <h5 class="card-title" t-esc="wc.name"/>
+                                <button class="btn btn-outline-primary mt-2" t-on-click="() => selectWorkcenter(wc.id)">Select</button>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+
+                <!-- Go Back Button -->
+                <div class="text-center mt-4">
+                    <button class="btn btn-secondary" t-on-click="logout">Go Back</button>
+                </div>
+            </div>
+        </t>
+
+        <!-- Job Selection -->
+       <t t-if="state.isLoggedIn and state.selectedWorkcenter and !state.selectedJob">
+           <div class="container mt-5 text-center" style="height: 90%; overflow-y: auto;">
+               <h2>Select Job</h2>
+
+                <!-- Search Bar -->
+                <div class="mb-4">
+                    <input type="text" class="form-control" placeholder="Search Job..."
+                           t-model="state.searchQuery" />
+                </div>
+
+                <div class="row justify-content-center">
+                    <!-- Filter jobs based on search query -->
+                    <t t-foreach="state.jobs.filter(job => !state.searchQuery || job.name?.toLowerCase().includes(state.searchQuery?.toLowerCase()) || job.product_id?.[1]?.toLowerCase().includes(state.searchQuery?.toLowerCase()))"
+                       t-as="job" t-key="job.id">
+                        <div class="col-md-4">
+                            <div class="card text-center p-3 shadow-sm">
+                                <span>Job Id :<strong class="card-title" t-esc="job.job_id[1]"/> </span>
+                                <span>Operation :<strong class="card-title" t-esc="job.name"/> </span>
+                                <span>Qty : <strong class="card-title" t-esc="job.available_qty_fg"/></span>
+                                <span>WorkCenter : <strong class="card-title" t-esc="job.workcenter_id[1]"/></span>
+                                <span>Product : <strong class="card-title" t-esc="job.product_id[1]"/></span>
+                                <button class="btn btn-outline-primary mt-2"
+                                        t-on-click="() => selectJob(job)">Select</button>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+
+                <!-- Go Back Button -->
+                <div class="text-center mt-4">
+                    <button class="btn btn-secondary" t-on-click="deselectWorkcenter">Go Back</button>
+                </div>
+            </div>
+        </t>
+
+        <!-- Job Actions -->
+        <t t-if="state.isLoggedIn and state.selectedJob">
+            <div class="container mt-5 text-center" style="height: 90%; overflow-y: auto;">
+                <h2>Job Details</h2>
+                <div class="card p-4 shadow-lg">
+                    <h4>Operation: <t t-esc="state.selectedJob.name"/></h4>
+                    <h5>Job qty: <t t-esc="state.selectedJob.available_qty_fg"/></h5>
+                    <h5>Product: <t t-esc="state.selectedJob.product_id[1]"/></h5>
+                    <h5>Job No: <t t-esc="state.selectedJob.job_id"/></h5>
+                    <t t-if="state.loadedLot">
+                        <t t-foreach="state.loadedLot" t-as="lot" t-key="lot.id">
+                            <h5>Loaded Lots:
+                                <span t-esc="lot.name"/>
+
+                            </h5>
+                            <h5>Lot Qty:
+                                <span t-esc="lot.product_qty"/>
+                            </h5>
+                        </t>
+                    </t>
+                    <t t-else="">
+                        <p>No lots loaded.</p>
+                    </t>
+                </div>
+                <div class="mt-3">
+                    <t t-if="!state.jobCompleted">
+                        <button class="btn btn-success m-2"
+                                t-if="!this.state.stockLoaded and !state.jobStarted and !state.jobPaused and !state.jobCompleted"
+                                t-on-click="loadComponent">Load Components</button>
+                        <button class="btn btn-success m-2"
+                                t-if="this.state.stockLoaded and !state.jobStarted and !state.jobPaused and !state.jobCompleted"
+                                t-on-click="unloadComponent">Unload Components</button>
+                        <button class="btn btn-success m-2"
+                                t-if="this.state.stockLoaded and !state.jobStarted and !state.jobPaused and !state.jobCompleted"
+                                t-on-click="startJob">Start</button>
+                        <button class="btn btn-warning m-2"
+                                t-if="state.jobStarted and !state.jobPaused and !state.jobCompleted"
+                                t-on-click="pauseJob">Record Production</button>
+                        <!--                        <button class="btn btn-danger m-2"-->
+                        <!--                                t-if="state.jobStarted and !state.jobPaused and !state.jobCompleted"-->
+                        <!--                                t-on-click="completeJob">Complete</button>-->
+                    </t>
+                    <t t-if="state.jobCompleted">
+                        <div class="alert alert-success">Job Completed Successfully!</div>
+                        <button class="btn btn-primary m-2" t-on-click="selectNewJob">Select New Job</button>
+                    </t>
+                    <t t-if="state.jobPaused">
+                        <div class="alert alert-success">Job Paused Successfully!</div>
+                        <button class="btn btn-primary m-2" t-on-click="selectNewJob">Select New Job</button>
+                    </t>
+                </div>
+
+                <!-- Go Back Button -->
+                <div class="text-center mt-4" t-if="!state.jobStarted">
+                    <button class="btn btn-secondary" t-on-click="deselectJob">Go Back</button>
+                </div>
+
+                <!-- Show Timer -->
+                <t t-if="state.jobStarted">
+                    <h4>Timer: <t t-esc="state.timerValue"/></h4>
+                </t>
+            </div>
+        </t>
+        <div class="modal fade" id="loadComponentModal" tabindex="-1" aria-labelledby="loadComponentModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="loadComponentModalLabel">Load Components</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"/>
+                    </div>
+                    <div class="modal-body">
+                        <t t-foreach="state.bomComponents" t-as="component" t-key="component.id">
+                            <div class="mb-3">
+                                <label t-esc="component.product_id[1]"/>
+                                :
+
+                                <select class="form-select multi-select" required="True" multiple="multiple"
+                                        t-att-data-component="component.id">
+                                    <t t-foreach="component.lot_options" t-as="lot" t-key="lot.id">
+                                        <option t-att-value="lot.id" t-esc="lot.name + ' (' + lot.quantity + ')'"/>
+                                    </t>
+                                </select>
+
+                            </div>
+                        </t>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary"
+                                t-on-click="confirmComponentSelection">Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="pauseJobModal" tabindex="-1" aria-labelledby="pauseJobModalLabel"
+             aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="pauseJobModalLabel">Record Production</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3" t-if="state.loadedComponents">
+                        Loaded Qty:
+<!--                        <span t-esc="state.loadedComponents[0].quantity" t-if="state.loadedComponents[0].quantity"/>-->
+                    </div>
+
+                    <!-- Shift Selection -->
+                    <div class="mb-3">
+                        <label for="shift" class="form-label"><b>Select Shift:</b></label>
+                        <select id="shift" class="form-select">
+                            <option value="" disabled="" selected="">Select Shift</option>
+                            <option value="shift_I">Shift I</option>
+                            <option value="shift_II">Shift II</option>
+                            <option value="shift_III">Shift III</option>
+                            <option value="shift_G">Shift G</option>
+                        </select>
+                    </div>
+
+                    <!-- General Pause Reason -->
+                    <div class="mb-3">
+                        <label for="pause_reason" class="form-label"><b>General Reason:</b></label>
+                        <textarea id="pause_reason" class="form-control" placeholder="Enter reason..."></textarea>
+                    </div>
+
+                    <!-- Quantity Inputs -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="produced_qty" class="form-label"><b>Produced Quantity:</b></label>
+                            <input type="number" id="produced_qty" class="form-control"/>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="ok_qty" class="form-label"><b>OK Quantity:</b></label>
+                            <input type="number" id="ok_qty" class="form-control"/>
+                        </div>
+                    </div>
+
+                    <!-- OK Quantity Remark -->
+                    <div class="mb-3 mt-2">
+                        <label for="ok_qty_remark" class="form-label"><b>OK Quantity Remark:</b></label>
+                        <input type="text" id="ok_qty_remark" class="form-control"
+                               placeholder="Enter remark for OK quantity..."/>
+                    </div>
+
+                    <!-- Material Reject Section -->
+                    <div class="row align-items-center mt-3 border p-2 rounded bg-light">
+                        <div class="col-md-4">
+                            <label for="material_reject_qty" class="form-label"><b>Material Reject Qty:</b></label>
+                            <input type="number" id="material_reject_qty" class="form-control"/>
+                        </div>
+                        <div class="col-md-8">
+                            <label for="material_reject_reason" class="form-label"><b>Reason:</b></label>
+                            <input type="text" id="material_reject_reason" class="form-control"
+                                   placeholder="Enter reason for material reject..."/>
+                        </div>
+                    </div>
+                    <!-- Rework Section -->
+                    <div class="row align-items-center mt-3 border p-2 rounded bg-light">
+                        <div class="col-md-4">
+                            <label for="rework_qty" class="form-label"><b>Rework Qty:</b></label>
+                            <input type="number" id="rework_qty" class="form-control"/>
+                        </div>
+                        <div class="col-md-8">
+                            <label for="rework_reason" class="form-label"><b>Reason:</b></label>
+                            <input type="text" id="rework_reason" class="form-control"
+                                   placeholder="Enter reason for rework..."/>
+                        </div>
+                    </div>
+
+                    <!-- Process Reject Section -->
+                    <div class="row align-items-center mt-3 border p-2 rounded bg-light">
+                        <div class="col-md-4">
+                            <label for="process_reject_qty" class="form-label"><b>Process Reject Qty:</b></label>
+                            <input type="number" id="process_reject_qty" class="form-control"/>
+                        </div>
+                        <div class="col-md-8">
+                            <label for="process_reject_reason" class="form-label"><b>Reason:</b></label>
+                            <input type="text" id="process_reject_reason" class="form-control"
+                                   placeholder="Enter reason for process reject..."/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" t-on-click="submitPauseReason" id="submitPauseReason">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </t>
+</templates>

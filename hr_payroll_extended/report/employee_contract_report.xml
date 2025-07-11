@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="paper_format_employee_contract_report_new" model="report.paperformat">
+        <field name="name">Employee Contract Report</field>
+        <field name="default" eval="True"/>
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">40</field>
+        <field name="margin_bottom">20</field>
+        <field name="margin_left">7</field>
+        <field name="margin_right">7</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">35</field>
+        <field name="dpi">90</field>
+    </record>
+
+
+    <record id="action_employee_contract_report_new" model="ir.actions.report">
+        <field name="name">Employee Contract</field>
+        <field name="model">hr.contract</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">hr_payroll_extended.report_employee_contract_data</field>
+        <field name="report_file">hr_payroll_extended.report_employee_contract_data</field>
+        <field name="paperformat_id" ref="hr_payroll_extended.paper_format_employee_contract_report_new"/>
+        <field name="binding_model_id" ref="model_hr_contract"/>
+        <field name="print_report_name">'%s - Contract' % (object.name)</field>
+    </record>
+
+
+    <template id="report_employee_contract_data">
+        <t t-call="web.html_container">
+            <style>
+                p.a {
+                font-family: Arial;
+                }
+
+                .table.custom_head thead th:first-child {
+                vertical-align: bottom;
+                border-bottom: 2px solid #dee2e6;
+                display: revert;
+                }
+
+                .table.custom_head thead th:last-child {
+                vertical-align: bottom;
+                border-bottom: 2px solid #dee2e6;
+                display: revert;
+                }
+
+                .custom_head > thead {
+                background: #f20000;
+                color: #fff;
+                }
+
+                .custom_head > tr {
+                background: #f20000;
+                width: 100%;
+                color: #fff;
+                }
+
+                .table.custom_head > tbody > tr > td {
+                border: 1px solid #d1d1d1;
+                }
+
+                .table.custom_head {
+                display: table;
+                border-collapse: separate;
+                box-sizing: border-box;
+                text-indent: initial;
+                border-spacing: 2px;
+                }
+            </style>
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.basic_layout">
+                    <div class="header">
+                        <div class="row">
+                            <div align="right" width="50%">
+                                <img src="/web/binary/company_logo"
+                                     class="img-responsive"/>
+                            </div>
+                            <br/>
+                            <br/>
+                        </div>
+                    </div>
+
+                    <!--                    RED COLOR TABLE 1 : CONTRACT EMPLOYEE NAME-->
+                    <div class="page">
+                        <table class="table table-sm table-bordered">
+                            <tbody>
+                                <tr align="left"
+                                    style="font-size: 14px; color: white; background-color: #8e5337;"
+                                    class="padding_all tleft tbottom ttop text-center">
+                                    <td colspan="2">
+                                        <h3>
+                                            <span t-field="o.name"/>
+                                        </h3>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="page">
+                        <table class="table table-sm table-bordered">
+                            <tr>
+                                <td>
+                                    <strong>Employee</strong>
+                                </td>
+                                <td>
+                                    <span t-field="o.employee_id"/>
+                                </td>
+                                <td>
+                                    <strong>Department</strong>
+                                </td>
+                                <td>
+                                    <span t-field="o.department_id"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Start Date</strong>
+                                </td>
+                                <td>
+<!--                                    <span t-field="o.start_date_doj"/>-->
+                                </td>
+                                <td>
+                                    <strong>Job Position</strong>
+                                </td>
+                                <td>
+                                    <span t-field="o.job_id"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Contract End Date</strong>
+                                </td>
+                                <td>
+                                    <span t-field="o.date_end"/>
+                                </td>
+                                <td>
+                                    <strong>Salary Structure</strong>
+                                </td>
+                                <td>
+                                    <span t-field="o.struct_id"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Notice Period</strong>
+                                </td>
+                                <td>
+                                    <span t-field="o.notice_days"/>
+                                </td>
+                                <td>
+                                    <strong>Employee Category</strong>
+                                </td>
+                                <td>
+                                    <span t-field="o.type_id"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Salary Structure Type</strong>
+                                </td>
+                                <td>
+                                    <span t-field="o.structure_type_id"/>
+                                </td>
+                                <td>
+                                    <strong>Contract Type</strong>
+                                </td>
+                                <td>
+                                    <span t-field="o.contract_type_id"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Working Schedule</strong>
+                                </td>
+                                <td>
+                                    <span t-field="o.resource_calendar_id"/>
+                                    <span t-field="o.schedule_pay"/>
+                                </td>
+                                <td>
+                                    <strong>HR Responsible</strong>
+                                </td>
+                                <td>
+                                    <span t-field="o.hr_responsible_id"/>
+                                </td>
+                            </tr>
+                        </table>
+                        <br/>
+                        <table class="table table-sm table-bordered">
+                            <tr>
+                                <td style="color:white;background-color: #8e5337;" align="center" colspan="2">
+                                    <strong>Accounting</strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="30%">
+                                    <strong>Analytic Account</strong>
+                                </td>
+                                <td>
+                                    <span t-field="o.analytic_account_id"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="30%">
+                                    <strong>Salary Journal</strong>
+                                </td>
+                                <td>
+                                    <span t-field="o.journal_id"/>
+                                </td>
+                            </tr>
+                        </table>
+                        <br/>
+                        <table class="table table-sm table-bordered">
+                            <tr>
+                                <td style="color:white;background-color: #8e5337;" align="center" colspan="8">
+                                    <strong>Salary Information</strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="color:white;background-color: #8e5337;" align="center" colspan="4">
+                                    <strong>Monthly Advantages in Cash</strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>CTC</strong>
+                                </td>
+                                <td>
+                                    <span t-field="o.manual_ctc"/>
+                                </td>
+                                <td>
+                                    <strong>CTC</strong>
+                                </td>
+                                <td>
+                                    <span t-field="o.ctc"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Salary Hike Effective Date</strong>
+                                </td>
+                                <td>
+                                    <span t-field="o.salary_hike_effective_date"/>
+                                </td>
+                                <td>
+                                    <strong>Basic Percentage %</strong>
+                                </td>
+                                <td>
+                                    <span t-field="o.basic_percentage"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>CTC Difference</strong>
+                                </td>
+                                <td>
+                                    <span t-field="o.amount_settlement_diff"/>
+                                </td>
+                                <td>
+                                    <strong>Basic</strong>
+                                </td>
+                                <td>
+                                    <span t-field="o.wage"/>
+                                </td>
+                            </tr>
+                        </table>
+                        <table class="table table-sm table-bordered">
+                            <tr>
+                                <td style="color:white;background-color: #8e5337;" align="center" colspan="4">
+                                    <strong>Allowances</strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>HRA Allowance Percentage %</strong>
+                                </td>
+                                <td>
+                                    <span t-field="o.hra_percentage"/>
+                                </td>
+                                <td>
+                                    <strong>House Rent Allowance</strong>
+                                </td>
+                                <td>
+                                    <span t-field="o.house_rent_allowance"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Coveyance Allowance</strong>
+                                </td>
+                                <td>
+                                    <span t-field="o.convenyance_allowance"/>
+                                </td>
+                                <td>
+                                    <strong>Special Allowance</strong>
+                                </td>
+                                <td>
+                                    <span t-field="o.special_allowance"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Travel Allowance</strong>
+                                </td>
+                                <td>
+                                    <span t-field="o.travel_incentives"/>
+                                </td>
+                                <td>
+                                    <strong>Health Insurance</strong>
+                                </td>
+                                <td>
+                                    <span t-field="o.health_insurance"/>
+                                </td>
+                            </tr>
+                        </table>
+                        <table class="table table-sm table-bordered">
+                            <tr>
+                                <td style="color:white;background-color: #8e5337;" align="center" colspan="4">
+                                    <strong>Deductions</strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Health Insurance Deduction</strong>
+                                </td>
+                                <td>
+<!--                                    <span t-field="o.health_insurance_deduction"/>-->
+                                </td>
+                                <td>
+                                    <strong>Other Deduction</strong>
+                                </td>
+                                <td>
+<!--                                    <span t-field="o.other_deduction"/>-->
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Advance Salary</strong>
+                                </td>
+                                <td>
+<!--                                    <span t-field="o.advance_salary"/>-->
+                                </td>
+                                <td>
+                                    <strong>Loan Deduction</strong>
+                                </td>
+                                <td>
+<!--                                    <span t-field="o.loan_deduction"/>-->
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>TDS</strong>
+                                </td>
+                                <td>
+                                    <span t-field="o.tds"/>
+                                </td>
+                                <td>
+                                    <strong>Professional Tax</strong>
+                                </td>
+                                <td>
+                                    <span t-field="o.professional_tax"/>
+                                </td>
+                            </tr>
+                        </table>
+                        <table class="table table-sm table-bordered">
+                            <tr>
+                                <td style="color:white;background-color: #8e5337;" align="center" colspan="4">
+                                    <strong>ESI - [Employee / Employer]</strong>
+                                </td>
+                                <td style="color:white;background-color: #8e5337;" align="center" colspan="4">
+                                    <strong>PF - [Employee / Employer]</strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>ESI Percentage %</strong>
+                                </td>
+                                <td>
+                                    <span t-field="o.esi_basic_percentage"/>
+                                </td>
+                                <td>
+                                    <span t-field="o.esi_basic_percentage_second"/>
+                                </td>
+                                <td>
+                                    <strong>PF Type</strong>
+                                </td>
+                                <td>
+                                    <span t-field="o.pf_type"/>
+                                </td>
+                                <td>
+                                    <span t-field="o.pf_type"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>ESI</strong>
+                                </td>
+                                <td>
+                                    <span t-field="o.esi"/>
+                                </td>
+                                <td>
+                                    <span t-field="o.esi_second"/>
+                                </td>
+                                <td>
+                                    <strong>PF</strong>
+                                </td>
+                                <td>
+                                    <span t-field="o.employee_pf_amount"/>
+                                </td>
+                                <td>
+                                    <span t-field="o.employer_pf_amount"/>
+                                </td>
+                            </tr>
+                        </table>
+                        <table class="table table-sm table-bordered">
+                            <tr>
+                                <td style="color:white;background-color: #8e5337;" align="center" colspan="4">
+                                    <strong>Contract Remarks</strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>
+                                        ESI field will be enabled if An employee CTC below Rs.21000,
+                                        PF Fixed Amount will set as Rs.1800 ,
+                                        <br/>
+                                        if an employee receives CTC Rs.15000 and
+                                        above.
+                                    </span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>
+

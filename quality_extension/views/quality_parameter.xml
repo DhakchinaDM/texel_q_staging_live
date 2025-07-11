@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record id="quality_parameter_form_view" model="ir.ui.view">
+            <field name="name">Quality Parameter Form View</field>
+            <field name="model">quality.parameter</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <h1>
+                            <field name='name'/>
+                        </h1>
+                        <group>
+                            <group>
+                                <field name="observation_no_need"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="quality_parameter_tree_view" model="ir.ui.view">
+            <field name="name">Quality Parameter Tree View</field>
+            <field name="model">quality.parameter</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name='name'/>
+                    <field name='observation_no_need'/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="quality_parameter_action" model="ir.actions.act_window">
+            <field name="name">Quality Parameter</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">quality.parameter</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_no content_smiling_face">
+                    Quality Parameter Information
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="quality_parameter_main_menu"
+                  name="Quality Parameter"
+                  parent="quality_control.menu_quality_configuration"
+                  action="quality_parameter_action"
+                  sequence="21"/>
+
+        <record id="quality_check_method_form_view" model="ir.ui.view">
+            <field name="name">Quality check method Form View</field>
+            <field name="model">quality.check.method</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <h1>
+                            <field name='name'/>
+                        </h1>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="quality_check_method_tree_view" model="ir.ui.view">
+            <field name="name">Quality check method tree View</field>
+            <field name="model">quality.check.method</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name='name'/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="quality_check_method_action" model="ir.actions.act_window">
+            <field name="name">Quality Check Method</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">quality.check.method</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_no content_smiling_face">
+                    Quality Check Method Information
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="quality_check_method_main_menu"
+                  name="Method of Check"
+                  parent="quality_control.menu_quality_configuration"
+                  action="quality_check_method_action"
+                  sequence="21"/>
+    </data>
+</odoo>

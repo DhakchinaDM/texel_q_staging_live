@@ -1,0 +1,60 @@
+<odoo>
+    <record id="supplier_performance_report_exl" model="ir.ui.view">
+        <field name="name">supplier.performance.wizard.view</field>
+        <field name="model">supplier.performance</field>
+        <field name="arch" type="xml">
+            <form string="Supplier Performance">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="partner_id" options='{"no_open": False, "no_create": True,"no_edit": True}'
+                            />
+                            <!--                             domain="[('supplier_rank', '=', 1)]"-->
+                            <field name="start_date" invisible="1"/>
+                            <field name="end_date" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="months_selection" invisible="1"/>
+                            <label for="select_month" string="Month/Year"/>
+                            <div class="o_row">
+                                <field name="select_month" class="oe_inline"/>
+                                <field name="year_master" class="oe_inline"
+                                       options='{"no_open": False, "no_create": True,"no_edit": True}'/>
+                            </div>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="report_printed" invisible="1"/>
+                        <group invisible="report_printed != True">
+                            <field name="file_name" invisible="1"/>
+                            <field name="summary_file" readonly="1" filename="file_name"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="tick_ok" type='object'
+                            string="Submit"
+                            class="oe_highlight"/>
+
+                    <button name="tick_cancel" type='object' string="Cancel" class="oe_highlight" special="cancel"
+                            icon="fa-times-circle"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_supplier_performance_report_exl" model="ir.actions.act_window">
+        <field name="name">Supplier Performance</field>
+        <field name="res_model">supplier.performance</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+
+    <menuitem id="menu_supplier_performance_report_exl"
+              name="Supplier Performance Report"
+              sequence="2"
+              action="action_supplier_performance_report_exl"
+              parent="purchase.purchase_report_main"/>
+
+</odoo>

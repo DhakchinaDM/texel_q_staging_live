@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="company_transfer_sequence" model="ir.sequence">
+            <field name="name">Material Request</field>
+            <field name="code">material.request.indent</field>
+            <field name="prefix" eval="'MR/' + (time.strftime('%y') if int(time.strftime('%m')) >= 4 else str(int(time.strftime('%y')) - 1)) + '-' + (str(int(time.strftime('%y')) + 1) if int(time.strftime('%m')) >= 4 else time.strftime('%y')) + '/'"/>
+            <field name="padding">5</field>
+            <field name="number_increment">1</field>
+            <field name="implementation">standard</field>
+        </record>
+
+         <record id="action_account_confirm_payments" model="ir.actions.server">
+            <field name="name">UnArchive</field>
+            <field name="state">code</field>
+<!--            <field name="groups_id" eval="[(4, ref('account.group_account_invoice'))]"/>-->
+            <field name="model_id" ref="material_request.model_material_request_indent"/>
+            <field name="binding_model_id" ref="material_request.model_material_request_indent"/>
+            <field name="binding_view_types">list</field>
+            <field name="code">
+                records.action_unarchive()
+            </field>
+        </record>
+
+         <record id="action_archive_request" model="ir.actions.server">
+            <field name="name">Archive</field>
+            <field name="state">code</field>
+<!--            <field name="groups_id" eval="[(4, ref('account.group_account_invoice'))]"/>-->
+            <field name="model_id" ref="material_request.model_material_request_indent"/>
+            <field name="binding_model_id" ref="material_request.model_material_request_indent"/>
+            <field name="binding_view_types">list</field>
+            <field name="code">
+                records.action_archive()
+            </field>
+        </record>
+
+        <!-- Indent Tree View -->
+        <record id='view_indent_indent_tree' model='ir.ui.view'>
+            <field name="name">material.request.indent.tree</field>
+            <field name="model">material.request.indent</field>
+            <field name="arch" type="xml">
+                <tree default_order='name desc'>
+                    <field name="name"/>
+                    <field name="state"/>
+                    <field name="responsible"/>
+                    <field name="indent_date" />
+                    <field name="required_date" widget="remaining_days"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Indent Form View -->
+        <record id='view_stock_indent_indent_form' model='ir.ui.view'>
+            <field name="name">material.request.indent.form</field>
+            <field name="model">material.request.indent</field>
+            <field name="arch" type="xml">
+                <form string="Material/Material Request">
+                    <header>
+                        <button name="indent_request_for_manager_approval" string="Request For Approval" type="object"
+                                class="oe_highlight" invisible="state != 'draft'"/>
+                        
+                        <!-- <button name="material_request_approve_remarks" string="Approve" type="object"
+                                class="oe_highlight" invisible="state != 'to_be_approved' "/> -->
+                        <button name="material_request_approve_remarks" string="Approve" type="object"
+                            class="oe_highlight" invisible="state != 'to_be_approved' or current_user != True"/>
+                        
+                        <button name="material_request_cancel_remarks" string="Cancel" type="object"
+                                class="oe_highlight" invisible="state != 'to_be_approved' or current_user != True"/>
+<!--                        <button name="return_balance_product" type="object" class="oe_highlight" string="Return" invisible="state != 'done'"/>-->
+
+                        <!-- <button name="indent_request_store_approved" string="Approve Request" type="object"
+                                class="oe_highlight" invisible="state != 'request_for_store_approval'"/>
+                        
+                        <button name="material_request_cancel_remarks" string="Cancel" type="object"
+                                class="oe_highlight" invisible="state != 'request_for_store_approval'"/> -->
+                        
+                        <!-- <button name="create_shipped" string="Check Availability" type="object" class="oe_highlight"
+                                invisible="state not in ['request_approved', 'rfq_create', 'tender_create'] or stock_available == True"/> -->
+                        <!-- <button name="open_rfq_form" string="Create RFQ" type="object" class="oe_highlight"
+                                invisible="state not in ['request_approved', 'partially_received'] or stock_available == True"/> -->
+                        
+                        <!-- <button name="action_stock_moves" string="Delivery" type="object" class="oe_highlight"
+                                groups="material_request.group_receptions_report"
+                                invisible="state != 'request_approved'"/> -->
+                        <!-- <button name="action_partial_stock_move" string="Partial Delivery" type="object" class="oe_highlight"
+                                invisible="state not in ['request_approved', 'rfq_create'] or partial_stock_available != True or picking_count != 0"/> -->
+                        
+                        <button name="set_draft" string="Set to Draft" type="object" class="oe_highlight"
+                        invisible="state not in ['reject', 'cancel']"/>
+
+
+                        <field name="state" widget="statusbar" options="{'clickable': '1'}"
+                               statusbar_visible="draft,to_be_approved,request_approved" readonly="1"/>
+                    </header>
+
+
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="material_requisition_back_order"
+                                    class="oe_stat_button"
+                                    icon="fa-book"
+                                    invisible="1"
+                                    type="object">
+                                <field name="material_requisition_backorder_count" widget="statinfo"
+                                       options="{'reload_on_button': true}"/>
+                            </button>
+                            <button class="oe_stat_button"
+                                    type="object"
+                                    icon="fa-shopping-cart"
+                                    invisible="rfq_total == 0"
+                                    name="create_RFQ_lines">
+                                <field name="rfq_total" widget="statinfo"/>
+                            </button>
+                            <button name="button_purchase_order"
+                                    class="oe_stat_button"
+                                    icon="fa-shopping-cart"
+                                    invisible="purchase_order_count == 0"
+                                    type="object">
+                                <field name="purchase_order_count" widget="statinfo"/>
+                            </button>
+                            <button type="object"
+                                    name="action_view_picking"
+                                    class="oe_stat_button"
+                                    invisible="state == 'draft' or picking_count == 0"
+                                    icon="fa-truck">
+                                <field name="picking_count" string="Shipment" widget="statinfo"/>
+                            </button>
+                        </div>
+                        <widget name="web_ribbon" title="Waiting for approvel" bg_color="bg-success"
+                                invisible="state != 'to_be_approved'"/>
+                        <widget name="web_ribbon" title="Waiting for store approvel" bg_color="bg-success"
+                                invisible="state != 'request_for_store_approval'"/>
+                        <widget name="web_ribbon" title="Request Approved" bg_color="bg-success"
+                                invisible="state != 'request_approved'"/>
+                        <widget name="web_ribbon" title="RFQ Created" bg_color="bg-success"
+                                invisible="state != 'rfq_create'"/>
+                        <widget name="web_ribbon" title="Tender Created" bg_color="bg-success"
+                                invisible="state != 'tender_create'"/>
+                        <widget name="web_ribbon" title="Partially Delevered" bg_color="bg-success" 
+                                invisible="state != 'partially_received'"/>
+                        <widget name="web_ribbon" title="Out of Stock" bg_color="bg-danger"
+                                invisible="stock_available == True or rfq_raised == False"/>
+                        <widget name="web_ribbon" title="Stock Available" bg_color="bg-success"
+                                invisible="stock_available == False or rfq_raised == True"/>
+                        <widget name="web_ribbon" title="Delevred" bg_color="bg-success"
+                                invisible="state != 'received'"/>
+                        <widget name="web_ribbon" title="Rejected" bg_color="bg-warning"
+                                invisible="state != 'reject'"/>
+                        <widget name="web_ribbon" title="Cancelled" bg_color="bg-danger"
+                                invisible="state != 'cancel'"/>
+
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" class="oe_inline" readonly="1"/>
+                            </h1>
+                        </div>   
+                        <group>
+                            <group>
+                                <field name="responsible"/>
+                                <field name="user_id" invisible="1"/>
+                                <field name="department_id"/>
+                                <field name="current_job_id"/>
+                                <field name="current_reporting_manager"/>
+                                <field name="purpose" />
+                                <field name="location_id" 
+                                       domain="[('location_id', '!=',False), ('usage', '!=', 'view')]"/>
+                                <!-- <field name="approver_store" /> -->
+                            </group>
+                            <group>
+                                <field name="request_raised_for" />
+                                <field name="requester_department_id"
+                                       readonly="1"
+                                       force_save="1"/>
+                                <field name="requester_current_job_id"
+                                       readonly="1"
+                                       force_save="1"/>
+                                <field name="requester_current_reporting_manager"
+                                       readonly="1"
+                                       force_save="1"/>
+                                <field name="indent_date" readonly="1"/>
+                                <field name="required_date" />
+                                <field name="requirement" 
+                                       on_change="onchange_requirement(indent_date, requirement)"/>
+                                <field name="type" required="1" invisible="1"/>
+                                <field name="stock_available" invisible="1"/>
+                                <field name="partial_stock_available" invisible="1"/>
+                                <field name="stock_transferred" invisible="1"/>
+                                <field name="partial_stock_transferred" invisible="1"/>
+                                <field name="partial_delivery" invisible="1"/>
+                                <field name="store_approval" invisible="1"/>
+                                <field name="store_request" invisible="1"/>
+                                <field name="rfq_raised" invisible="1"/>
+                                <field name="tender_raised" invisible="1"/>
+                                <field name="grn_status" invisible="1"/>
+                                <field name="issued_date" invisible="1" readonly="1" force_save="1"/>
+                                <field name="inward_date" invisible="1" readonly="1" force_save="1"/>
+
+                                <field name="enable_ribbon" invisible="1"/>
+                                <field name="current_user" invisible="1"/>
+                                <!-- <field name="delevered_qty" readonly="1"/> -->
+                                <!-- <field name="partial_develered_qty" readonly="1"/> -->
+                            </group>
+                            <group>
+                                <!-- <field name="item_for" invisible="1"/>
+                                <field name="analytic_account_id" invisible="1"/>
+                                <field name="in_picking_id" invisible="1"/> -->
+                            </group>
+                        </group>   
+
+                        <notebook>
+                            <page string="Request Products">
+                                <field name="request_product_lines"  readonly="state not in ('draft')">
+                                    <tree string="Products" editable="bottom">
+                                        <!-- <field name="indent_id" column_invisible="True"/> -->
+                                        <field name="product_id" force_save="1"/>
+                                        <field name="product_name" force_save="1" />
+                                        <field name="product_available" readonly="1" force_save="1"/>
+                                        <field name="product_uom" force_save="1"/>
+                                        <field name="delevered_qtys" readonly="1"/>
+                                        <field name="product_uom_qty" sum="Total Qty" force_save="1"/>
+                                        
+                                        
+                                        <!-- <field name="approved_product_uom_qty"  invisible="1" />
+                                        <field name="approved_product_uom" invisible="parent.store_request == False"/>
+                                        <field name="approved_product_available" readonly="1" force_save="1"
+                                               column_invisible="parent.store_request == False"/>
+                                        <field name="approved_product_category" optional="hide" readonly="1"
+                                               column_invisible="parent.store_request == False"
+                                               force_save="1"/>
+                                        <field name="approved_product_type" optional="hide" readonly="1"
+                                               column_invisible="parent.store_request == False"
+                                               force_save="1"/>
+                                        <field name="short_close" invisible="1"/> -->
+                                    </tree>
+
+                                </field>
+                                <group class="oe_subtotal_footer oe_right">
+                                </group>
+                                <div class="oe_clear">
+                                    <label for="description"/>
+                                </div>
+                                <field name="description" class="oe_inline" placeholder="Additional note..."/>
+                            </page>
+                            <page string="Approved Products" invisible="1">
+                                <field name="product_lines" >
+                                    <form string="Approved Products">
+                                        <group>
+                                            <group>
+                                                <field name="product_id"/>
+                                                <field name="indent_type" invisible="1"/>
+                                                <field name="original_product_id" invisible="1"/>
+                                                <label for="product_uom_qty"/>
+                                                <div>
+                                                    <field name="product_uom_qty" class="oe_inline"/>
+                                                    <field name="qty_shipped" class="oe_inline"/>
+                                                    <field name="product_uom"/>
+                                                </div>
+                                            </group>
+                                            <group>
+                                                <field name="indent_type" invisible="1"/>
+                                                <field name="qty_available" invisible="1"/>
+                                                <field name="product_available"/>
+                                                <field name="product_category"/>
+                                                <field name="product_type"/>
+                                                <field name="delay" invisible="1"/>
+                                            </group>
+                                        </group>
+                                        <label for="name"/>
+                                        <field name="name"/>
+                                        <label for="specification"/>
+                                        <field name="specification"/>
+                                    </form>
+                                    <tree string="Products">
+                                        <field name="product_id" force_save="1"/>
+                                        <field name="product_uom_qty" force_save="1" sum="Total Qty"/>
+                                        <field name="qty_shipped" sum="Total Qty"/>
+                                        <field name="product_uom" string="Unit"/>
+                                        <field name="product_available" invisible="0" force_save="1"/>
+                                        <field name="product_category" optional="hide" force_save="1"/>
+                                        <field name="product_type" optional="hide" force_save="1"/>
+                                        <field name="name" optional="hide" invisible="1" force_save="1"/>
+                                    </tree>
+                                </field>
+                                <group class="oe_subtotal_footer oe_right">
+                                </group>
+                                <div class="oe_clear">
+                                    <label for="description"/>
+                                </div>
+                                <field name="description" class="oe_inline" placeholder="Additional note..."/>
+                            </page>
+                            <!-- <page string="Remarks">
+                                
+                            </page> -->
+                        </notebook>               
+
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+         <record id="view_material_request_indent_search_view" model="ir.ui.view">
+            <field name="name">material.request.indent.search</field>
+            <field name="model">material.request.indent</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <filter name="archived" string="Archived" domain="[('active', '=', False)]"/>
+                    <!--                    <separator/>-->
+                    <!--                    <searchpanel>-->
+                    <!--                        <field name="mmr_state" icon="fa-filter"/>-->
+                    <!--                    </searchpanel>-->
+                </search>
+            </field>
+        </record>
+
+
+        <!-- Indent Window Action -->
+        <record id='action_material_Request_indent' model='ir.actions.act_window'>
+            <field name="name">Material Request</field>
+            <field name="res_model">material.request.indent</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'search_default_waiting':1,'search_default_active':1}</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a new indent.
+                </p>
+            </field>
+        </record>
+        
+
+
+        <menuitem action="action_material_Request_indent" name="Material Request"
+                  parent="purchase.menu_procurement_management" id="menu_request_indent" sequence="1"/>
+
+        <!-- <menuitem id="menu_material_request_inventory_label" name="Material Request"
+              parent="stock.menu_stock_warehouse_mgmt"/> -->
+
+        <record id="action_material_Request_indent_stock" model="ir.actions.act_window">
+            <field name="name">Material Request Stock</field>
+            <field name="res_model">material.request.indent</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'search_default_state': 'request_approved'}</field>
+            <field name="domain">[('state', '=', 'request_approved')]</field>
+        </record>
+
+        <menuitem action="action_material_Request_indent_stock" name="Material Request"
+              parent="stock.menu_stock_warehouse_mgmt" id="menu_request_indent_inventory" sequence="1"/>
+    </data>
+</odoo>

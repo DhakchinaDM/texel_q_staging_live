@@ -1,0 +1,48 @@
+<odoo>
+    <data>
+        <record id="pending_rfq_excel_report" model="ir.ui.view">
+            <field name="name">rfq.report.excel.wizard.view</field>
+            <field name="model">rfq.report.excel</field>
+            <field name="arch" type="xml">
+                <form string="RFQ Report">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="start_date" required="1"/>
+                                <field name="end_date" required="1"/>
+                            </group>
+                            <group>
+                                <field name="purchase_orders" widget="many2many_tags"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="report_printed" invisible="1"/>
+                            <group invisible="report_printed != True">
+                                <field name="file_name" invisible="1"/>
+                                <field name="summary_file" readonly="1" filename="file_name"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button name="tick_ok" type='object'
+                                string="Print RFQ Report"
+                                class="oe_highlight"/>
+
+                        <button name="tick_cancel" type='object' string="Cancel" class="oe_highlight" special="cancel"
+                                icon="fa-times-circle"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        <record id="action_rfq_excel_report" model="ir.actions.act_window">
+            <field name="name">RFQ Report</field>
+            <field name="res_model">rfq.report.excel</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+        <menuitem id="menu_pending_purchase_order_report_exl"
+                  name="RFQ Report"
+                  action="action_rfq_excel_report"
+                  parent="purchase.purchase_report_main"/>
+    </data>
+</odoo>

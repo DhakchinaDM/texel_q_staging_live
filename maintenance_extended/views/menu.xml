@@ -1,0 +1,9 @@
+<odoo>
+    <data>
+        <menuitem id="menu_equipment_details_list"
+                  name="Equipment"
+                  sequence="1"
+                  parent="maintenance.menu_maintenance_configuration"
+                  action="maintenance.hr_equipments_action"/>
+    </data>
+</odoo>

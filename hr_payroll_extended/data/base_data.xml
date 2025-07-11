@@ -1,0 +1,192 @@
+<odoo>
+    <data noupdate="0">
+        <record id="hr_payroll.structure_002" model="hr.payroll.structure">
+            <field name="name">Worker Pay</field>
+            <field name="type_id" ref="hr_contract.structure_type_employee"/>
+            <field name="unpaid_work_entry_type_ids"
+                   eval="[(4, ref('hr_work_entry_contract.work_entry_type_unpaid_leave'))]"/>
+            <field name="country_id" eval="False"/>
+        </record>
+        <record id="hr_payroll.structure_worker_001" model="hr.payroll.structure">
+            <field name="name">Staff Pay</field>
+            <field name="type_id" ref="hr_contract.structure_type_worker"/>
+            <field name="country_id" eval="False"/>
+        </record>
+
+        <!-- WORKER PAY BASIC -->
+        <function model="hr.salary.rule" name="write">
+            <value model="hr.salary.rule" search="[
+                ('struct_id', '=', ref('hr_payroll.structure_002')),
+                ('code', '=', 'BASIC')]"/>
+            <value eval="{
+                'amount_python_compute': 'result = contract.wage - (payslip.allowance_amount_deduction  * 0.60)',
+                'sequence': 2}"/>
+        </function>
+
+        <!-- WORKER PAY HRA -->
+        <function model="hr.salary.rule" name="write">
+            <value model="hr.salary.rule" search="[
+                ('struct_id', '=', ref('hr_payroll.structure_002')),
+                ('code', '=', 'HRA')]"/>
+            <value eval="{
+                'amount_python_compute': 'result = contract.house_rent_allowance - (payslip.allowance_amount_deduction  * 0.20)',
+                'sequence': 3}"/>
+        </function>
+
+        <!-- WORKER PAY CA -->
+        <function model="hr.salary.rule" name="write">
+            <value model="hr.salary.rule" search="[
+                ('struct_id', '=', ref('hr_payroll.structure_002')),
+                ('code', '=', 'CA')]"/>
+            <value eval="{
+                'amount_python_compute': 'result = contract.convenyance_allowance - (payslip.allowance_amount_deduction  * 0.10)',
+                'sequence': 4}"/>
+        </function>
+
+        <!-- WORKER PAY MA -->
+        <function model="hr.salary.rule" name="write">
+            <value model="hr.salary.rule" search="[
+                ('struct_id', '=', ref('hr_payroll.structure_002')),
+                ('code', '=', 'MA')]"/>
+            <value eval="{
+                'amount_python_compute': 'result = contract.special_allowance - (payslip.allowance_amount_deduction  * 0.10)',
+                'sequence': 5}"/>
+        </function>
+
+        <!-- WORKER PAY GROSS -->
+        <function model="hr.salary.rule" name="write">
+            <value model="hr.salary.rule"
+                   search="[('struct_id', '=', ref('hr_payroll.structure_002')), ('code', '=', 'GROSS')]"/>
+            <value eval="{
+        'amount_python_compute': 'result = half_round(categories[\'BASIC\'] + categories[\'ALW\'])',
+        'sequence': 200}"/>
+        </function>
+
+        <!-- WORKER PAY NET -->
+        <function model="hr.salary.rule" name="write">
+            <value model="hr.salary.rule"
+                   search="[('struct_id', '=', ref('hr_payroll.structure_002')), ('code', '=', 'NET')]"/>
+            <value eval="{
+        'amount_python_compute': 'result = half_round(categories[\'BASIC\'] + categories[\'ALW\'] - categories[\'DED\'])',
+        'sequence': 200}"/>
+        </function>
+
+
+        <!-- STAFF PAY BASIC -->
+        <function model="hr.salary.rule" name="write">
+            <value model="hr.salary.rule" search="[
+                ('struct_id', '=', ref('hr_payroll.structure_worker_001')),
+                ('code', '=', 'BASIC')]"/>
+            <value eval="{
+                'amount_python_compute': 'result = contract.wage - (payslip.allowance_amount_deduction  * 0.60)',
+                'sequence': 2}"/>
+        </function>
+
+        <!-- STAFF PAY HRA -->
+        <function model="hr.salary.rule" name="write">
+            <value model="hr.salary.rule" search="[
+                ('struct_id', '=', ref('hr_payroll.structure_worker_001')),
+                ('code', '=', 'HRA')]"/>
+            <value eval="{
+                'amount_python_compute': 'result = contract.house_rent_allowance - (payslip.allowance_amount_deduction  * 0.20)',
+                'sequence': 3}"/>
+        </function>
+
+        <!-- STAFF PAY CA -->
+        <function model="hr.salary.rule" name="write">
+            <value model="hr.salary.rule" search="[
+                ('struct_id', '=', ref('hr_payroll.structure_worker_001')),
+                ('code', '=', 'CA')]"/>
+            <value eval="{
+                'amount_python_compute': 'result = contract.convenyance_allowance - (payslip.allowance_amount_deduction  * 0.10)',
+                'sequence': 4}"/>
+        </function>
+
+        <!-- STAFF PAY MA -->
+        <function model="hr.salary.rule" name="write">
+            <value model="hr.salary.rule" search="[
+                ('struct_id', '=', ref('hr_payroll.structure_worker_001')),
+                ('code', '=', 'MA')]"/>
+            <value eval="{
+                'amount_python_compute': 'result = contract.special_allowance - (payslip.allowance_amount_deduction  * 0.10)',
+                'sequence': 5}"/>
+        </function>
+
+        <!-- STAFF PAY GROSS -->
+        <function model="hr.salary.rule" name="write">
+            <value model="hr.salary.rule"
+                   search="[('struct_id', '=', ref('hr_payroll.structure_worker_001')), ('code', '=', 'GROSS')]"/>
+            <value eval="{
+        'amount_python_compute': 'result = half_round(categories[\'BASIC\'] + categories[\'ALW\'])',
+        'sequence': 200}"/>
+        </function>
+
+        <!-- STAFF PAY NET -->
+        <function model="hr.salary.rule" name="write">
+            <value model="hr.salary.rule"
+                   search="[('struct_id', '=', ref('hr_payroll.structure_worker_001')), ('code', '=', 'NET')]"/>
+            <value eval="{
+        'amount_python_compute': 'result = half_round(categories[\'BASIC\'] + categories[\'ALW\'] - categories[\'DED\'])',
+        'sequence': 200}"/>
+        </function>
+
+
+        <!-- STAFF PAY SAT BASIC -->
+        <function model="hr.salary.rule" name="write">
+            <value model="hr.salary.rule" search="[
+                ('struct_id', '=', ref('hr_payroll_extended.structure_staff_sat001')),
+                ('code', '=', 'BASIC')]"/>
+            <value eval="{
+                'amount_python_compute': 'result = contract.wage - (payslip.allowance_amount_deduction  * 0.60)',
+                'sequence': 2}"/>
+        </function>
+
+        <!-- STAFF PAY SAT HRA -->
+        <function model="hr.salary.rule" name="write">
+            <value model="hr.salary.rule" search="[
+                ('struct_id', '=', ref('hr_payroll_extended.structure_staff_sat001')),
+                ('code', '=', 'HRA')]"/>
+            <value eval="{
+                'amount_python_compute': 'result = contract.house_rent_allowance - (payslip.allowance_amount_deduction  * 0.20)',
+                'sequence': 3}"/>
+        </function>
+
+        <!-- STAFF PAY SAT CA -->
+        <function model="hr.salary.rule" name="write">
+            <value model="hr.salary.rule" search="[
+                ('struct_id', '=', ref('hr_payroll_extended.structure_staff_sat001')),
+                ('code', '=', 'CA')]"/>
+            <value eval="{
+                'amount_python_compute': 'result = contract.convenyance_allowance - (payslip.allowance_amount_deduction  * 0.10)',
+                'sequence': 4}"/>
+        </function>
+
+        <!-- STAFF PAY SAT MA -->
+        <function model="hr.salary.rule" name="write">
+            <value model="hr.salary.rule" search="[
+                ('struct_id', '=', ref('hr_payroll_extended.structure_staff_sat001')),
+                ('code', '=', 'MA')]"/>
+            <value eval="{
+                'amount_python_compute': 'result = contract.special_allowance - (payslip.allowance_amount_deduction  * 0.10)',
+                'sequence': 5}"/>
+        </function>
+
+        <!-- STAFF PAY SAT GROSS -->
+        <function model="hr.salary.rule" name="write">
+            <value model="hr.salary.rule"
+                   search="[('struct_id', '=', ref('hr_payroll_extended.structure_staff_sat001')), ('code', '=', 'GROSS')]"/>
+            <value eval="{
+        'amount_python_compute': 'result = half_round(categories[\'BASIC\'] + categories[\'ALW\'])',
+        'sequence': 200}"/>
+        </function>
+
+        <!-- STAFF PAY SAT NET -->
+        <function model="hr.salary.rule" name="write">
+            <value model="hr.salary.rule"
+                   search="[('struct_id', '=', ref('hr_payroll_extended.structure_staff_sat001')), ('code', '=', 'NET')]"/>
+            <value eval="{
+        'amount_python_compute': 'result = half_round(categories[\'BASIC\'] + categories[\'ALW\'] - categories[\'DED\'])',
+        'sequence': 200}"/>
+        </function>
+    </data>
+</odoo>

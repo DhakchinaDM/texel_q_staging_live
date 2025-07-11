@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-name="location_based_inventory.OdooServices" owl="1">
+        <div class="o_content">
+            <div class="container" align="center">
+                <h1>
+                    <span style="color:red">L</span>OCATION <span style="color:red">B</span>ASED <span
+                        style="color:red">R</span>EPORT
+                </h1>
+                <br/>
+                <div class="row">
+                    <div class="col-6">
+                         <!-- Product Category Dropdown -->
+                        <select class="form-control" t-on-change="onCategoryChange"
+                                style="width: 50%; margin-bottom: 10px;">
+                    <option value="">-- Select a Category --</option>
+                            <t t-foreach="state.categories" t-as="cat" t-key="cat.id">
+                        <option t-att-value="cat.id"><t t-esc="cat.name"/></option>
+                    </t>
+                </select>
+                    </div>
+                    <div class="col-6">
+                        <!-- Product Dropdown -->
+                        <select class="form-control" t-on-change="onProductChange"
+                                style="width: 50%; margin-bottom: 20px;">
+                    <option value="">-- Select a Product --</option>
+                            <t t-foreach="state.products" t-as="product" t-key="product.id">
+                        <option t-att-value="product.id"><t t-esc="product.default_code"/></option>
+                    </t>
+                </select>
+                    </div>
+
+
+
+                </div>
+
+                <div style="max-height: 100vh; overflow-y: auto;">
+                    <table class="table table-bordered" style="width: 90%;">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <t t-foreach="state.locations" t-as="loc" t-key="loc.id">
+                                    <th><t t-esc="loc.name"/></th>
+                                </t>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-set="visibleProducts"
+                               t-value="state.products.filter(p => !state.selectedProduct || p.id === state.selectedProduct)"/>
+                            <t t-foreach="visibleProducts" t-as="product" t-key="product.id">
+                                <tr>
+                                    <td><t t-esc="product.default_code"/></td>
+                                    <t t-foreach="state.locations" t-as="loc" t-key="loc.id">
+                                        <td style="vertical-align: top; text-align: right;">
+                                            <div style="float: left;"><t t-esc="getQty(product.id, loc.id)"/></div>
+                                            <t t-set="qty" t-value="getQty(product.id, loc.id)"/>
+<!--                                            <button t-if="qty > 0"-->
+<!--                                                    t-on-click="() => showQuantIds(getQuantIds(product.id, loc.id))"-->
+<!--                                                    class="btn btn-sm btn-primary"-->
+<!--                                                    type="button"-->
+<!--                                                    style="margin-top: 0;">-->
+<!--                                                Stock-->
+<!--                                            </button>-->
+                                        </td>
+                                    </t>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

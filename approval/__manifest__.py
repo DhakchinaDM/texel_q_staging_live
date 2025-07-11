@@ -1,0 +1,25 @@
+{
+    'name': 'Approval',
+    'version': '17.3',
+    'summary': 'Approval',
+    'description': 'Approval',
+    'category': 'Human Resources',
+    'author': 'Appscomp Widgets Pve Ltd.,',
+    'website': 'appscomp.com',
+    'license': 'LGPL-3',
+    'depends': [
+        'mail',
+        'base',
+        'purchase',
+    ],
+    'data': [
+        'data/approval.xml',
+        'security/ir.model.access.csv',
+        'views/approval_view.xml',
+        'wizard/approval_remarks.xml',
+    ],
+    'demo': [],
+    'installable': True,
+    'auto_install': False,
+    'application': True,
+}

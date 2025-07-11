@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="group_product_edition" model="res.groups">
+        <field name="name">Inventory (No Create / Edit / Delete)</field>
+        <field name="category_id" ref="base.module_category_usability"/>
+        <field name="users" eval="[(4, ref('base.user_admin'))]"/>
+    </record>
+
+
+<!--    <record id="product_template_chatter_view_form" model="ir.ui.view">-->
+<!--        <field name="name">product.template.view.form.inherit.vendor.ref</field>-->
+<!--        <field name="model">product.template</field>-->
+<!--        <field name="inherit_id" ref="product.product_template_only_form_view"/>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <sheet position="after">-->
+<!--                <div class="oe_chatter">-->
+<!--                    <field name="message_follower_ids" widget="mail_followers"/>-->
+<!--                    <field name="message_ids" widget="mail_thread"/>-->
+<!--                </div>-->
+<!--            </sheet>-->
+<!--        </field>-->
+<!--    </record>-->
+</odoo>

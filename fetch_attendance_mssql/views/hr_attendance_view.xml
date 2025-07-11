@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_hr_attendance_tree_inherited" model="ir.ui.view">
+        <field name="name">hr.attendance.tree.inherit</field>
+        <field name="model">hr.attendance</field>
+        <field name="inherit_id" ref="hr_attendance.view_attendance_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="attributes">
+                <attribute name="js_class">button_in_tree</attribute>
+            </xpath>
+            <field name="check_out" position="after">
+                <field name="auto_checked_out" column_invisible="1"/>
+            </field>
+            <field name="check_out" position="replace">
+                <field name="check_out" options="{}"
+                       decoration-warning="auto_checked_out == True"/>
+            </field>
+            <field name="worked_hours" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </field>
+            <field name="overtime_hours" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_hr_attendance_form_inherited" model="ir.ui.view">
+        <field name="name">hr.attendance.form.inherit</field>
+        <field name="model">hr.attendance</field>
+        <field name="inherit_id" ref="hr_attendance.hr_attendance_view_form"/>
+        <field name="arch" type="xml">
+            <field name="worked_hours" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="overtime_hours" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+        </field>
+    </record>
+</odoo>

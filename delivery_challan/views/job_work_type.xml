@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_job_work_type" model="ir.actions.act_window">
+        <field name="name">Job Work Type</field>
+        <field name="res_model">job.work.type</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create Job Work Type.
+            </p>
+        </field>
+    </record>
+
+    <menuitem
+            id="approval_menu_root"
+            name="Purchase Approval"
+            action="action_job_work_type"
+            parent="stock.menu_stock_config_settings"
+            sequence="9"/>
+
+
+</odoo>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_subcate_form" model="ir.ui.view">
+            <field name="name">subcate.details.form</field>
+            <field name="model">subcate.details</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_equipment_category"
+                                    class="oe_stat_info"
+                                    icon="fa-cubes"
+                                    type="object">
+                                <field name="equipment_count" class="oe_stat_value"/>
+                                <span class="oe_stat_text">Equipment</span>
+                            </button>
+                        </div>
+                        <field name="image" widget="image" class="oe_avatar oe_right"/>
+                        <group string="Sub Category">
+                            <group>
+                                <field name="name"/>
+                                <field name="code" required="1"/>
+                                <field name="category_id" invisible="0"/>
+                                <field name="equipment_ids" invisible="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_subcate_tree" model="ir.ui.view">
+            <field name="name">subcate.details.tree</field>
+            <field name="model">subcate.details</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="code"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_subcate_kanban" model="ir.ui.view">
+            <field name="name">subcate.details.kanban</field>
+            <field name="model">subcate.details</field>
+            <field name="arch" type="xml">
+                <kanban class="o_hr_subcate_kanban">
+                    <field name="name"/>
+                    <field name="equipment_count"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_global_click">
+                                <div class="oe_kanban_global_click o_kanban_record_has_image_fill o_hr_kanban_record">
+                                    <div class="o_kanban_record_top">
+                                        <div class="o_kanban_image">
+                                            <field name="image" widget="image"/>
+                                        </div>
+                                        <strong class="o_kanban_record_title">
+                                        </strong>
+                                    </div>
+                                    <div class="row mt4">
+                                        <div class="col-6">
+                                            <span class="badge badge-pill">
+                                                <strong>Equipment :</strong>
+                                                <field name="equipment_count"/>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <ul style="text-align:Left; ">
+                                        <li>Sub Category :
+                                            <field name="name"/>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record id="subcate_details_action" model="ir.actions.act_window">
+            <field name="name">Sub Category</field>
+            <field name="res_model">subcate.details</field>
+            <field name="view_mode">tree,kanban,form</field>
+        </record>
+
+        <menuitem id="menu_subcate_details_root"
+                  name="Sub Category"
+                  sequence="9"
+                  parent="maintenance.menu_maintenance_configuration"
+                  action="subcate_details_action"/>
+
+    </data>
+</odoo>

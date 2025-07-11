@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_merger_dc_form" model="ir.ui.view">
+        <field name="name">merge.dc.form</field>
+        <field name="model">merge.dc</field>
+        <field name="arch" type="xml">
+            <form string="Combine DC">
+                <group>
+                    <field name="picking_ids" widget="many2many_tags" force_save="1" readonly="1"/>
+                    <field name="merge_order_ids" create="0">
+                        <tree string="Combine Dc Line" editable="bottom" create="0">
+                            <field name="return_picking_id" force_save="1" readonly="1"/>
+                            <field name="picking_id" force_save="1" readonly="1"/>
+                            <field name="product_id" force_save="1" readonly="1"/>
+                            <field name="lot_ids" widget="many2many_tags" force_save="1" readonly="1"/>
+                            <field name="product_qty" force_save="1" readonly="1"/>
+                            <field name="confirm_qty" force_save="1" readonly="0"/>
+                        </tree>
+                    </field>
+                </group>
+                <footer>
+                    <button string='Create RDC' name='create_r_dc' type='object' class='btn-primary'/>
+                    <button string='Cancel' class='btn-default' special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="combine_job_order_action" model="ir.actions.act_window">
+        <field name="name">Combine Job order</field>
+        <field name="res_model">merge.dc</field>
+        <field name="view_mode">form</field>
+        <field name="binding_view_types">list</field>
+        <field name="binding_model_id" ref="stock.model_stock_picking"/>
+        <field name="target">new</field>
+    </record>
+
+</odoo>
