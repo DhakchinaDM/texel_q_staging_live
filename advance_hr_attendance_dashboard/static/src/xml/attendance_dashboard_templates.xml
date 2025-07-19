@@ -12,7 +12,6 @@
         <label for="start_date" style="white-space: nowrap; color: #333; font-weight: bold;">Start Date</label>
                         <input type="date" id="start_date" class="form-control" t-on-change="onStartDateChange"
                                style="padding: 5px 10px; border-radius: 5px; border: 1px solid #ccc;"/>
-
                         <label for="end_date"
                                style="white-space: nowrap; color: #333; font-weight: bold;">End Date</label>
                         <input type="date" id="end_date" class="form-control" t-on-change="onEndDateChange"
@@ -21,6 +20,15 @@
                         <input type="text" class="search-bar"
                                style="border: 1px solid #ccc; padding: 5px 10px; border-radius: 5px;"
                                id="search-bar" placeholder="Search Employee"/>
+
+                        <label for="data_view_type" style="white-space: nowrap; color: #333; font-weight: bold;">View Type</label>
+                        <select id="data_view_type" class="form-control"
+                                t-model="state.viewType" t-on-change="onDataViewChange"
+                                style="padding: 5px 10px; border-radius: 5px; border: 1px solid #ccc;">
+    <option value="consolidated">Consolidated Data</option>
+                            <option value="raw">Raw Data</option>
+</select>
+
 
                         <button type="object" t-on-click="_OnClickSearchEmployee"
                                 class="btn btn-primary search_employee"
@@ -84,7 +92,7 @@
         <td t-out="employee.name" t-att-data-name="employee.name"/>
         <td t-out="employee.emp_code" t-att-data-emp-code="employee.emp_code"/>
 
-       <t t-foreach="employee.leave_data" t-as="leave" t-key="leave_index">
+        <t t-foreach="employee.leave_data" t-as="leave" t-key="leave_index">
     <td class="employee-leave-data table-data"
         t-attf-style="
             background: {{
@@ -101,7 +109,6 @@
         </t>
     </td>
 </t>
-
 
 
         <td t-out="employee.totalPresentDays" style="text-align: center;"/>

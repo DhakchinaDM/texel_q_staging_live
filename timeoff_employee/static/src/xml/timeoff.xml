@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+<t t-name="timeoff_employee.Odoo" owl="1">
+    <div class="o_content">
+        <div class="container dashboard-container" align="center" style="max-width: 1200px;">
+
+            <!-- Login Form -->
+            <t t-if="!state.loggedIn">
+                <div class="shadow-lg p-4 bg-white rounded-3" style="width: 350px; border-top: 4px solid #4e73df;">
+                    <div class="text-center mb-4">
+                        <i class="fa fa-user-circle fs-1" style="color: #4e73df;"></i>
+                        <h4 class="mt-2" style="color: #5a5c69;">Employee Login</h4>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-muted small">Employee ID</label>
+                        <input type="text" class="form-control rounded-2" t-model="state.empId"
+                               placeholder="Enter your ID"/>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label text-muted small">Password</label>
+                        <input type="password" class="form-control rounded-2" t-model="state.password"
+                               placeholder="••••••••"/>
+                    </div>
+                    <t t-if="state.error">
+                        <div class="alert alert-danger py-2 mb-3 rounded-2" t-esc="state.error"/>
+                    </t>
+                    <button class="btn w-100 py-2 rounded-2"
+                            t-on-click="login"
+                            style="background-color: #4e73df; color: white; transition: all 0.3s;"
+                            onmouseover="this.style.backgroundColor='#3a5ab0'"
+                            onmouseout="this.style.backgroundColor='#4e73df'">
+                        Login
+                    </button>
+                </div>
+            </t>
+
+            <!-- Dashboard -->
+            <t t-if="state.loggedIn">
+                <div class="d-flex justify-content-between align-items-center w-100 mb-4">
+                    <h3 class="mb-0" style="color: #4e73df;">
+                        <i class="fa fa-user me-2"></i>
+                        <span t-esc="state.employeeName"/>
+                    </h3>
+                    <button class="btn btn-outline-danger rounded-2 px-3" t-on-click="logout">
+                        <i class="fa fa-sign-out-alt me-1"></i>
+                        Logout
+                    </button>
+                </div>
+
+                <div class="d-flex flex-wrap justify-content-center gap-4 mb-4 w-100">
+                    <t t-foreach="state.leaveTypes" t-as="leave" t-key="leave.id">
+                        <div class="card shadow-sm border-0 rounded-3 overflow-hidden" style="width: 280px;">
+                            <div class="card-header py-3"
+                                 style="background-color: #f8f9fc; border-bottom: 1px solid #e3e6f0;">
+                                <h5 class="mb-0 fw-bold" style="color: #4e73df;" t-esc="leave.name"/>
+                            </div>
+                            <div class="card-body py-4">
+                                <div class="d-flex justify-content-between mb-3">
+                                    <span class="text-muted">Allocated:</span>
+                                    <span class="fw-bold" t-esc="leave.allocated_days"/>
+                                </div>
+                                <div class="d-flex justify-content-between mb-3">
+                                    <span class="text-muted">Used:</span>
+                                    <span class="fw-bold" t-esc="leave.used_days"/>
+                                </div>
+                                <div class="d-flex justify-content-between mb-3">
+                                    <span class="text-muted">Pending:</span>
+                                    <a href="#" class="fw-bold text-decoration-none"
+                                       style="color:#f6c23e;"
+                                       t-on-click="() => openDraftDetails(leave)">
+    <t t-esc="leave.draft"/>
+</a>
+                                </div>
+                                <div class="d-flex justify-content-between mb-4">
+                                    <span class="text-muted">Remaining:</span>
+                                    <span class="fw-bold" style="color: #1cc88a;" t-esc="leave.remaining_days"/>
+                                </div>
+                                <button class="btn w-100 py-2 rounded-2"
+                                        t-on-click="() => openModal(leave)"
+                                        style="background-color: #f8f9fc; color: #4e73df; border: 1px solid #e3e6f0;"
+                                        onmouseover="this.style.backgroundColor='#e9ecef'"
+                                        onmouseout="this.style.backgroundColor='#f8f9fc'">
+                                    <i class="fa fa-calendar-plus me-2"></i>
+                                    Request Leave
+                                </button>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+            </t>
+
+            <!-- Modal -->
+            <t t-if="state.showModal">
+                <div class="modal d-block"
+                     style="background: rgba(0,0,0,0.5); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1050;">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content border-0 shadow-lg rounded-3 overflow-hidden">
+                            <div class="modal-header py-3" style="background-color: #4e73df; color: white;">
+                                <h5 class="modal-title">
+                                    <i class="fa fa-calendar-alt me-2"></i>
+                                    Request
+                                    <t t-esc="state.selectedLeaveType.name"/>
+                                </h5>
+                                <button type="button" class="btn-close btn-close-white"
+                                        t-on-click="closeModal"></button>
+                            </div>
+                            <div class="modal-body p-4">
+                                <div class="mb-3">
+                                    <label class="form-label text-muted small">From Date</label>
+                                    <input type="date" class="form-control rounded-2"
+                                           t-model="state.leaveForm.date_from"/>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label text-muted small">To Date</label>
+                                    <input type="date" class="form-control rounded-2"
+                                           t-model="state.leaveForm.date_to"/>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label text-muted small">Reason</label>
+                                    <textarea class="form-control rounded-2" t-model="state.leaveForm.reason" rows="3"
+                                              placeholder="Enter reason for leave"></textarea>
+                                </div>
+                            </div>
+                            <div class="modal-footer border-0">
+                                <button class="btn btn-outline-secondary rounded-2 px-4" t-on-click="closeModal">
+                                    Cancel
+                                </button>
+                                <button class="btn rounded-2 px-4"
+                                        t-on-click="submitLeaveRequest"
+                                        style="background-color: #4e73df; color: white;"
+                                        onmouseover="this.style.backgroundColor='#3a5ab0'"
+                                        onmouseout="this.style.backgroundColor='#4e73df'">
+                                    Submit Request
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+            <t t-if="state.showDraftModal">
+    <div class="modal d-block"
+         style="background: rgba(0,0,0,0.5); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1050;">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 shadow-lg rounded-3 overflow-hidden">
+                <div class="modal-header py-3" style="background-color: #f6c23e; color: black;">
+                    <h5 class="modal-title">
+                        <i class="fa fa-calendar-check me-2"></i>
+                        Leave Details -
+                        <t t-esc="state.selectedLeaveType.name"/>
+                    </h5>
+                    <button type="button" class="btn-close" t-on-click="() => state.showDraftModal = false"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <table class="table table-striped table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th>From</th>
+                                <th>To</th>
+                                <th>Status</th>
+                                <th>Reason</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="state.draftDetails" t-as="leave"
+                               t-key="leave.date_from + leave.date_to + leave.state">
+                                <tr>
+                                    <td><span t-esc="leave.date_from"/></td>
+                                    <td><span t-esc="leave.date_to"/></td>
+                                    <td><span t-esc="leave.state"/></td>
+                                    <td><span t-esc="leave.reason"/></td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer border-0">
+                    <button class="btn btn-outline-secondary rounded-2 px-4"
+                            t-on-click="() => state.showDraftModal = false">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</t>
+
+        </div>
+    </div>
+</t>
+</templates>

@@ -28,25 +28,25 @@ class HrAttendance(models.Model):
 
 
 
-class ResCompany(models.Model):
-    _inherit = 'res.company'
-
-    attendance_face_key = fields.Char(default=lambda s: uuid.uuid4().hex, copy=False, groups='hr_attendance.group_hr_attendance_manager')
-    attendance_face_url = fields.Char(compute="_compute_attendance_face_url")
-
-    @api.depends("attendance_face_key")
-    def _compute_attendance_face_url(self):
-        for company in self:
-            company.attendance_face_url = url_join(self.env['res.company'].get_base_url(), '/face_tracking/%s' % company.attendance_face_key)
-
-
-
-    def _action_open_face_mode(self):
-        return {
-            'type': 'ir.actions.act_url',
-            'target': 'self',
-            'url': f'/hr_attendance/face_mode_menu/{self.env.company.id}',
-        }
+# class ResCompany(models.Model):
+#     _inherit = 'res.company'
+#
+#     attendance_face_key = fields.Char(default=lambda s: uuid.uuid4().hex, copy=False, groups='hr_attendance.group_hr_attendance_manager')
+#     attendance_face_url = fields.Char(compute="_compute_attendance_face_url")
+#
+#     @api.depends("attendance_face_key")
+#     def _compute_attendance_face_url(self):
+#         for company in self:
+#             company.attendance_face_url = url_join(self.env['res.company'].get_base_url(), '/face_tracking/%s' % company.attendance_face_key)
+#
+#
+#
+#     def _action_open_face_mode(self):
+#         return {
+#             'type': 'ir.actions.act_url',
+#             'target': 'self',
+#             'url': f'/hr_attendance/face_mode_menu/{self.env.company.id}',
+#         }
 
 
 

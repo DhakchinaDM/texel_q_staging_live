@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="action_odoo_services_employee_timeoff" model="ir.actions.client">
+            <field name="name">Employee TimeOff</field>
+            <field name="tag">timeoff_employee.Odoo</field>
+        </record>
+
+         <menuitem name="Employee TimeOff"
+                  id="main_employee_timeoff" sequence="4" parent="hr_holidays.menu_hr_holidays_root"
+                  action="action_odoo_services_employee_timeoff"
+                  />
+    </data>
+</odoo>

@@ -13,8 +13,10 @@ class AttendanceController(http.Controller):
         # Get parameters from the request
         start_date = kwargs.get('start_date')
         end_date = kwargs.get('end_date')
+        viewType = kwargs.get('viewType')
         print(")))))))))))))))))))))Start Date:", start_date)
         print(')))))))))))))))))))))End Date:', end_date)
+        print(')))))))))))))))))))))viewType:', viewType)
 
         # Ensure valid dates
         if not start_date or not end_date:
@@ -23,14 +25,15 @@ class AttendanceController(http.Controller):
         # Fetch employee leave data
         employee_leave_data = request.env['hr.employee'].sudo().get_employee_leave_data({
             'start_date': start_date,
-            'end_date': end_date
+            'end_date': end_date,
+            'viewType': viewType
         })
-        print(")))))))))))))))))))))Employee Leave Data:", employee_leave_data)
+        # print(")))))))))))))))))))))Employee Leave Data:", employee_leave_data)
 
         employee_data = employee_leave_data.get('employee_data', [])
         dates = employee_leave_data.get('filtered_duration_dates', [])
-        print(")))))))))))))))))))))Filtered Duration Dates:", dates)
-        print(")))))))))))))))))))))Employee Data:", employee_data)
+        # print(")))))))))))))))))))))Filtered Duration Dates:", dates)
+        # print(")))))))))))))))))))))Employee Data:", employee_data)
 
         # Create an in-memory Excel file
         output = io.BytesIO()
@@ -49,7 +52,7 @@ class AttendanceController(http.Controller):
         # Write employee data
         row = 1
         for employee in employee_data:
-            print("-------------------Employee:", employee)
+            # print("-------------------Employee:", employee)
             worksheet.write(row, 0, employee.get('name', ''))
             worksheet.write(row, 1, employee.get('emp_code', ''))
 

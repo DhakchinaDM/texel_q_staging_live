@@ -9,13 +9,15 @@ class AttendanceDashboard extends Component {
         this.state = useState({
             filteredDurationDates: [],
             employeeData: [],
-            publicHolidays: []
+            publicHolidays: [],
+            viewType: "consolidated",
 
         });
         this.orm = useService("orm");
         this.root = useRef("attendance-dashboard");
         this.startDate = "";
         this.endDate = "";
+        this.viewType = "";
     }
 
     /**
@@ -30,6 +32,12 @@ class AttendanceDashboard extends Component {
      */
     onEndDateChange(ev) {
         this.endDate = ev.target.value;
+    }
+
+    onDataViewChange(ev) {
+        this.state.viewType = ev.target.value;
+        this.viewType = ev.target.value;
+        this._OnClickSearchEmployee()
     }
 
     /**
@@ -56,7 +64,7 @@ class AttendanceDashboard extends Component {
     async onFilterByDateRange() {
         if (this.startDate && this.endDate) {
             const result = await this.orm.call("hr.employee", "get_employee_leave_data", [
-                { start_date: this.startDate, end_date: this.endDate },
+                { start_date: this.startDate, end_date: this.endDate, view_type: this.state.viewType,},
             ]);
             this.state.filteredDurationDates = result.filtered_duration_dates;
             this.state.publicHolidays = result.public_holidays;
@@ -131,6 +139,7 @@ class AttendanceDashboard extends Component {
     _OnClickExcelReport(ev) {
         const start_date = this.startDate;  // Ensure this is properly set in your state
         const end_date = this.endDate;      // Ensure this is properly set in your state
+        const viewType = this.viewType;      // Ensure this is properly set in your state
 
         console.log(".>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", start_date, end_date);
 
@@ -139,7 +148,7 @@ class AttendanceDashboard extends Component {
             return;
         }
 
-        const url = `/attendance/download_excel?start_date=${start_date}&end_date=${end_date}`;
+        const url = `/attendance/download_excel?start_date=${start_date}&end_date=${end_date}&viewType=${viewType}`;
         window.location.href = url;
     }
 
